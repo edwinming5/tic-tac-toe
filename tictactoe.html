@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,15 +7,84 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
+    /* ── Theme variables ── */
+    :root[data-theme="dark"] {
+      --bg:         #1a1a2e;
+      --surface:    #16213e;
+      --border:     #0f3460;
+      --hover:      #0f3460;
+      --text:       #eee;
+      --label:      #888;
+      --toggle-bg:  #0f3460;
+      --toggle-knob:#eee;
+    }
+
+    :root[data-theme="light"] {
+      --bg:         #f0f2f8;
+      --surface:    #ffffff;
+      --border:     #c8d0e0;
+      --hover:      #dde3f0;
+      --text:       #1a1a2e;
+      --label:      #666;
+      --toggle-bg:  #c8d0e0;
+      --toggle-knob:#1a1a2e;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #1a1a2e;
-      color: #eee;
+      background: var(--bg);
+      color: var(--text);
       display: flex;
       flex-direction: column;
       align-items: center;
       min-height: 100vh;
       padding: 2rem 1rem;
+      transition: background 0.25s, color 0.25s;
+    }
+
+    /* ── Theme toggle ── */
+    .theme-row {
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.8rem;
+      color: var(--label);
+    }
+
+    .toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-track {
+      width: 40px;
+      height: 22px;
+      background: var(--toggle-bg);
+      border-radius: 11px;
+      position: relative;
+      transition: background 0.25s;
+    }
+
+    .toggle-knob {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--toggle-knob);
+      transition: transform 0.25s, background 0.25s;
+    }
+
+    [data-theme="light"] .toggle-knob {
+      transform: translateX(18px);
     }
 
     h1 {
@@ -26,7 +95,7 @@
       margin-bottom: 1.5rem;
     }
 
-    /* Stats */
+    /* ── Stats ── */
     .stats {
       display: flex;
       gap: 1.5rem;
@@ -34,32 +103,29 @@
     }
 
     .stat-card {
-      background: #16213e;
-      border: 1px solid #0f3460;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 10px;
       padding: 0.75rem 1.5rem;
       text-align: center;
       min-width: 90px;
+      transition: background 0.25s, border-color 0.25s;
     }
 
     .stat-card .label {
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 2px;
-      color: #888;
+      color: var(--label);
       margin-bottom: 0.3rem;
     }
 
-    .stat-card .value {
-      font-size: 1.8rem;
-      font-weight: bold;
-    }
-
-    .stat-card.x .value  { color: #e94560; }
-    .stat-card.o .value  { color: #0f9ff5; }
+    .stat-card .value { font-size: 1.8rem; font-weight: bold; }
+    .stat-card.x    .value { color: #e94560; }
+    .stat-card.o    .value { color: #0f9ff5; }
     .stat-card.draw .value { color: #f5a623; }
 
-    /* Turn indicator */
+    /* ── Turn indicator ── */
     .turn {
       font-size: 1.1rem;
       margin-bottom: 1.2rem;
@@ -71,7 +137,7 @@
     .turn .x-color { color: #e94560; }
     .turn .o-color { color: #0f9ff5; }
 
-    /* Board */
+    /* ── Board ── */
     .board {
       display: grid;
       grid-template-columns: repeat(3, 110px);
@@ -81,8 +147,8 @@
     }
 
     .cell {
-      background: #16213e;
-      border: 2px solid #0f3460;
+      background: var(--surface);
+      border: 2px solid var(--border);
       border-radius: 12px;
       display: flex;
       align-items: center;
@@ -90,12 +156,12 @@
       font-size: 3rem;
       font-weight: bold;
       cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      transition: background 0.15s, transform 0.1s, border-color 0.25s;
       user-select: none;
     }
 
     .cell:hover:not(.taken) {
-      background: #0f3460;
+      background: var(--hover);
       transform: scale(1.04);
     }
 
@@ -104,7 +170,7 @@
     .cell.o { color: #0f9ff5; }
 
     .cell.win-cell {
-      background: #0f3460;
+      background: var(--hover);
       border-color: #e94560;
       animation: pulse 0.6s ease;
     }
@@ -115,7 +181,7 @@
       100% { transform: scale(1); }
     }
 
-    /* Message */
+    /* ── Message ── */
     .message {
       font-size: 1.3rem;
       font-weight: bold;
@@ -124,7 +190,7 @@
       letter-spacing: 1px;
     }
 
-    /* Buttons */
+    /* ── Buttons ── */
     .buttons { display: flex; gap: 1rem; }
 
     button {
@@ -140,21 +206,27 @@
 
     button:hover { opacity: 0.85; transform: scale(1.03); }
 
-    .btn-new {
-      background: #e94560;
-      color: #fff;
-    }
+    .btn-new   { background: #e94560; color: #fff; }
 
     .btn-reset {
-      background: #0f3460;
-      color: #aaa;
-      border: 1px solid #333;
+      background: var(--surface);
+      color: var(--label);
+      border: 1px solid var(--border);
     }
 
-    .btn-reset:hover { color: #fff; }
+    .btn-reset:hover { color: var(--text); }
   </style>
 </head>
 <body>
+
+  <div class="theme-row">
+    <label class="toggle-wrap" id="theme-toggle" title="Toggle light/dark mode">
+      <span id="theme-label">Dark</span>
+      <div class="toggle-track">
+        <div class="toggle-knob"></div>
+      </div>
+    </label>
+  </div>
 
   <h1>Tic Tac Toe</h1>
 
@@ -207,6 +279,23 @@
     const oWinsEl  = document.getElementById('o-wins');
     const drawsEl  = document.getElementById('draws');
 
+    // ── Theme toggle ──
+    const html        = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeLabel  = document.getElementById('theme-label');
+
+    const savedTheme = localStorage.getItem('ttt-theme') || 'dark';
+    html.dataset.theme = savedTheme;
+    themeLabel.textContent = savedTheme === 'dark' ? 'Dark' : 'Light';
+
+    themeToggle.addEventListener('click', () => {
+      const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      html.dataset.theme = next;
+      themeLabel.textContent = next === 'dark' ? 'Dark' : 'Light';
+      localStorage.setItem('ttt-theme', next);
+    });
+
+    // ── Game logic ──
     function startGame() {
       board = Array(9).fill('');
       currentPlayer = 'X';
