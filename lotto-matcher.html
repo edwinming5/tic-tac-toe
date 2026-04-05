@@ -439,7 +439,16 @@
     // OCR garbles letter labels (A. B. C.) into symbols/digits — don't rely on them.
     // Instead: find any line that yields at least 4 valid numbers in 1–49 range
     // (standard TOTO range) and skip lines that are mostly words (headers/footers).
-    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+    // Fix common OCR digit/letter confusions before parsing
+    const cleaned = text
+      .replace(/\bb\b/gi, '5')   // b → 5
+      .replace(/(?<=\d)b/gi, '5') // digit followed by b → 5 (e.g. 3b → 35)
+      .replace(/b(?=\d)/gi, '5') // b followed by digit → 5
+      .replace(/[oO](?=\d)|(?<=\d)[oO]/g, '0') // o → 0 next to digits
+      .replace(/[lI](?=\d)|(?<=\d)[lI]/g, '1') // l/I → 1 next to digits
+      .replace(/[sS](?=\d)|(?<=\d)[sS]/g, '5') // s → 5 next to digits
+      .replace(/[zZ](?=\d)|(?<=\d)[zZ]/g, '2'); // z → 2 next to digits
+    const lines = cleaned.split('\n').map(l => l.trim()).filter(Boolean);
     const rows   = [];
     const labels = [];
     let rowIndex = 0;
