@@ -192,6 +192,16 @@
       transition: background 0.2s, border-color 0.2s, color 0.2s;
     }
 
+    .strike-label {
+      margin-left: auto;
+      font-size: 0.8rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #f5a623;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
     .num-ball.match {
       background: #1a6e3c;
       border-color: #2ecc71;
@@ -503,13 +513,17 @@
     const userSet = new Set(userNums.filter(n => n >= 1 && n <= 99));
 
     rowsWrap.innerHTML = rows.map((row, i) => {
+      const hits = row.filter(n => userSet.has(n)).length;
       const balls = row.map(n => {
         const matched = userSet.has(n);
         return `<div class="num-ball${matched ? ' match' : ''}">${n}</div>`;
       }).join('');
+      const strike = (userSet.size > 0 && hits >= 3)
+        ? '<span class="strike-label">Strike!</span>' : '';
       return `<div class="row-entry">
         <span class="row-label">${labels[i] || i + 1}</span>
         ${balls}
+        ${strike}
       </div>`;
     }).join('');
   }
