@@ -207,21 +207,26 @@
     }
 
     .num-input {
-      width: 58px;
-      padding: 0.5rem;
+      width: 100%;
+      padding: 0.6rem 0.9rem;
       border-radius: 8px;
       border: 2px solid var(--border);
       background: var(--bg);
       color: var(--text);
       font-size: 1rem;
       font-weight: bold;
-      text-align: center;
       transition: border-color 0.2s;
-      -moz-appearance: textfield;
     }
-    .num-input::-webkit-outer-spin-button,
-    .num-input::-webkit-inner-spin-button { -webkit-appearance: none; }
     .num-input:focus { outline: none; border-color: #e94560; }
+    .num-input::placeholder { color: var(--label); font-weight: normal; }
+
+    .parsed-balls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+      min-height: 38px;
+    }
 
     /* ── Buttons ── */
     .btn-row { display: flex; gap: 0.8rem; margin-top: 1rem; flex-wrap: wrap; }
@@ -301,14 +306,8 @@
   <!-- Step 3: Your numbers + match -->
   <div class="section">
     <div class="section-title">3 — Your Numbers</div>
-    <div class="input-row" id="user-inputs">
-      <input class="num-input" type="number" min="1" max="99" placeholder="—">
-      <input class="num-input" type="number" min="1" max="99" placeholder="—">
-      <input class="num-input" type="number" min="1" max="99" placeholder="—">
-      <input class="num-input" type="number" min="1" max="99" placeholder="—">
-      <input class="num-input" type="number" min="1" max="99" placeholder="—">
-      <input class="num-input" type="number" min="1" max="99" placeholder="—">
-    </div>
+    <input class="num-input" type="text" id="user-input" placeholder="Paste or type your 6 numbers e.g. 5 12 33 45 67 88">
+    <div class="parsed-balls" id="parsed-balls"></div>
     <div class="btn-row">
       <button class="btn-match" id="btn-match" disabled>Match</button>
       <button class="btn-clear" id="btn-clear">Clear</button>
@@ -333,7 +332,8 @@
   });
 
   // ── State ──
-  let extractedRows = []; // array of number arrays
+  let extractedRows   = []; // array of number arrays
+  let extractedLabels = []; // parallel array of row letters
 
   // ── Drop zone ──
   const dropZone   = document.getElementById('drop-zone');
@@ -369,7 +369,8 @@
 
   // ── OCR ──
   function runOCR(imageUrl) {
-    extractedRows = [];
+    extractedRows   = [];
+    extractedLabels = [];
     rowsWrap.innerHTML = '<div class="empty-state">Reading image…</div>';
     btnMatch.disabled = true;
     summary.textContent = '';
@@ -398,29 +399,44 @@
   }
 
   function parseAndDisplay(text) {
-    // Extract all integers 1-99 from each non-empty line
+    // Each data row starts with a letter (a-z / A-Z), possibly followed by noise,
+    // then a series of numbers 1–99.
+    // Strategy: scan every line, find the first letter token, treat it as the
+    // row label, then extract all 1–99 integers from the rest of the line.
     const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-    const rows = [];
+    const rows  = [];
+    const labels = [];
 
     for (const line of lines) {
+      // Look for a leading letter label: one or two chars where first is a letter
+      const labelMatch = line.match(/^([A-Za-z])\b/);
+      if (!labelMatch) continue; // skip lines without a leading letter
+
+      const letter = labelMatch[1].toUpperCase();
+      // Extract numbers after the label
       const nums = (line.match(/\b([1-9][0-9]?)\b/g) || [])
         .map(Number)
         .filter(n => n >= 1 && n <= 99);
-      if (nums.length >= 2) rows.push(nums.slice(0, 6)); // keep up to 6 per row
+
+      if (nums.length >= 2) {
+        labels.push(letter);
+        rows.push(nums.slice(0, 6));
+      }
     }
 
     extractedRows = rows;
+    extractedLabels = labels;
 
     if (rows.length === 0) {
-      rowsWrap.innerHTML = '<div class="empty-state">No number rows found. Try a clearer image.</div>';
+      rowsWrap.innerHTML = '<div class="empty-state">No labelled rows found. Each row must start with a letter (a–z).</div>';
       return;
     }
 
-    renderRows(rows, []);
+    renderRows(rows, labels, []);
     btnMatch.disabled = false;
   }
 
-  function renderRows(rows, userNums) {
+  function renderRows(rows, labels, userNums) {
     const userSet = new Set(userNums.filter(n => n >= 1 && n <= 99));
 
     rowsWrap.innerHTML = rows.map((row, i) => {
@@ -429,42 +445,45 @@
         return `<div class="num-ball${matched ? ' match' : ''}">${n}</div>`;
       }).join('');
       return `<div class="row-entry">
-        <span class="row-label">Row ${i + 1}</span>
+        <span class="row-label">${labels[i] || i + 1}</span>
         ${balls}
       </div>`;
     }).join('');
   }
 
-  // ── User inputs ──
-  const userInputs = document.querySelectorAll('.num-input');
+  // ── User input (single paste-friendly field) ──
+  const userInput   = document.getElementById('user-input');
+  const parsedBalls = document.getElementById('parsed-balls');
 
-  // Auto-advance to next input after 2 digits
-  userInputs.forEach((inp, idx) => {
-    inp.addEventListener('input', () => {
-      if (inp.value.length >= 2) {
-        const next = userInputs[idx + 1];
-        if (next) next.focus();
-      }
-    });
-    inp.addEventListener('keydown', e => {
-      if (e.key === 'Enter') btnMatch.click();
-    });
-  });
+  function getUserNums() {
+    return (userInput.value.match(/\b([1-9][0-9]?)\b/g) || [])
+      .map(Number)
+      .filter(n => n >= 1 && n <= 99)
+      .slice(0, 6);
+  }
+
+  function refreshParsedBalls() {
+    const nums = getUserNums();
+    parsedBalls.innerHTML = nums.length
+      ? nums.map(n => `<div class="num-ball">${n}</div>`).join('')
+      : '';
+  }
+
+  userInput.addEventListener('input', refreshParsedBalls);
+  userInput.addEventListener('keydown', e => { if (e.key === 'Enter') btnMatch.click(); });
 
   // ── Match ──
   btnMatch.addEventListener('click', () => {
     if (extractedRows.length === 0) return;
 
-    const userNums = Array.from(userInputs)
-      .map(i => parseInt(i.value, 10))
-      .filter(n => !isNaN(n) && n >= 1 && n <= 99);
+    const userNums = getUserNums();
 
     if (userNums.length === 0) {
       summary.innerHTML = '<span style="color:#e94560">Enter at least one number.</span>';
       return;
     }
 
-    renderRows(extractedRows, userNums);
+    renderRows(extractedRows, extractedLabels, userNums);
 
     // Count rows with at least one match
     const userSet = new Set(userNums);
@@ -484,10 +503,11 @@
 
   // ── Clear ──
   document.getElementById('btn-clear').addEventListener('click', () => {
-    userInputs.forEach(i => i.value = '');
-    userInputs[0].focus();
-    renderRows(extractedRows, []);
+    userInput.value = '';
+    parsedBalls.innerHTML = '';
+    renderRows(extractedRows, extractedLabels, []);
     summary.textContent = '';
+    userInput.focus();
   });
 </script>
 </body>
