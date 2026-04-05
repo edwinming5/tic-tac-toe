@@ -436,36 +436,51 @@
   }
 
   function parseAndDisplay(text) {
-    // Each data row starts with a letter (a-z / A-Z), possibly followed by noise,
-    // then a series of numbers 1–99.
-    // Strategy: scan every line, find the first letter token, treat it as the
-    // row label, then extract all 1–99 integers from the rest of the line.
+    // OCR garbles letter labels (A. B. C.) into symbols/digits — don't rely on them.
+    // Instead: find any line that yields at least 4 valid numbers in 1–49 range
+    // (standard TOTO range) and skip lines that are mostly words (headers/footers).
     const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-    const rows  = [];
+    const rows   = [];
     const labels = [];
+    let rowIndex = 0;
 
     for (const line of lines) {
-      // Look for a leading letter label: one or two chars where first is a letter
-      const labelMatch = line.match(/^([A-Z])\s*\./);
-      if (!labelMatch) continue; // skip lines without a leading letter
+      // Skip lines that are mostly letters (headers/footers)
+      const letterCount = (line.match(/[A-Za-z]/g) || []).length;
+      const digitCount  = (line.match(/\d/g) || []).length;
+      if (letterCount > digitCount) continue;
 
-      const letter = labelMatch[1].toUpperCase();
-      // Extract numbers after the label
-      const nums = (line.match(/\b([1-9][0-9]?)\b/g) || [])
-        .map(Number)
-        .filter(n => n >= 1 && n <= 99);
+      // Split on non-digit characters and extract valid numbers
+      const tokens = line.split(/\D+/).filter(Boolean);
+      const nums = [];
+      for (const tok of tokens) {
+        if (tok.length > 2) {
+          // Numbers may be run together (e.g. "101236") — try every 2-char slice
+          for (let i = 0; i <= tok.length - 2; i++) {
+            const n = parseInt(tok.slice(i, i + 2), 10);
+            if (n >= 1 && n <= 49) nums.push(n);
+          }
+        } else {
+          const n = parseInt(tok, 10);
+          if (n >= 1 && n <= 49) nums.push(n);
+        }
+      }
 
-      if (nums.length >= 2) {
-        labels.push(letter);
-        rows.push(nums.slice(0, 6));
+      // Deduplicate while preserving order
+      const unique = [...new Set(nums)];
+
+      if (unique.length >= 4) {
+        labels.push(String.fromCharCode(65 + rowIndex)); // A, B, C…
+        rows.push(unique.slice(0, 6));
+        rowIndex++;
       }
     }
 
-    extractedRows = rows;
+    extractedRows   = rows;
     extractedLabels = labels;
 
     if (rows.length === 0) {
-      rowsWrap.innerHTML = '<div class="empty-state">No labelled rows found. Each row must start with a letter (a–z).</div>';
+      rowsWrap.innerHTML = '<div class="empty-state">No number rows found. Check the raw OCR text below for clues.</div>';
       return;
     }
 
