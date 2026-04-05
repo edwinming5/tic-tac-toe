@@ -298,7 +298,7 @@
     // ── Game logic ──
     function startGame() {
       board = Array(9).fill('');
-      currentPlayer = 'X';
+      currentPlayer = Math.random() < 0.5 ? 'X' : 'O';
       gameOver = false;
       msgEl.textContent = '';
       cells.forEach(c => {
