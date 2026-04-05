@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lotto Number Matcher</title>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root[data-theme="dark"] {
+      --bg:       #1a1a2e;
+      --surface:  #16213e;
+      --border:   #0f3460;
+      --hover:    #0f3460;
+      --text:     #eee;
+      --label:    #888;
+      --toggle-bg:   #0f3460;
+      --toggle-knob: #eee;
+    }
+    :root[data-theme="light"] {
+      --bg:       #f0f2f8;
+      --surface:  #ffffff;
+      --border:   #c8d0e0;
+      --hover:    #dde3f0;
+      --text:     #1a1a2e;
+      --label:    #666;
+      --toggle-bg:   #c8d0e0;
+      --toggle-knob: #1a1a2e;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 2rem 1rem;
+      transition: background 0.25s, color 0.25s;
+    }
+
+    .container { max-width: 720px; margin: 0 auto; }
+
+    /* ── Theme toggle ── */
+    .theme-row {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.8rem;
+      color: var(--label);
+    }
+    .toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .toggle-track {
+      width: 40px; height: 22px;
+      background: var(--toggle-bg);
+      border-radius: 11px;
+      position: relative;
+      transition: background 0.25s;
+    }
+    .toggle-knob {
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--toggle-knob);
+      transition: transform 0.25s, background 0.25s;
+    }
+    [data-theme="light"] .toggle-knob { transform: translateX(18px); }
+
+    h1 {
+      font-size: 1.8rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #e94560;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Sections ── */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: background 0.25s, border-color 0.25s;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--label);
+      margin-bottom: 1rem;
+    }
+
+    /* ── Drop zone ── */
+    .drop-zone {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      color: var(--label);
+      font-size: 0.95rem;
+    }
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: #e94560;
+      background: var(--hover);
+    }
+    .drop-zone input[type="file"] { display: none; }
+
+    .preview-wrap {
+      margin-top: 1rem;
+      text-align: center;
+      display: none;
+    }
+    .preview-wrap img {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── OCR status ── */
+    .ocr-status {
+      margin-top: 0.8rem;
+      font-size: 0.85rem;
+      color: var(--label);
+      min-height: 1.2rem;
+      text-align: center;
+    }
+    .ocr-status.error { color: #e94560; }
+
+    /* ── Progress bar ── */
+    .progress-bar-wrap {
+      margin-top: 0.6rem;
+      background: var(--border);
+      border-radius: 6px;
+      height: 6px;
+      overflow: hidden;
+      display: none;
+    }
+    .progress-bar {
+      height: 100%;
+      background: #e94560;
+      border-radius: 6px;
+      transition: width 0.2s;
+      width: 0%;
+    }
+
+    /* ── Extracted rows ── */
+    .rows-wrap { margin-top: 1rem; }
+
+    .row-entry {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .row-entry:last-child { border-bottom: none; }
+
+    .row-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--label);
+      min-width: 45px;
+    }
+
+    .num-ball {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--hover);
+      border: 2px solid var(--border);
+      font-size: 0.9rem;
+      font-weight: bold;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+
+    .num-ball.match {
+      background: #1a6e3c;
+      border-color: #2ecc71;
+      color: #2ecc71;
+    }
+
+    /* ── User input ── */
+    .input-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .num-input {
+      width: 58px;
+      padding: 0.5rem;
+      border-radius: 8px;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: bold;
+      text-align: center;
+      transition: border-color 0.2s;
+      -moz-appearance: textfield;
+    }
+    .num-input::-webkit-outer-spin-button,
+    .num-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .num-input:focus { outline: none; border-color: #e94560; }
+
+    /* ── Buttons ── */
+    .btn-row { display: flex; gap: 0.8rem; margin-top: 1rem; flex-wrap: wrap; }
+
+    button {
+      padding: 0.6rem 1.4rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    button:hover { opacity: 0.85; transform: scale(1.03); }
+    button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .btn-match  { background: #e94560; color: #fff; }
+    .btn-clear  { background: var(--surface); color: var(--label); border: 1px solid var(--border); }
+    .btn-clear:hover { color: var(--text); }
+
+    /* ── Summary ── */
+    .summary {
+      font-size: 0.9rem;
+      color: var(--label);
+      margin-top: 0.8rem;
+      min-height: 1.2rem;
+    }
+    .summary strong { color: #2ecc71; }
+
+    /* ── Empty state ── */
+    .empty-state {
+      text-align: center;
+      color: var(--label);
+      font-size: 0.9rem;
+      padding: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Theme toggle -->
+  <div class="theme-row">
+    <label class="toggle-wrap" id="theme-toggle" title="Toggle light/dark mode">
+      <span id="theme-label">Dark</span>
+      <div class="toggle-track"><div class="toggle-knob"></div></div>
+    </label>
+  </div>
+
+  <h1>Lotto Matcher</h1>
+
+  <!-- Step 1: Upload image -->
+  <div class="section">
+    <div class="section-title">1 — Upload Image</div>
+    <div class="drop-zone" id="drop-zone">
+      <input type="file" id="file-input" accept="image/*">
+      <div id="drop-text">Drag & drop an image here, or <strong>click to browse</strong></div>
+    </div>
+    <div class="preview-wrap" id="preview-wrap">
+      <img id="preview-img" src="" alt="Preview">
+    </div>
+    <div class="progress-bar-wrap" id="progress-wrap">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <div class="ocr-status" id="ocr-status"></div>
+  </div>
+
+  <!-- Step 2: Extracted numbers -->
+  <div class="section">
+    <div class="section-title">2 — Extracted Numbers</div>
+    <div class="rows-wrap" id="rows-wrap">
+      <div class="empty-state">Upload an image to extract numbers.</div>
+    </div>
+  </div>
+
+  <!-- Step 3: Your numbers + match -->
+  <div class="section">
+    <div class="section-title">3 — Your Numbers</div>
+    <div class="input-row" id="user-inputs">
+      <input class="num-input" type="number" min="1" max="99" placeholder="—">
+      <input class="num-input" type="number" min="1" max="99" placeholder="—">
+      <input class="num-input" type="number" min="1" max="99" placeholder="—">
+      <input class="num-input" type="number" min="1" max="99" placeholder="—">
+      <input class="num-input" type="number" min="1" max="99" placeholder="—">
+      <input class="num-input" type="number" min="1" max="99" placeholder="—">
+    </div>
+    <div class="btn-row">
+      <button class="btn-match" id="btn-match" disabled>Match</button>
+      <button class="btn-clear" id="btn-clear">Clear</button>
+    </div>
+    <div class="summary" id="summary"></div>
+  </div>
+
+</div>
+
+<script>
+  // ── Theme ──
+  const html = document.documentElement;
+  const themeLabel = document.getElementById('theme-label');
+  const saved = localStorage.getItem('lotto-theme') || 'dark';
+  html.dataset.theme = saved;
+  themeLabel.textContent = saved === 'dark' ? 'Dark' : 'Light';
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
+    html.dataset.theme = next;
+    themeLabel.textContent = next === 'dark' ? 'Dark' : 'Light';
+    localStorage.setItem('lotto-theme', next);
+  });
+
+  // ── State ──
+  let extractedRows = []; // array of number arrays
+
+  // ── Drop zone ──
+  const dropZone   = document.getElementById('drop-zone');
+  const fileInput  = document.getElementById('file-input');
+  const previewWrap = document.getElementById('preview-wrap');
+  const previewImg  = document.getElementById('preview-img');
+  const ocrStatus   = document.getElementById('ocr-status');
+  const progressWrap = document.getElementById('progress-wrap');
+  const progressBar  = document.getElementById('progress-bar');
+  const rowsWrap    = document.getElementById('rows-wrap');
+  const btnMatch    = document.getElementById('btn-match');
+  const summary     = document.getElementById('summary');
+
+  dropZone.addEventListener('click', () => fileInput.click());
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) loadImage(file);
+  });
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) loadImage(fileInput.files[0]);
+  });
+
+  function loadImage(file) {
+    const url = URL.createObjectURL(file);
+    previewImg.src = url;
+    previewWrap.style.display = 'block';
+    runOCR(url);
+  }
+
+  // ── OCR ──
+  function runOCR(imageUrl) {
+    extractedRows = [];
+    rowsWrap.innerHTML = '<div class="empty-state">Reading image…</div>';
+    btnMatch.disabled = true;
+    summary.textContent = '';
+    ocrStatus.className = 'ocr-status';
+    ocrStatus.textContent = 'Initialising OCR…';
+    progressWrap.style.display = 'block';
+    progressBar.style.width = '0%';
+
+    Tesseract.recognize(imageUrl, 'eng', {
+      logger: m => {
+        if (m.status === 'recognizing text') {
+          const pct = Math.round(m.progress * 100);
+          progressBar.style.width = pct + '%';
+          ocrStatus.textContent = `Recognising text… ${pct}%`;
+        }
+      }
+    }).then(({ data: { text } }) => {
+      progressBar.style.width = '100%';
+      ocrStatus.textContent = 'Done.';
+      parseAndDisplay(text);
+    }).catch(err => {
+      ocrStatus.className = 'ocr-status error';
+      ocrStatus.textContent = 'OCR failed: ' + err.message;
+      progressWrap.style.display = 'none';
+    });
+  }
+
+  function parseAndDisplay(text) {
+    // Extract all integers 1-99 from each non-empty line
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+    const rows = [];
+
+    for (const line of lines) {
+      const nums = (line.match(/\b([1-9][0-9]?)\b/g) || [])
+        .map(Number)
+        .filter(n => n >= 1 && n <= 99);
+      if (nums.length >= 2) rows.push(nums.slice(0, 6)); // keep up to 6 per row
+    }
+
+    extractedRows = rows;
+
+    if (rows.length === 0) {
+      rowsWrap.innerHTML = '<div class="empty-state">No number rows found. Try a clearer image.</div>';
+      return;
+    }
+
+    renderRows(rows, []);
+    btnMatch.disabled = false;
+  }
+
+  function renderRows(rows, userNums) {
+    const userSet = new Set(userNums.filter(n => n >= 1 && n <= 99));
+
+    rowsWrap.innerHTML = rows.map((row, i) => {
+      const balls = row.map(n => {
+        const matched = userSet.has(n);
+        return `<div class="num-ball${matched ? ' match' : ''}">${n}</div>`;
+      }).join('');
+      return `<div class="row-entry">
+        <span class="row-label">Row ${i + 1}</span>
+        ${balls}
+      </div>`;
+    }).join('');
+  }
+
+  // ── User inputs ──
+  const userInputs = document.querySelectorAll('.num-input');
+
+  // Auto-advance to next input after 2 digits
+  userInputs.forEach((inp, idx) => {
+    inp.addEventListener('input', () => {
+      if (inp.value.length >= 2) {
+        const next = userInputs[idx + 1];
+        if (next) next.focus();
+      }
+    });
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') btnMatch.click();
+    });
+  });
+
+  // ── Match ──
+  btnMatch.addEventListener('click', () => {
+    if (extractedRows.length === 0) return;
+
+    const userNums = Array.from(userInputs)
+      .map(i => parseInt(i.value, 10))
+      .filter(n => !isNaN(n) && n >= 1 && n <= 99);
+
+    if (userNums.length === 0) {
+      summary.innerHTML = '<span style="color:#e94560">Enter at least one number.</span>';
+      return;
+    }
+
+    renderRows(extractedRows, userNums);
+
+    // Count rows with at least one match
+    const userSet = new Set(userNums);
+    let totalMatches = 0;
+    let rowsWithMatch = 0;
+    extractedRows.forEach(row => {
+      const hits = row.filter(n => userSet.has(n)).length;
+      if (hits > 0) { rowsWithMatch++; totalMatches += hits; }
+    });
+
+    if (totalMatches === 0) {
+      summary.textContent = 'No matches found.';
+    } else {
+      summary.innerHTML = `<strong>${totalMatches} match${totalMatches !== 1 ? 'es' : ''}</strong> across <strong>${rowsWithMatch}</strong> row${rowsWithMatch !== 1 ? 's' : ''}.`;
+    }
+  });
+
+  // ── Clear ──
+  document.getElementById('btn-clear').addEventListener('click', () => {
+    userInputs.forEach(i => i.value = '');
+    userInputs[0].focus();
+    renderRows(extractedRows, []);
+    summary.textContent = '';
+  });
+</script>
+</body>
+</html>
