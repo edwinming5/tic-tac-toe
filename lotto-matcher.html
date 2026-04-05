@@ -482,6 +482,7 @@
         labels.push(String.fromCharCode(65 + rowIndex)); // A, B, C…
         rows.push(unique.slice(0, 6));
         rowIndex++;
+        if (rowIndex >= 6) break; // max 6 rows per chit
       }
     }
 
