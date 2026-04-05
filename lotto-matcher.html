@@ -409,7 +409,7 @@
 
     for (const line of lines) {
       // Look for a leading letter label: one or two chars where first is a letter
-      const labelMatch = line.match(/^([A-Za-z])\b/);
+      const labelMatch = line.match(/^([A-Z])\b/);
       if (!labelMatch) continue; // skip lines without a leading letter
 
       const letter = labelMatch[1].toUpperCase();
