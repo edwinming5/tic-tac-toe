@@ -257,6 +257,38 @@
     }
     .summary strong { color: #2ecc71; }
 
+    /* ── Debug ── */
+    .debug-section {
+      margin-top: 1rem;
+    }
+    .debug-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--label);
+      font-size: 0.75rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transform: none;
+    }
+    .debug-toggle:hover { color: var(--text); opacity: 1; transform: none; }
+    .debug-box {
+      display: none;
+      margin-top: 0.8rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8rem;
+      font-family: monospace;
+      font-size: 0.78rem;
+      color: var(--label);
+      white-space: pre-wrap;
+      word-break: break-all;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
     /* ── Empty state ── */
     .empty-state {
       text-align: center;
@@ -293,6 +325,10 @@
       <div class="progress-bar" id="progress-bar"></div>
     </div>
     <div class="ocr-status" id="ocr-status"></div>
+    <div class="debug-section">
+      <button class="debug-toggle" id="debug-toggle">Show raw OCR text</button>
+      <div class="debug-box" id="debug-box">No OCR output yet.</div>
+    </div>
   </div>
 
   <!-- Step 2: Extracted numbers -->
@@ -390,6 +426,7 @@
     }).then(({ data: { text } }) => {
       progressBar.style.width = '100%';
       ocrStatus.textContent = 'Done.';
+      document.getElementById('debug-box').textContent = text || '(empty)';
       parseAndDisplay(text);
     }).catch(err => {
       ocrStatus.className = 'ocr-status error';
@@ -468,6 +505,14 @@
       ? nums.map(n => `<div class="num-ball">${n}</div>`).join('')
       : '';
   }
+
+  document.getElementById('debug-toggle').addEventListener('click', () => {
+    const box = document.getElementById('debug-box');
+    const btn = document.getElementById('debug-toggle');
+    const visible = box.style.display === 'block';
+    box.style.display = visible ? 'none' : 'block';
+    btn.textContent = visible ? 'Show raw OCR text' : 'Hide raw OCR text';
+  });
 
   userInput.addEventListener('input', refreshParsedBalls);
   userInput.addEventListener('keydown', e => { if (e.key === 'Enter') btnMatch.click(); });
