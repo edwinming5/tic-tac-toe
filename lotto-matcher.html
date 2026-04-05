@@ -447,7 +447,8 @@
       .replace(/[oO](?=\d)|(?<=\d)[oO]/g, '0') // o → 0 next to digits
       .replace(/[lI](?=\d)|(?<=\d)[lI]/g, '1') // l/I → 1 next to digits
       .replace(/[sS](?=\d)|(?<=\d)[sS]/g, '5') // s → 5 next to digits
-      .replace(/[zZ](?=\d)|(?<=\d)[zZ]/g, '2'); // z → 2 next to digits
+      .replace(/[zZ](?=\d)|(?<=\d)[zZ]/g, '2') // z → 2 next to digits
+      .replace(/\?(?=\d)|(?<=\d)\?/g, '9');     // ? → 9 next to digits
     const lines = cleaned.split('\n').map(l => l.trim()).filter(Boolean);
     const rows   = [];
     const labels = [];
