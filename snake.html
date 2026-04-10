@@ -378,6 +378,7 @@
       <input class="name-input" id="nameInput" maxlength="3" placeholder="AAA" autocomplete="off" spellcheck="false">
       <button class="btn" id="saveBtn">Save Score</button>
     </div>
+    <p class="no-qualify" id="noQualify" style="display:none;font-size:0.85rem;color:var(--text-muted);text-align:center;">Not in the top 10 — keep playing!</p>
     <button class="btn secondary" id="restartBtn">Play Again</button>
   </div>
 </div>
@@ -569,6 +570,11 @@
     draw();
   }
 
+  function qualifiesForLeaderboard(sc) {
+    const scores = loadScores();
+    return scores.length < 10 || sc > scores[scores.length - 1].score;
+  }
+
   function endGame() {
     gameOver = true;
     clearInterval(loop);
@@ -576,7 +582,10 @@
     finalScoreEl.textContent = score;
     nameInput.value = '';
     gameOverOverlay.classList.remove('hidden');
-    nameInput.focus();
+    const qualifies = qualifiesForLeaderboard(score);
+    document.getElementById('nameWrap').style.display = qualifies ? '' : 'none';
+    document.getElementById('noQualify').style.display = qualifies ? 'none' : '';
+    if (qualifies) nameInput.focus();
   }
 
   // ── Draw ──────────────────────────────────────────────────────────────────────
