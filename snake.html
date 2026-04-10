@@ -169,6 +169,48 @@
     font-weight: 600;
   }
 
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    color: var(--text);
+    padding: 8px 0;
+    user-select: none;
+  }
+  .checkbox-label input[type="checkbox"] { display: none; }
+  .checkmark {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    background: var(--btn-bg);
+    flex-shrink: 0;
+    position: relative;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .checkbox-label input:checked + .checkmark {
+    background: var(--accent2);
+    border-color: var(--accent2);
+  }
+  .checkbox-label input:checked + .checkmark::after {
+    content: '';
+    position: absolute;
+    left: 4px; top: 1px;
+    width: 6px; height: 10px;
+    border: 2px solid #fff;
+    border-top: none; border-left: none;
+    transform: rotate(45deg);
+  }
+  .bonus-pill {
+    background: #3b82f6;
+    color: #fff;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
   .game-wrap {
     position: relative;
     border-radius: 12px;
@@ -410,6 +452,14 @@
       </div>
     </div>
 
+    <div class="controls">
+      <label class="checkbox-label">
+        <input type="checkbox" id="bonusFoodToggle" checked>
+        <span class="checkmark"></span>
+        Blue bonus food <span class="bonus-pill">+3 boxes</span>
+      </label>
+    </div>
+
     <div class="scores-panel">
       <h3>High Scores</h3>
       <div class="scores-list" id="scoresList"></div>
@@ -430,7 +480,7 @@
   let COLS = GRIDS.medium, ROWS = GRIDS.medium, CELL = CANVAS_SIZE / COLS;
 
   // ── State ───────────────────────────────────────────────────────────────────
-  let snake, dir, nextDir, food, score, gameOver, paused, loop, speed;
+  let snake, dir, nextDir, food, bonusFood, score, gameOver, paused, loop, speed;
 
   // ── DOM refs ─────────────────────────────────────────────────────────────────
   const canvas      = document.getElementById('canvas');
@@ -548,20 +598,37 @@
     for (let i = 1; i < 5; i++) snake.push({ x: cx - i, y: cy }); // start with 5 segments
     dir      = { x: 1, y: 0 };
     nextDir  = { x: 1, y: 0 };
-    score    = 0;
-    gameOver = false;
-    paused   = false;
+    score     = 0;
+    gameOver  = false;
+    paused    = false;
+    bonusFood = null;
     placeFood();
     updateHud();
   }
 
-  function placeFood() {
+  function freeCells() {
     const cells = [];
     for (let x = 0; x < COLS; x++)
       for (let y = 0; y < ROWS; y++)
-        if (!snake.some(s => s.x === x && s.y === y))
+        if (!snake.some(s => s.x === x && s.y === y)
+            && !(food && food.x === x && food.y === y)
+            && !(bonusFood && bonusFood.x === x && bonusFood.y === y))
           cells.push({ x, y });
+    return cells;
+  }
+
+  function placeFood() {
+    const cells = freeCells();
     food = cells[Math.floor(Math.random() * cells.length)];
+  }
+
+  function tryPlaceBonusFood() {
+    if (!document.getElementById('bonusFoodToggle').checked) return;
+    if (bonusFood) return; // already on board
+    if (Math.random() < 0.3) { // 30% chance each time regular food is eaten
+      const cells = freeCells();
+      if (cells.length) bonusFood = cells[Math.floor(Math.random() * cells.length)];
+    }
   }
 
   // ── Tick ──────────────────────────────────────────────────────────────────────
@@ -583,17 +650,29 @@
 
     snake.unshift(head);
 
-    const ate = head.x === food.x && head.y === food.y;
+    const ate      = head.x === food.x && head.y === food.y;
+    const ateBonus = bonusFood && head.x === bonusFood.x && head.y === bonusFood.y;
+
     if (ate) {
       playEatSound();
       score += 10;
-      if (snake.length <= 5)       score += 0;
+      if (snake.length <= 5)        score += 0;
       else if (snake.length <= 10)  score += 5;
       else                          score += 10;
       placeFood();
+      tryPlaceBonusFood();
+    } else if (ateBonus) {
+      playEatSound();
+      // grow 2 extra segments (head already added = 3 total)
+      const tail = snake[snake.length - 1];
+      snake.push({ ...tail }, { ...tail });
+      bonusFood = null;
     } else {
       snake.pop();
     }
+
+    // clear bonus food if checkbox was unchecked mid-game
+    if (!document.getElementById('bonusFoodToggle').checked) bonusFood = null;
 
     updateHud();
     draw();
@@ -635,12 +714,32 @@
       ctx.beginPath(); ctx.moveTo(0, y * CELL); ctx.lineTo(canvas.width, y * CELL); ctx.stroke();
     }
 
-    // Food
+    // Regular food
     const fr = Math.max(3, CELL / 2 - 3);
     ctx.fillStyle = getCSSVar('--food');
     ctx.beginPath();
     ctx.arc(food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, fr, 0, Math.PI * 2);
     ctx.fill();
+
+    // Bonus food (blue diamond)
+    if (bonusFood) {
+      const bx = bonusFood.x * CELL + CELL / 2;
+      const by = bonusFood.y * CELL + CELL / 2;
+      const br = Math.max(4, CELL / 2 - 2);
+      ctx.fillStyle = '#3b82f6';
+      ctx.beginPath();
+      ctx.moveTo(bx,      by - br);
+      ctx.lineTo(bx + br, by);
+      ctx.lineTo(bx,      by + br);
+      ctx.lineTo(bx - br, by);
+      ctx.closePath();
+      ctx.fill();
+      // white inner dot
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.beginPath();
+      ctx.arc(bx, by, Math.max(1.5, br * 0.3), 0, Math.PI * 2);
+      ctx.fill();
+    }
 
     // Snake
     const eyeOffset = Math.max(2, CELL * 0.18);
