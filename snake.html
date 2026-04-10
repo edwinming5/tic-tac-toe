@@ -129,7 +129,7 @@
     gap: 6px;
   }
 
-  .speed-btn {
+  .speed-btn, .grid-btn {
     background: var(--btn-bg);
     border: 1px solid var(--border);
     color: var(--text);
@@ -139,8 +139,8 @@
     font-size: 0.85rem;
     transition: background 0.15s, color 0.15s;
   }
-  .speed-btn:hover { background: var(--surface2); }
-  .speed-btn.active {
+  .speed-btn:hover, .grid-btn:hover { background: var(--surface2); }
+  .speed-btn.active, .grid-btn.active {
     background: var(--accent2);
     color: #fff;
     border-color: var(--accent2);
@@ -350,6 +350,15 @@
   </div>
 </div>
 
+<div class="controls">
+  <label>Grid:</label>
+  <div class="speed-group">
+    <button class="grid-btn" data-grid="small">Small</button>
+    <button class="grid-btn active" data-grid="medium">Medium</button>
+    <button class="grid-btn" data-grid="large">Large</button>
+  </div>
+</div>
+
 <div class="game-wrap">
   <canvas id="canvas" width="500" height="500"></canvas>
 
@@ -382,11 +391,13 @@
 
 <script>
   // ── Config ──────────────────────────────────────────────────────────────────
-  const COLS = 20, ROWS = 20;
-  const CELL = 500 / COLS; // 25px
+  const CANVAS_SIZE = 500;
+  const GRIDS = { small: 12, medium: 20, large: 30 };
   const SPEEDS = { slow: 200, medium: 130, fast: 85, insane: 50 };
   const LS_SCORES = 'snake-hiscores';
   const LS_THEME  = 'snake-theme';
+
+  let COLS = GRIDS.medium, ROWS = GRIDS.medium, CELL = CANVAS_SIZE / COLS;
 
   // ── State ───────────────────────────────────────────────────────────────────
   let snake, dir, nextDir, food, score, gameOver, paused, loop, speed;
@@ -429,6 +440,17 @@
       btn.classList.add('active');
       speed = SPEEDS[btn.dataset.speed];
       if (loop) { clearInterval(loop); loop = setInterval(tick, speed); }
+    });
+  });
+
+  // ── Grid size ─────────────────────────────────────────────────────────────────
+  document.querySelectorAll('.grid-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.grid-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      COLS = GRIDS[btn.dataset.grid];
+      ROWS = COLS;
+      CELL = CANVAS_SIZE / COLS;
     });
   });
 
@@ -576,19 +598,22 @@
     }
 
     // Food
-    const fr = CELL / 2 - 3;
+    const fr = Math.max(3, CELL / 2 - 3);
     ctx.fillStyle = getCSSVar('--food');
     ctx.beginPath();
     ctx.arc(food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, fr, 0, Math.PI * 2);
     ctx.fill();
 
     // Snake
+    const eyeOffset = Math.max(2, CELL * 0.18);
+    const eyeSize   = Math.max(1.5, CELL * 0.12);
+    const eyeFwd    = Math.max(2, CELL * 0.18);
     snake.forEach((seg, i) => {
       const x = seg.x * CELL + 1, y = seg.y * CELL + 1;
       const s = CELL - 2;
       ctx.fillStyle = i === 0 ? getCSSVar('--snake-head') : getCSSVar('--snake-body');
       ctx.beginPath();
-      ctx.roundRect(x, y, s, s, i === 0 ? 6 : 3);
+      ctx.roundRect(x, y, s, s, i === 0 ? Math.min(6, CELL * 0.25) : Math.min(3, CELL * 0.12));
       ctx.fill();
 
       // Eyes on head
@@ -596,12 +621,10 @@
         ctx.fillStyle = getCSSVar('--bg');
         const ex = seg.x * CELL + CELL / 2;
         const ey = seg.y * CELL + CELL / 2;
-        const eyeOffset = 4;
-        const eyeSize = 3;
-        if (dir.x === 1)  { drawEye(ex+4, ey-eyeOffset, eyeSize); drawEye(ex+4, ey+eyeOffset, eyeSize); }
-        if (dir.x === -1) { drawEye(ex-4, ey-eyeOffset, eyeSize); drawEye(ex-4, ey+eyeOffset, eyeSize); }
-        if (dir.y === -1) { drawEye(ex-eyeOffset, ey-4, eyeSize); drawEye(ex+eyeOffset, ey-4, eyeSize); }
-        if (dir.y === 1)  { drawEye(ex-eyeOffset, ey+4, eyeSize); drawEye(ex+eyeOffset, ey+4, eyeSize); }
+        if (dir.x === 1)  { drawEye(ex+eyeFwd, ey-eyeOffset, eyeSize); drawEye(ex+eyeFwd, ey+eyeOffset, eyeSize); }
+        if (dir.x === -1) { drawEye(ex-eyeFwd, ey-eyeOffset, eyeSize); drawEye(ex-eyeFwd, ey+eyeOffset, eyeSize); }
+        if (dir.y === -1) { drawEye(ex-eyeOffset, ey-eyeFwd, eyeSize); drawEye(ex+eyeOffset, ey-eyeFwd, eyeSize); }
+        if (dir.y === 1)  { drawEye(ex-eyeOffset, ey+eyeFwd, eyeSize); drawEye(ex+eyeOffset, ey+eyeFwd, eyeSize); }
       }
     });
 
