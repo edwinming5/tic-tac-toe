@@ -472,10 +472,28 @@
 
   renderScores();
 
+  // ── Audio ─────────────────────────────────────────────────────────────────────
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  function playEatSound() {
+    const osc  = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.08);
+    gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.15);
+  }
+
   // ── Game init ─────────────────────────────────────────────────────────────────
   function initGame() {
     const cx = Math.floor(COLS / 2), cy = Math.floor(ROWS / 2);
     snake    = [{ x: cx, y: cy }];
+    for (let i = 1; i < 5; i++) snake.push({ x: cx - i, y: cy }); // start with 5 segments
     dir      = { x: 1, y: 0 };
     nextDir  = { x: 1, y: 0 };
     score    = 0;
@@ -515,6 +533,7 @@
 
     const ate = head.x === food.x && head.y === food.y;
     if (ate) {
+      playEatSound();
       score += 10;
       if (snake.length <= 5)       score += 0;
       else if (snake.length <= 10)  score += 5;
@@ -637,6 +656,11 @@
   });
 
   // ── Buttons ───────────────────────────────────────────────────────────────────
+  // Resume AudioContext on first interaction (browser autoplay policy)
+  [startBtn, restartBtn].forEach(b => b.addEventListener('click', () => {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }));
+
   startBtn.addEventListener('click', startGame);
 
   saveBtn.addEventListener('click', () => {
