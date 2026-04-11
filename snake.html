@@ -671,6 +671,10 @@
       tryPlaceBonusFood();
     } else if (ateBonus) {
       playEatSound();
+      score += 30;
+      if (snake.length <= 5)        score += 0;
+      else if (snake.length <= 10)  score += 15;
+      else                          score += 30;
       // grow 2 extra segments (head already added = 3 total)
       const tail = snake[snake.length - 1];
       snake.push({ ...tail }, { ...tail });
