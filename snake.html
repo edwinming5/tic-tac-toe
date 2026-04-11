@@ -434,6 +434,7 @@
         <label>Speed:</label>
       </div>
       <div class="speed-group">
+        <button class="speed-btn" data-speed="superslow">Super Slow</button>
         <button class="speed-btn" data-speed="slow">Slow</button>
         <button class="speed-btn active" data-speed="medium">Medium</button>
         <button class="speed-btn" data-speed="fast">Fast</button>
@@ -473,7 +474,7 @@
   // ── Config ──────────────────────────────────────────────────────────────────
   const CANVAS_SIZE = 500;
   const GRIDS = { small: 12, medium: 20, large: 30 };
-  const SPEEDS = { slow: 200, medium: 130, fast: 85, insane: 50 };
+  const SPEEDS = { superslow: 350, slow: 200, medium: 130, fast: 85, insane: 50 };
   const LS_SCORES = 'snake-hiscores';
   const LS_THEME  = 'snake-theme';
 
@@ -576,6 +577,13 @@
 
   // ── Audio ─────────────────────────────────────────────────────────────────────
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  // Resume AudioContext on any user interaction (browser autoplay policy)
+  ['keydown', 'click'].forEach(evt =>
+    document.addEventListener(evt, () => {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }, { once: false })
+  );
 
   function playEatSound() {
     const osc  = audioCtx.createOscillator();
@@ -816,11 +824,6 @@
   });
 
   // ── Buttons ───────────────────────────────────────────────────────────────────
-  // Resume AudioContext on first interaction (browser autoplay policy)
-  [startBtn, restartBtn].forEach(b => b.addEventListener('click', () => {
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-  }));
-
   startBtn.addEventListener('click', startGame);
 
   saveBtn.addEventListener('click', () => {
