@@ -1994,197 +1994,111 @@
   </div>
 
   <style>
-    .dining-table { width: 100%; border-collapse: collapse; font-size: 9px; margin-top: 6px; }
-    .dining-table th { background: #8b1a1a; color: white; padding: 5px 6px; text-align: left; font-size: 8.5px; letter-spacing: 0.04em; }
-    .dining-table td { padding: 4px 6px; border-bottom: 1px solid #e8e0d5; vertical-align: middle; line-height: 1.4; }
+    .dining-table { width: 100%; border-collapse: collapse; font-size: 8.5px; margin-top: 6px; }
+    .dining-table th { background: #8b1a1a; color: white; padding: 5px 8px; text-align: left; font-size: 8.5px; letter-spacing: 0.04em; }
+    .dining-table th.th-bfast { background: #6d7f4e; }
+    .dining-table th.th-lunch { background: #b8621a; }
+    .dining-table th.th-dinner { background: #8b1a1a; }
+    .dining-table td { padding: 5px 8px; border-bottom: 1px solid #e8e0d5; vertical-align: top; line-height: 1.5; }
     .dining-table tr:nth-child(even) td { background: #faf8f5; }
-    .dining-table tr:hover td { background: #f3ede4; }
-    .dining-table .col-day { width: 30px; font-weight: 700; color: #8b1a1a; text-align: center; }
-    .dining-table .col-meal { width: 60px; }
-    .dining-table .col-name { width: 38%; font-weight: 600; }
-    .dining-table .col-addr { color: #555; }
-    .meal-tag { display: inline-block; padding: 1px 5px; border-radius: 3px; font-size: 7.5px; font-weight: 600; }
-    .meal-tag.lunch { background: #fff3e8; color: #c0622a; border: 1px solid #e67e22; }
-    .meal-tag.dinner { background: #fdecea; color: #922b21; border: 1px solid #c0392b; }
+    .dining-table .col-day { width: 28px; font-weight: 700; color: #8b1a1a; text-align: center; vertical-align: middle; font-size: 10px; }
+    .dining-table .cell-name { font-weight: 600; display: block; }
+    .dining-table .cell-addr { color: #888; font-size: 7.5px; display: block; margin-top: 1px; }
   </style>
 
   <table class="dining-table">
     <thead>
       <tr>
-        <th class="col-day">Day</th>
-        <th class="col-meal">Meal</th>
-        <th class="col-name">Restaurant</th>
-        <th class="col-addr">Address / Location</th>
+        <th style="width:28px">Day</th>
+        <th class="th-bfast">🌅 Breakfast</th>
+        <th class="th-lunch">🍱 Lunch</th>
+        <th class="th-dinner">🥩 Dinner</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td class="col-day">D1</td>
-        <td><span class="meal-tag lunch">🍱 Lunch</span></td>
-        <td>Restaurant in Rinku Town</td>
-        <td>Rinku Premium Outlets area, Izumisano, Osaka</td>
-      </tr>
-      <tr>
-        <td class="col-day">D1</td>
-        <td><span class="meal-tag dinner">🥩 Dinner</span></td>
-        <td>One Karubi Yakiniku</td>
-        <td>Rinku Town, Izumisano, Osaka</td>
+        <td><span class="cell-name">–</span></td>
+        <td><span class="cell-name">Restaurant in Rinku Town</span><span class="cell-addr">Rinku Premium Outlets area, Izumisano, Osaka</span></td>
+        <td><span class="cell-name">One Karubi Yakiniku</span><span class="cell-addr">Rinku Town, Izumisano, Osaka</span></td>
       </tr>
       <tr>
         <td class="col-day">D2</td>
-        <td><span class="meal-tag lunch">🍱 Lunch</span></td>
-        <td>Irori Beniya</td>
-        <td>Uji, Kyoto Prefecture</td>
-      </tr>
-      <tr>
-        <td class="col-day">D2</td>
-        <td><span class="meal-tag dinner">🥩 Dinner</span></td>
-        <td>Matsukiya Main Store 近江牛専門松喜屋本店</td>
-        <td>Uji, Kyoto Prefecture</td>
+        <td><span class="cell-name">Lake Biwa Marriott Hotel</span><span class="cell-addr">Included with stay</span></td>
+        <td><span class="cell-name">Irori Beniya</span><span class="cell-addr">Uji, Kyoto Prefecture</span></td>
+        <td><span class="cell-name">Matsukiya Main Store 近江牛専門松喜屋本店</span><span class="cell-addr">Uji, Kyoto Prefecture</span></td>
       </tr>
       <tr>
         <td class="col-day">D3</td>
-        <td><span class="meal-tag lunch">🍱 Lunch</span></td>
-        <td>Eel Hitsumabushi Sumiyagura</td>
-        <td>Ōmi-Hachiman, Shiga Prefecture</td>
-      </tr>
-      <tr>
-        <td class="col-day">D3</td>
-        <td><span class="meal-tag dinner">🍽 Dinner</span></td>
-        <td>PIERI MORIYAMA Restaurant</td>
-        <td>PIERI守山, Moriyama, Shiga Prefecture</td>
+        <td><span class="cell-name">Lake Biwa Marriott Hotel</span><span class="cell-addr">Included with stay</span></td>
+        <td><span class="cell-name">Eel Hitsumabushi Sumiyagura</span><span class="cell-addr">Ōmi-Hachiman, Shiga Prefecture</span></td>
+        <td><span class="cell-name">PIERI MORIYAMA Restaurant</span><span class="cell-addr">PIERI守山, Moriyama, Shiga Prefecture</span></td>
       </tr>
       <tr>
         <td class="col-day">D4</td>
-        <td><span class="meal-tag lunch">🍱 Lunch</span></td>
-        <td>Hieizan Minemichi Restaurant 比叡山嶺道餐廳</td>
-        <td>Mt. Hiei, Otsu, Shiga Prefecture</td>
-      </tr>
-      <tr>
-        <td class="col-day">D4</td>
-        <td><span class="meal-tag dinner">🥩 Dinner</span></td>
-        <td>Tonkatsu Taku 豬排Taku</td>
-        <td>Otsu / Lake Biwa area, Shiga Prefecture</td>
+        <td><span class="cell-name">Lake Biwa Marriott Hotel</span><span class="cell-addr">Included with stay</span></td>
+        <td><span class="cell-name">Hieizan Minemichi Restaurant 比叡山嶺道餐廳</span><span class="cell-addr">Mt. Hiei, Otsu, Shiga Prefecture</span></td>
+        <td><span class="cell-name">Tonkatsu Taku 豬排Taku</span><span class="cell-addr">Otsu / Lake Biwa area, Shiga Prefecture</span></td>
       </tr>
       <tr>
         <td class="col-day">D5</td>
-        <td><span class="meal-tag lunch">🍕 Lunch</span></td>
-        <td>Sakaya Pizza Cafe</td>
-        <td>Miyama, Nantan, Kyoto Prefecture</td>
-      </tr>
-      <tr>
-        <td class="col-day">D5</td>
-        <td><span class="meal-tag dinner">🍽 Dinner</span></td>
-        <td>お食事処 割烹たんご</td>
-        <td>Miyazu, Kyoto Prefecture</td>
+        <td><span class="cell-name">–</span></td>
+        <td><span class="cell-name">Sakaya Pizza Cafe</span><span class="cell-addr">Miyama, Nantan, Kyoto Prefecture</span></td>
+        <td><span class="cell-name">お食事処 割烹たんご</span><span class="cell-addr">Miyazu, Kyoto Prefecture</span></td>
       </tr>
       <tr>
         <td class="col-day">D6</td>
-        <td><span class="meal-tag lunch">🦞 Lunch</span></td>
-        <td>海鮮工房 / 310 Amanohashidate</td>
-        <td>Amanohashidate, Miyazu, Kyoto Prefecture</td>
-      </tr>
-      <tr>
-        <td class="col-day">D6</td>
-        <td><span class="meal-tag dinner">🍽 Dinner</span></td>
-        <td>Nitanda</td>
-        <td>Miyazu, Kyoto Prefecture</td>
+        <td><span class="cell-name">–</span></td>
+        <td><span class="cell-name">海鮮工房 / 310 Amanohashidate</span><span class="cell-addr">Amanohashidate, Miyazu, Kyoto Prefecture</span></td>
+        <td><span class="cell-name">Nitanda</span><span class="cell-addr">Miyazu, Kyoto Prefecture</span></td>
       </tr>
       <tr>
         <td class="col-day">D7</td>
-        <td><span class="meal-tag lunch">🐬 Lunch</span></td>
-        <td>Cafe &amp; Restaurant Terrace</td>
-        <td>Kinosaki Marine World, Toyooka, Hyogo Prefecture</td>
-      </tr>
-      <tr>
-        <td class="col-day">D7</td>
-        <td><span class="meal-tag dinner">🍱 Dinner</span></td>
-        <td>Asanoya Ryokan 朝野家旅館 <em style="font-weight:400;color:#888">(included)</em></td>
-        <td>Yumura Onsen, Shingu, Hyogo Prefecture</td>
+        <td><span class="cell-name">Asanoya Ryokan 朝野家旅館</span><span class="cell-addr">Included with stay · Yumura Onsen, Hyogo</span></td>
+        <td><span class="cell-name">Cafe &amp; Restaurant Terrace</span><span class="cell-addr">Kinosaki Marine World, Toyooka, Hyogo</span></td>
+        <td><span class="cell-name">Asanoya Ryokan 朝野家旅館</span><span class="cell-addr">Included with stay · Yumura Onsen, Hyogo</span></td>
       </tr>
       <tr>
         <td class="col-day">D8</td>
-        <td><span class="meal-tag lunch">🏯 Lunch</span></td>
-        <td>Kassui-ken 活水軒</td>
-        <td>Himeji Castle Grounds, 68 Honmachi, Himeji, Hyogo</td>
-      </tr>
-      <tr>
-        <td class="col-day">D8</td>
-        <td><span class="meal-tag dinner">🐟 Dinner</span></td>
-        <td>Uoya Taisho</td>
-        <td>Himeji, Hyogo Prefecture</td>
+        <td><span class="cell-name">Smile Hotel Okayama</span><span class="cell-addr">Included with stay</span></td>
+        <td><span class="cell-name">Kassui-ken 活水軒</span><span class="cell-addr">Himeji Castle Grounds, 68 Honmachi, Himeji, Hyogo</span></td>
+        <td><span class="cell-name">Uoya Taisho</span><span class="cell-addr">Himeji, Hyogo Prefecture</span></td>
       </tr>
       <tr>
         <td class="col-day">D9</td>
-        <td><span class="meal-tag lunch">🍲 Lunch</span></td>
-        <td>Shabu-shabu Sukiyaki Hitorinabe Megu</td>
-        <td>Okayama City, Okayama Prefecture</td>
-      </tr>
-      <tr>
-        <td class="col-day">D9</td>
-        <td><span class="meal-tag dinner">🍶 Dinner</span></td>
-        <td>Hidaya Togiyacho</td>
-        <td>Kurashiki, Okayama Prefecture</td>
+        <td><span class="cell-name">Smile Hotel Okayama</span><span class="cell-addr">Included with stay</span></td>
+        <td><span class="cell-name">Shabu-shabu Sukiyaki Hitorinabe Megu</span><span class="cell-addr">Okayama City, Okayama Prefecture</span></td>
+        <td><span class="cell-name">Hidaya Togiyacho</span><span class="cell-addr">Kurashiki, Okayama Prefecture</span></td>
       </tr>
       <tr>
         <td class="col-day">D10</td>
-        <td><span class="meal-tag lunch">🐟 Lunch</span></td>
-        <td>Yuunagi</td>
-        <td>Naoshima, Kagawa Prefecture</td>
-      </tr>
-      <tr>
-        <td class="col-day">D10</td>
-        <td><span class="meal-tag dinner">🥩 Dinner</span></td>
-        <td>焼肉割烹のべ</td>
-        <td>3 Chome-21 Ichibancho, Tokushima 770-0833</td>
+        <td><span class="cell-name">–</span></td>
+        <td><span class="cell-name">Yuunagi</span><span class="cell-addr">Naoshima, Kagawa Prefecture</span></td>
+        <td><span class="cell-name">焼肉割烹のべ</span><span class="cell-addr">3 Chome-21 Ichibancho, Tokushima 770-0833</span></td>
       </tr>
       <tr>
         <td class="col-day">D11</td>
-        <td><span class="meal-tag lunch">🍤 Lunch</span></td>
-        <td>天ぷらたまき 六甲道店</td>
-        <td>Rokkodo, Nada-ku, Kobe, Hyogo Prefecture</td>
-      </tr>
-      <tr>
-        <td class="col-day">D11</td>
-        <td><span class="meal-tag dinner">🍢 Dinner</span></td>
-        <td>Kushikatsu Ittoku Tsutenkaku Branch 串かつ一徳</td>
-        <td>Shinsekai, Naniwa-ku, Osaka</td>
+        <td><span class="cell-name">–</span></td>
+        <td><span class="cell-name">天ぷらたまき 六甲道店</span><span class="cell-addr">Rokkodo, Nada-ku, Kobe, Hyogo Prefecture</span></td>
+        <td><span class="cell-name">Kushikatsu Ittoku Tsutenkaku 串かつ一徳</span><span class="cell-addr">Shinsekai, Naniwa-ku, Osaka</span></td>
       </tr>
       <tr>
         <td class="col-day">D12</td>
-        <td><span class="meal-tag lunch">🌿 Lunch</span></td>
-        <td>The Farm Universal Osaka</td>
-        <td>2-chome Sakurajima, Konohana-ku, Osaka</td>
-      </tr>
-      <tr>
-        <td class="col-day">D12</td>
-        <td><span class="meal-tag dinner">🥩 Dinner</span></td>
-        <td>Wagyu Sukiyaki Okuwo 和牛すき焼き おくを</td>
-        <td>Osaka City, Osaka Prefecture</td>
+        <td><span class="cell-name">–</span></td>
+        <td><span class="cell-name">The Farm Universal Osaka</span><span class="cell-addr">Sakurajima, Konohana-ku, Osaka</span></td>
+        <td><span class="cell-name">Wagyu Sukiyaki Okuwo 和牛すき焼き おくを</span><span class="cell-addr">Osaka City, Osaka Prefecture</span></td>
       </tr>
       <tr>
         <td class="col-day">D13</td>
-        <td><span class="meal-tag lunch">🍤 Lunch</span></td>
-        <td>Tempura Makino Umeda 天ぷら牧野梅田店</td>
-        <td>Umeda, Kita-ku, Osaka</td>
-      </tr>
-      <tr>
-        <td class="col-day">D13</td>
-        <td><span class="meal-tag dinner">🍽️ Dinner</span></td>
-        <td>TBD</td>
-        <td>–</td>
+        <td><span class="cell-name">bills Osaka</span><span class="cell-addr">Umeda, Kita-ku, Osaka</span></td>
+        <td><span class="cell-name">Tempura Makino Umeda 天ぷら牧野梅田店</span><span class="cell-addr">Umeda, Kita-ku, Osaka</span></td>
+        <td><span class="cell-name">TBD</span></td>
       </tr>
       <tr>
         <td class="col-day">D14</td>
-        <td><span class="meal-tag lunch">🦪 Lunch</span></td>
-        <td>Kuromon Ichiba Market 黒門市場</td>
-        <td>2-4-1 Nippombashi, Chuo-ku, Osaka 542-0073</td>
-      </tr>
-      <tr>
-        <td class="col-day">D14</td>
-        <td><span class="meal-tag dinner">✈️ Dinner</span></td>
-        <td>Airport Bento — KIX Departure Hall</td>
-        <td>Kansai International Airport, Izumisano, Osaka</td>
+        <td><span class="cell-name">–</span></td>
+        <td><span class="cell-name">Kuromon Ichiba Market 黒門市場</span><span class="cell-addr">2-4-1 Nippombashi, Chuo-ku, Osaka 542-0073</span></td>
+        <td><span class="cell-name">Airport Bento — KIX Departure Hall</span><span class="cell-addr">Kansai International Airport, Izumisano, Osaka</span></td>
       </tr>
     </tbody>
   </table>
