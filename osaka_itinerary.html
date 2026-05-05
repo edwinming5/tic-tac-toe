@@ -211,6 +211,9 @@
       font-weight: 500;
       margin-left: 3px;
     }
+    .check-times { font-size: 9px; white-space: nowrap; line-height: 1.7; }
+    .cin { color: #27ae60; display: block; }
+    .cout { color: #c0392b; display: block; }
 
     /* Tips box */
     .tips-box {
@@ -523,9 +526,10 @@
     <thead>
       <tr>
         <th style="width:7%">Day</th>
-        <th style="width:28%">Date</th>
-        <th style="width:25%">Destination</th>
-        <th>Hotel / Accommodation</th>
+        <th style="width:26%">Date</th>
+        <th style="width:22%">Destination</th>
+        <th style="width:30%">Hotel / Accommodation</th>
+        <th style="width:15%">Check-in · Check-out</th>
       </tr>
     </thead>
     <tbody>
@@ -537,6 +541,7 @@
           <span class="hotel-name">Odysis Suites Osaka Airport Hotel</span>
           <span class="hotel-source trip">Trip.com</span>
         </td>
+        <td class="check-times"><span class="cin">In 15:00</span><span class="cout">Out 11:00</span></td>
       </tr>
       <tr>
         <td class="day-num">D2</td>
@@ -547,6 +552,7 @@
           <span class="hotel-source bonvoy">Bonvoy</span>
           <span class="meal-badge">B</span>
         </td>
+        <td class="check-times"><span class="cin">In 15:00</span><span class="cout">Out 11:00</span></td>
       </tr>
       <tr>
         <td class="day-num">D3</td>
@@ -557,6 +563,7 @@
           <span class="hotel-source bonvoy">Bonvoy</span>
           <span class="meal-badge">B</span>
         </td>
+        <td class="check-times"><span class="cout">Out 11:00</span></td>
       </tr>
       <tr>
         <td class="day-num">D4</td>
@@ -567,6 +574,7 @@
           <span class="hotel-source bonvoy">Bonvoy</span>
           <span class="meal-badge">B</span>
         </td>
+        <td class="check-times"><span class="cout">Out 11:00</span></td>
       </tr>
       <tr>
         <td class="day-num">D5</td>
@@ -576,6 +584,7 @@
           <span class="hotel-name">Fairfield by Marriott Kyoto Amanohashidate</span>
           <span class="hotel-source bonvoy">Bonvoy</span>
         </td>
+        <td class="check-times"><span class="cin">In 15:00</span><span class="cout">Out 11:00</span></td>
       </tr>
       <tr>
         <td class="day-num">D6</td>
@@ -585,6 +594,7 @@
           <span class="hotel-name">Fairfield by Marriott Kyoto Amanohashidate</span>
           <span class="hotel-source bonvoy">Bonvoy</span>
         </td>
+        <td class="check-times"><span class="cout">Out 11:00</span></td>
       </tr>
       <tr>
         <td class="day-num">D7</td>
@@ -596,6 +606,7 @@
           <span class="meal-badge">D</span>
           <span class="meal-badge">B</span>
         </td>
+        <td class="check-times"><span class="cin">In 15:00</span><span class="cout">Out 10:00</span></td>
       </tr>
       <tr>
         <td class="day-num">D8</td>
@@ -606,6 +617,7 @@
           <span class="hotel-source trip">Trip.com</span>
           <span class="meal-badge">B</span>
         </td>
+        <td class="check-times"><span class="cin">In 15:00</span><span class="cout">Out 11:00</span></td>
       </tr>
       <tr>
         <td class="day-num">D9</td>
@@ -616,6 +628,7 @@
           <span class="hotel-source trip">Trip.com</span>
           <span class="meal-badge">B</span>
         </td>
+        <td class="check-times"><span class="cout">Out 11:00</span></td>
       </tr>
       <tr>
         <td class="day-num">D10</td>
@@ -625,6 +638,7 @@
           <span class="hotel-name">Hotel Sunroute Tokushima</span>
           <span class="hotel-source trip">Trip.com</span>
         </td>
+        <td class="check-times"><span class="cin">In 14:00</span><span class="cout">Out 11:00</span></td>
       </tr>
       <tr>
         <td class="day-num">D11</td>
@@ -634,6 +648,7 @@
           <span class="hotel-name">Tanimachi-Kun Hotel Ebisucho 72</span>
           <span class="hotel-source trip">Trip.com</span>
         </td>
+        <td class="check-times"><span class="cin">In 15:00</span><span class="cout">Out 10:00</span></td>
       </tr>
       <tr>
         <td class="day-num">D12</td>
@@ -643,6 +658,7 @@
           <span class="hotel-name">Tanimachi-Kun Hotel Ebisucho 72</span>
           <span class="hotel-source trip">Trip.com</span>
         </td>
+        <td class="check-times"><span class="cout">Out 10:00</span></td>
       </tr>
       <tr>
         <td class="day-num">D13</td>
@@ -652,12 +668,14 @@
           <span class="hotel-name">Tanimachi-Kun Hotel Ebisucho 72</span>
           <span class="hotel-source trip">Trip.com</span>
         </td>
+        <td class="check-times"><span class="cout">Out 10:00</span></td>
       </tr>
       <tr>
         <td class="day-num">D14</td>
         <td class="day-date">Tuesday, 2 June 2026</td>
         <td class="day-location">Osaka → Airport <span class="zh">大阪→機場</span></td>
         <td style="color:#888;font-style:italic;font-size:10px;">Return to Singapore (3 June)</td>
+        <td class="check-times" style="color:#aaa;font-style:italic;">—</td>
       </tr>
     </tbody>
   </table>
