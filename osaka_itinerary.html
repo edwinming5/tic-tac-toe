@@ -2425,6 +2425,19 @@
     .drive-total td { background: #2c3e6b !important; color: white !important; font-weight: 700; font-size: 9px; }
     .drive-total .d-km { color: #f9e79f !important; font-size: 11px; }
     .drive-total .d-time { color: #aed6f1 !important; }
+    .car-card { display: flex; gap: 10px; margin-bottom: 8px; background: #f5f7fb; border: 1px solid #dde3f0; border-radius: 6px; padding: 8px 10px; align-items: flex-start; }
+    .car-img { width: 148px; min-width: 148px; height: 92px; object-fit: cover; border-radius: 4px; }
+    .car-specs { flex: 1; }
+    .car-title { font-size: 12px; font-weight: 700; color: #2c3e6b; margin-bottom: 2px; }
+    .car-sub { font-size: 8px; color: #888; margin-bottom: 6px; }
+    .car-specs-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 8px; margin-bottom: 6px; }
+    .car-spec-item { font-size: 7.5px; }
+    .car-spec-label { color: #888; display: block; font-size: 6.8px; }
+    .car-spec-val { font-weight: 700; color: #2c3e6b; font-size: 8.5px; }
+    .car-rental { border-top: 1px solid #dde3f0; padding-top: 5px; font-size: 7.5px; color: #444; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .car-rental-co { font-weight: 700; color: #2c3e6b; font-size: 8.5px; }
+    .incl-badge { display: inline-block; background: #eaf4fb; color: #1a6fa0; font-size: 7px; padding: 1px 6px; border-radius: 8px; font-weight: 600; margin-right: 3px; }
+    .fuel-est { background: #fef9e7; border: 1px solid #f9e79f; border-radius: 4px; padding: 3px 8px; font-size: 7px; color: #7d6608; margin-left: auto; white-space: nowrap; }
   </style>
 
   <div class="header">
@@ -2435,6 +2448,35 @@
     <div class="header-right">
       <div class="dates">20 May – 2 June 2026</div>
       <div>KIX → KIX &nbsp;·&nbsp; Japan</div>
+    </div>
+  </div>
+
+  <!-- Car Info Card -->
+  <div class="car-card">
+    <img class="car-img" src="https://upload.wikimedia.org/wikipedia/commons/7/75/2022_Toyota_Noah_X.jpg" alt="Toyota Noah">
+    <div class="car-specs">
+      <div class="car-title">Toyota Noah &nbsp;<span style="font-size:9px;font-weight:400;color:#888;">90-Series (2022) &nbsp;·&nbsp; Pure Petrol ICE</span></div>
+      <div class="car-sub">7-seater MPV &nbsp;·&nbsp; Automatic (Direct Shift-CVT)</div>
+      <div class="car-specs-grid">
+        <div class="car-spec-item"><span class="car-spec-label">Engine</span><span class="car-spec-val">2.0 L 4-cyl</span></div>
+        <div class="car-spec-item"><span class="car-spec-label">Power</span><span class="car-spec-val">170 PS</span></div>
+        <div class="car-spec-item"><span class="car-spec-label">Fuel Tank</span><span class="car-spec-val">52 L</span></div>
+        <div class="car-spec-item"><span class="car-spec-label">WLTC Efficiency</span><span class="car-spec-val">15.1 km/L</span></div>
+        <div class="car-spec-item"><span class="car-spec-label">Fuel Type</span><span class="car-spec-val">Regular Petrol レギュラー</span></div>
+        <div class="car-spec-item"><span class="car-spec-label">Tank Range</span><span class="car-spec-val">~785 km/tank</span></div>
+        <div class="car-spec-item"><span class="car-spec-label">Est. Fuel (trip)</span><span class="car-spec-val">~93 L (~2 fill-ups)</span></div>
+        <div class="car-spec-item"><span class="car-spec-label">Seats</span><span class="car-spec-val">7 seats</span></div>
+      </div>
+      <div class="car-rental">
+        <span><span class="car-rental-co">KuMa Rental Car</span> &nbsp;·&nbsp; kuma-rental-car.com</span>
+        <span>Includes:</span>
+        <span>
+          <span class="incl-badge">📡 ETC Machine</span>
+          <span class="incl-badge">💳 ETC Card</span>
+          <span class="incl-badge">🪑 Child Booster Seat</span>
+        </span>
+        <div class="fuel-est">⛽ Est. fuel cost @ ¥180/L &nbsp;≈&nbsp; ¥16,700</div>
+      </div>
     </div>
   </div>
 
