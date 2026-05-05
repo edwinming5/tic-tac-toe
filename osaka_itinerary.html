@@ -686,1301 +686,7 @@
   <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; 20 May – 2 June &nbsp;·&nbsp; 14 Days &nbsp;·&nbsp; Western Japan</div>
 
 </div>
-<!-- PAGE 2: Route Map -->
-<div class="page">
-
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Route Map – Western Japan</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">20 May – 2 June 2026</div>
-      <div>14 stops · Self-drive road trip</div>
-    </div>
-  </div>
-
-  <div class="section-title">Route Overview</div>
-  <div id="map"></div>
-
-  <div class="stops-grid" id="stops-legend"></div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; 20 May – 2 June &nbsp;·&nbsp; 14 Days &nbsp;·&nbsp; Western Japan &nbsp;·&nbsp; Map © OpenStreetMap contributors</div>
-
-</div>
-
-<script>
-  const stops = [
-    { day: 'D1',    label: 'Rinku Town',       sub: 'Outlet',              lat: 34.442, lng: 135.310, date: '20 May' },
-    { day: 'D2',    label: 'Uji',               sub: '',                    lat: 34.884, lng: 135.801, date: '21 May' },
-    { day: 'D3',    label: 'Ōmi-Hachiman',      sub: '',                    lat: 35.128, lng: 136.098, date: '22 May' },
-    { day: 'D4',    label: 'Lake Biwa',          sub: 'Driveway & Shrines',  lat: 35.150, lng: 136.068, date: '23 May' },
-    { day: 'D5',    label: 'Kayabuki-no-Sato',  sub: 'Miyama',              lat: 35.358, lng: 135.714, date: '24 May' },
-    { day: 'D6',    label: 'Ine Bay',            sub: '',                    lat: 35.662, lng: 135.304, date: '25 May' },
-    { day: 'D6',    label: 'Amanohashidate',    sub: '',                    lat: 35.553, lng: 135.197, date: '25 May' },
-    { day: 'D7',    label: 'Yumura Onsen',      sub: 'Marine World & Dolphin', lat: 35.520, lng: 134.567, date: '26 May' },
-    { day: 'D8',    label: 'Himeji',             sub: 'Himeji Castle',       lat: 34.840, lng: 134.694, date: '27 May' },
-    { day: 'D9',    label: 'Okayama',            sub: 'Gardens & City',      lat: 34.662, lng: 133.934, date: '28 May' },
-    { day: 'D10',   label: 'Naoshima',           sub: 'Art Island',          lat: 34.463, lng: 133.989, date: '29 May' },
-    { day: 'D11',   label: 'Naruto',             sub: 'Whirlpools',          lat: 34.180, lng: 134.608, date: '30 May' },
-    { day: 'D11',   label: 'Kobe',               sub: '',                    lat: 34.690, lng: 135.196, date: '30 May' },
-    { day: 'D12–14',label: 'Osaka',              sub: 'City Days',           lat: 34.693, lng: 135.502, date: '31 May–2 Jun' },
-  ];
-
-  function dayColor(i, n) {
-    const hue = Math.round(120 - 120 * i / (n - 1));
-    return `hsl(${hue}, 72%, 40%)`;
-  }
-
-  const map = L.map('map', { zoomControl: true }).setView([35.05, 135.1], 7);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 18
-  }).addTo(map);
-
-  stops.forEach((stop, i) => {
-    const color = dayColor(i, stops.length);
-    const icon = L.divIcon({
-      html: `<div style="background:${color};color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:7.5px;font-weight:700;border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.4);font-family:Inter,sans-serif;line-height:1;text-align:center">${stop.day}</div>`,
-      iconSize: [26, 26],
-      iconAnchor: [13, 13],
-      className: ''
-    });
-    L.marker([stop.lat, stop.lng], { icon })
-      .addTo(map)
-      .bindPopup(`<strong>${stop.day} · ${stop.date}</strong><br>${stop.label}${stop.sub ? '<br><em style="color:#666">' + stop.sub + '</em>' : ''}`);
-  });
-
-  // Dashed route polyline
-  L.polyline(stops.map(s => [s.lat, s.lng]), {
-    color: '#c0392b', weight: 2.5, opacity: 0.55, dashArray: '7,5'
-  }).addTo(map);
-
-  // Build legend
-  const legend = document.getElementById('stops-legend');
-  stops.forEach((stop, i) => {
-    const color = dayColor(i, stops.length);
-    const item = document.createElement('div');
-    item.className = 'stop-item';
-    item.innerHTML = `
-      <div class="stop-dot" style="background:${color}">${stop.day.replace('D','')}</div>
-      <div class="stop-text">
-        <div class="stop-day">${stop.day} · ${stop.date}</div>
-        <div class="stop-name">${stop.label}</div>
-      </div>`;
-    legend.appendChild(item);
-  });
-</script>
-
-<!-- PAGE 3: Day 1 Summary -->
-<div class="page">
-
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 1 – Rinku Town</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Wednesday, 20 May 2026</div>
-      <div>Rinku Town &nbsp;·&nbsp; Izumisano, Osaka</div>
-    </div>
-  </div>
-
-  <!-- Day hero banner -->
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D1</div>
-      <div class="day-hero-label">
-        <div class="day-title">Rinku Town &nbsp;·&nbsp; 臨空城</div>
-        <div class="day-sub">Izumisano, Osaka Prefecture &nbsp;·&nbsp; Arrival Day</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Arrive KIX</strong> &nbsp;09:05 (MM774 from SIN)</div>
-      <div><strong>Hotel</strong> &nbsp;Odysis Suites Osaka Airport Hotel</div>
-      <div><strong>Check-in</strong> &nbsp;from 15:00</div>
-    </div>
-  </div>
-
-  <div class="section-title">Places to Visit</div>
-
-  <div class="attraction-grid">
-
-    <div class="attraction-card">
-      <img src="https://www.pelago.com/img/products/JP-Japan/private-shopping-tour-from-osaka-hotels-to-rinku-premium-outlets/ae746c12-20b9-4255-b4d8-66ec6b1a05d2_private-shopping-tour-from-osaka-hotels-to-rinku-premium-outlets.jpg" alt="Rinku Premium Outlets">
-      <div class="img-credit">© Wikimedia Commons</div>
-      <div class="card-body">
-        <div class="card-title">Rinku Premium Outlets <span class="card-zh">臨空城暢貨中心</span></div>
-        <div class="card-desc">One of Japan's largest outlet malls with 210+ stores spanning luxury brands like Dolce &amp; Gabbana and Kate Spade to Nike and Adidas. Tax-free shopping is available — bring your passport for savings of up to 10%. A perfect first stop right after landing.</div>
-        <div class="card-desc card-desc-zh">日本最大型的暢貨中心之一，匯聚逾210間店鋪，涵蓋Dolce &amp; Gabbana、Kate Spade等奢侈品牌，以及Nike、Adidas等運動品牌。持護照可享免稅優惠，最高節省10%。甫抵達後的第一站首選。</div>
-        <span class="card-tag">Shopping</span>
-        <span class="card-tag">Tax-Free</span>
-        <span class="card-tag">Open 10:00–20:00</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/09/c0/06/6f/caption.jpg?w=1200&h=-1&s=1" alt="Rinku Gate Tower">
-      <div class="img-credit">© Wikimedia Commons</div>
-      <div class="card-body">
-        <div class="card-title">Rinku Gate Tower &amp; Ferris Wheel <span class="card-zh">臨空閘塔及摩天輪</span></div>
-        <div class="card-desc">The landmark twin towers and the 85-metre Rinku No Hoshi Ferris Wheel define the Rinku skyline. A ride on the Ferris wheel rewards you with panoramic views over Osaka Bay, Kansai Airport, and on a clear day, as far as Awaji Island to the south.</div>
-        <div class="card-desc card-desc-zh">標誌性的雙子塔與高達85米的「臨空之星」摩天輪，是臨空城最具代表性的地標。乘坐摩天輪可俯瞰大阪灣及關西國際機場全景，晴天時甚至能遠眺南方的淡路島。</div>
-        <span class="card-tag">Landmark</span>
-        <span class="card-tag">Observation</span>
-        <span class="card-tag">Paid Entry</span>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="section-title">Meals</div>
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🍱 Lunch</h4>
-      <ul>
-        <li><strong>Restaurant in Rinku Town</strong> — Grab lunch at one of the many dining options within Rinku Premium Outlets or the surrounding Rinku Town area after arriving and settling in.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">🥩 Dinner</h4>
-      <ul>
-        <li><strong>One Karubi Yakiniku</strong> — Japanese yakiniku (BBQ) restaurant conveniently located next to the hotel. Grill your own premium cuts of beef and pork at the table — a great way to kick off the trip.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="section-title">Practical Info</div>
-  <div class="practical-grid">
-    <div class="practical-box">
-      <h4>Getting Around</h4>
-      <ul>
-        <li>KIX → Rinku Town: 5 min by JR or Nankai train — station is directly under the terminal.</li>
-        <li>Rinku Premium Outlets is a 3-min walk from Rinku Town Station.</li>
-        <li>Hotel Odysis Suites is within Rinku Town, walkable from the station.</li>
-      </ul>
-    </div>
-    <div class="practical-box">
-      <h4>Tips for the Day</h4>
-      <ul>
-        <li>Bring your passport for tax-free purchases at the outlets.</li>
-        <li>Luggage storage is available at KIX if you want to explore before hotel check-in at 15:00.</li>
-        <li>AEON Mall Rinku Sennan nearby has 160+ stores for groceries, snacks, and everyday needs for the road trip.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 1 &nbsp;·&nbsp; 20 May 2026 &nbsp;·&nbsp; Rinku Town, Izumisano &nbsp;·&nbsp; Photos © Wikimedia Commons</div>
-
-</div>
-
-<!-- PAGE 4: Day 2 Summary -->
-<div class="page">
-
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 2 – Uji</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Thursday, 21 May 2026</div>
-      <div>Uji &nbsp;·&nbsp; Kyoto Prefecture</div>
-    </div>
-  </div>
-
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D2</div>
-      <div class="day-hero-label">
-        <div class="day-title">Uji &nbsp;·&nbsp; 宇治</div>
-        <div class="day-sub">Kyoto Prefecture &nbsp;·&nbsp; Tea Culture & UNESCO Heritage</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Hotel</strong> &nbsp;Lake Biwa Marriott Hotel</div>
-      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
-      <div><strong>Includes</strong> &nbsp;Breakfast</div>
-    </div>
-  </div>
-
-  <div class="section-title">Places to Visit</div>
-
-  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
-
-    <div class="attraction-card">
-      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/10/3e/01/72/phoenix-hall.jpg?w=900&h=500&s=1" alt="Byōdō-in Temple">
-      <div class="img-credit">© Wikimedia Commons</div>
-      <div class="card-body">
-        <div class="card-title">Byōdō-in Temple <span class="card-zh">平等院</span></div>
-        <div class="card-desc">A UNESCO World Heritage Site founded in 1052, Byōdō-in is home to the iconic Phoenix Hall (Hōō-dō) — a masterpiece of Heian-period aristocratic architecture reflected in a serene garden pond. Its image appears on the Japanese 10-yen coin.</div>
-        <div class="card-desc card-desc-zh">平等院建於1052年（平安時代），是聯合國教科文組織世界文化遺產。以著名的鳳凰堂聞名，此建築凌駕於倒影池上，是日本貴族建築瑰寶，其圖像更印於日本十円硬幣之上。</div>
-        <span class="card-tag">UNESCO Heritage</span>
-        <span class="card-tag">Temple</span>
-        <span class="card-tag">Open 08:30–17:30</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://cdn.cheapoguides.com/wp-content/uploads/sites/3/2024/02/tsuen-teahouse-1024x600.jpg" alt="Uji Tea District">
-      <div class="img-credit">© Wikimedia Commons</div>
-      <div class="card-body">
-        <div class="card-title">Uji Tea Houses <span class="card-zh">宇治茶屋</span></div>
-        <div class="card-desc">Uji is Japan's most prized tea region. <strong>Nakamura Tokichi Honten</strong> (est. 1854) serves matcha sweets in a heritage tea-factory café. <strong>Tsujiri Uji Main Store</strong> and the ancient <strong>Tsuen Main Branch</strong> complete the trio — all within a short riverside walk of each other.</div>
-        <div class="card-desc card-desc-zh">宇治是日本最負盛名的茶葉產區。<strong>中村藤吉本店</strong>（創立於1854年）以古樸茶廠改建的咖啡廳供應精緻抹茶甜點；<strong>辻利宇治本店</strong>及歷史悠久的<strong>通園本店</strong>同樣提供精選茶飲與和菓子，各店沿河步行皆可輕鬆到達。</div>
-        <span class="card-tag">Matcha</span>
-        <span class="card-tag">Tea Culture</span>
-        <span class="card-tag">Historic Cafés</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://english-site.fudousin.com/wp-content/uploads/2024/10/Kisenbashi-760x570.jpg" alt="Tachibana Bridge Uji">
-      <div class="img-credit">© Wikimedia Commons</div>
-      <div class="card-body">
-        <div class="card-title">Tachibana Bridge <span class="card-zh">橘橋</span></div>
-        <div class="card-desc">A charming footbridge spanning the Uji River near Byōdō-in, Tachibana Bridge offers picturesque views of the river and the wooded temple grounds beyond. A leisurely riverside stroll between the bridge and the temple is the perfect way to round off the afternoon in Uji.</div>
-        <div class="card-desc card-desc-zh">橘橋是橫跨宇治川的古雅小橋，毗鄰平等院，可眺望川面及山林中的寺院景色。漫步橘橋與平等院之間的河畔步道，是在宇治度過午後時光的最悠然方式。</div>
-        <span class="card-tag">Scenic</span>
-        <span class="card-tag">Riverside Walk</span>
-        <span class="card-tag">Free</span>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="section-title">Meals</div>
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🍱 Lunch — Irori Beniya</h4>
-      <ul>
-        <li><strong>Irori Beniya</strong> is a beloved traditional restaurant in Uji serving charcoal-grilled fish dishes cooked over an <em>irori</em> (sunken hearth). Signature dishes include grilled Atka mackerel set meals and grilled salmon with salmon roe rice. Rated 5.0 on Tripadvisor.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">🥩 Dinner — Matsukiya Main Store &nbsp;<span style="font-weight:400;font-size:9px;color:#888">近江牛專門餐廳松喜屋本店</span></h4>
-      <ul>
-        <li><strong>Matsukiya</strong> is a legendary Omi beef (近江牛) specialist run by the same family since the Meiji era. The main store sits on the bank of the Seta River in Otsu — perfectly placed en route to Lake Biwa. Enjoy premium cuts prepared as sukiyaki, shabu-shabu, or steak, finished with the chef's signature bubble salt.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 2 &nbsp;·&nbsp; 21 May 2026 &nbsp;·&nbsp; Uji, Kyoto Prefecture &nbsp;·&nbsp; Photos © Wikimedia Commons</div>
-
-</div>
-
-<!-- PAGE 5: Day 3 Summary -->
-<div class="page">
-
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 3 – Ōmi-Hachiman</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Friday, 22 May 2026</div>
-      <div>Ōmi-Hachiman &nbsp;·&nbsp; Shiga Prefecture</div>
-    </div>
-  </div>
-
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D3</div>
-      <div class="day-hero-label">
-        <div class="day-title">Ōmi-Hachiman &nbsp;·&nbsp; 近江八幡</div>
-        <div class="day-sub">Shiga Prefecture &nbsp;·&nbsp; Historic Canals & Merchant Culture</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Hotel</strong> &nbsp;Lake Biwa Marriott Hotel</div>
-      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
-      <div><strong>Includes</strong> &nbsp;Breakfast</div>
-    </div>
-  </div>
-
-  <div class="section-title">Places to Visit</div>
-
-  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
-
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbszhbXjXz3uz4dEbkODD4GZqZ3hApam10rQ&s" alt="La Collina Ōmi-Hachiman">
-      <div class="img-credit">© Wikimedia Commons</div>
-      <div class="card-body">
-        <div class="card-title">La Collina Ōmi-Hachiman <span class="card-zh">拉科利納近江八幡</span></div>
-        <div class="card-desc">A magical complex by confectionery group Taneya, centred on a grass-thatched main building designed by architect Terunobu Fujimori. Home to Club Harie — Japan's premier Baumkuchen brand — and the Taneya wagashi shop. Shiga's top tourist facility for nine consecutive years.</div>
-        <div class="card-desc card-desc-zh">由糖果集團TANEYA打造的夢幻園區，以建築師藤森照信設計的茅草屋頂主建築為核心，四周環抱翠綠山丘，宛如童話世界。設有日本頂級年輪蛋糕品牌Club Harie及和菓子店TANEYA，連續九年榮登滋賀縣人氣旅遊設施榜首。</div>
-        <span class="card-tag">Sweets & Café</span>
-        <span class="card-tag">Architecture</span>
-        <span class="card-tag">Open 09:00–18:00</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://rimage.gnst.jp/livejapan.com/public/article/detail/a/20/00/a2000094/img/en/a2000094_main.jpg" alt="Hachiman-bori Canal">
-      <div class="img-credit">© Wikimedia Commons</div>
-      <div class="card-body">
-        <div class="card-title">Hachiman-bori Boat Tour <span class="card-zh">八幡堀遊船</span></div>
-        <div class="card-desc">A 35-minute boat journey through Ōmi-Hachiman's historic canal, guided by skilled boatmen with traditional oars. The waterway is flanked by 400-year-old white-walled merchant storehouses and willows — a scene straight out of a period drama. Both rowing and engine-powered boats available.</div>
-        <div class="card-desc card-desc-zh">由技術嫻熟的船夫以傳統木槳引領，全程約35分鐘，穿梭於近江八幡歷史悠久的運河之中。兩岸矗立逾400年歷史的白牆商家倉庫與垂柳，景色宛如走入時代劇場景。可選擇人力划船或機動船。</div>
-        <span class="card-tag">Boat Tour</span>
-        <span class="card-tag">35 min</span>
-        <span class="card-tag">Historic Canal</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnjwJLpsjgLdKQLSTH-4OtWhYFmT0CKXmBmA&s" alt="Himure Hachimangu Shrine">
-      <div class="img-credit">© Wikimedia Commons</div>
-      <div class="card-body">
-        <div class="card-title">Himure Hachimangu &amp; Omi Merchant Cityscape <span class="card-zh">日牟禮八幡宮及近江商人街道</span></div>
-        <div class="card-desc"><strong>Himure Hachimangu Shrine</strong>, guardian deity of the Ōmi merchants for over 1,000 years, sits amid ancient trees at the foot of Mt. Hachiman. Nearby, the <strong>Omi Merchant Cityscape</strong> — a nationally designated preservation district — preserves 2 km of Edo-to-Meiji merchant residences and storehouses.</div>
-        <div class="card-desc card-desc-zh"><strong>日牟禮八幡宮</strong>擁有逾千年歷史，長期作為近江商人的守護神，坐落於八幡山麓古木之間。附近的<strong>近江商人街道</strong>全長約2公里，被列為國家重要傳統建造物群保存地區，保存著江戶至明治時代的商家建築，是日本最完整的商家街景之一。</div>
-        <span class="card-tag">Shrine</span>
-        <span class="card-tag">Historic District</span>
-        <span class="card-tag">Free</span>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="section-title">Meals</div>
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🍱 Lunch — Eel Hitsumabushi Sumiyagura</h4>
-      <ul>
-        <li><strong>Sumiyagura</strong> specialises in hitsumabushi — grilled freshwater eel over rice served in a wooden tub, enjoyed three ways: plain, with condiments, or as ochazuke with dashi broth. The eel is grilled over premium binchotan charcoal. Their signature <em>double hitsumabushi</em> adds Omi beef for an indulgent combination.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">🍽 Dinner — PIERI MORIYAMA &nbsp;<span style="font-weight:400;font-size:9px;color:#888">PIERI守山</span></h4>
-      <ul>
-        <li>Dinner at one of the restaurants in <strong>PIERI MORIYAMA</strong>, a lakeside shopping mall in Moriyama, Shiga, situated on the shores of Lake Biwa. The dining floor offers a variety of Japanese and international options, many with views over the lake — a scenic end to the day before heading to the hotel.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 3 &nbsp;·&nbsp; 22 May 2026 &nbsp;·&nbsp; Ōmi-Hachiman, Shiga &nbsp;·&nbsp; Photos © Wikimedia Commons</div>
-
-</div>
-
-<!-- PAGE 6: Day 4 Summary -->
-<div class="page">
-
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 4 – Lake Biwa & Mt. Hiei</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Saturday, 23 May 2026</div>
-      <div>Lake Biwa &nbsp;·&nbsp; Shiga Prefecture</div>
-    </div>
-  </div>
-
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D4</div>
-      <div class="day-hero-label">
-        <div class="day-title">Lake Biwa &amp; Mt. Hiei &nbsp;·&nbsp; 琵琶湖及比叡山</div>
-        <div class="day-sub">Shiga Prefecture &nbsp;·&nbsp; Floating Temples, Lakeside Shrines &amp; Sacred Mountain</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Hotel</strong> &nbsp;Lake Biwa Marriott Hotel</div>
-      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
-      <div><strong>Includes</strong> &nbsp;Breakfast</div>
-    </div>
-  </div>
-
-  <div class="section-title">Places to Visit</div>
-
-  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
-
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFslUeAXVsW5R1-M8WIsG_1Zyt32adTGMO-Q&s" alt="Mangetsu-ji Uki-midō">
-      <div class="img-credit">© To be added</div>
-      <div class="card-body">
-        <div class="card-title">Mangetsu-ji Uki-midō <span class="card-zh">滿月寺浮御堂</span></div>
-        <div class="card-desc">A small Buddhist hall perched on stilts over Lake Biwa in Katata, originally built in the 11th century by the monk Genshin to protect fishermen and sailors. One of Lake Biwa's most iconic and photographed sights — serene and magical at dawn when perfectly reflected in the still water.</div>
-        <div class="card-desc card-desc-zh">位於大津市堅田的浮御堂，是建於木樁之上、漂浮於琵琶湖水面的小型佛堂，相傳由11世紀源信和尚修建，以庇護湖上漁民及舟人。為琵琶湖最具代表性的地標之一，倒映湖面的景色尤為迷人，日出時分前往更是如夢似幻。</div>
-        <span class="card-tag">Temple</span>
-        <span class="card-tag">Lake Biwa</span>
-        <span class="card-tag">Iconic View</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-edr1vnqKaya9tiKwuG5H6th-6qXhYYNG9A&s" alt="Shirahige Shrine">
-      <div class="img-credit">© To be added</div>
-      <div class="card-body">
-        <div class="card-title">Shirahige Shrine <span class="card-zh">白鬚神社</span></div>
-        <div class="card-desc">One of Japan's oldest shrines, famous for its dramatic torii gate rising from the waters of Lake Biwa — often called the "Torii of Lake Biwa" and likened to Miyajima's iconic gate. Sunrise visits are especially rewarding as the gate glows against the morning light reflected on the lake.</div>
-        <div class="card-desc card-desc-zh">日本歷史最悠久的神社之一，以矗立於琵琶湖湖面的鳥居聞名，被譽為「琵琶湖的大鳥居」，常與廣島宮島的著名鳥居相提並論。日出時分前往尤為推薦，朝陽映照下鳥居與湖面交相輝映，景色震撼人心。</div>
-        <span class="card-tag">Shrine</span>
-        <span class="card-tag">Lake Torii</span>
-        <span class="card-tag">Sunrise Spot</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSp1FvPeYlsK6XY2rJRzk979VeQGJGZNKro1g&s" alt="Enryaku-ji">
-      <div class="img-credit">© To be added</div>
-      <div class="card-body">
-        <div class="card-title">Enryaku-ji <span class="card-zh">延曆寺</span></div>
-        <div class="card-desc">A UNESCO World Heritage Site founded in 788 by the monk Saicho atop Mt. Hiei. Headquarters of Japanese Tendai Buddhism for over 1,200 years, its vast complex spans three areas across the mountaintop. The founding monks of Zen, Pure Land, and other major Buddhist schools all trained here.</div>
-        <div class="card-desc card-desc-zh">延曆寺建於788年，由最澄上人創立於比叡山頂，是聯合國教科文組織世界文化遺產，天台宗總本山。寺院建築群分布山頂三個區域，逾千二百年來影響日本佛教深遠，禪宗、淨土宗等多個主要宗派的開山祖師皆出身於此。</div>
-        <span class="card-tag">UNESCO Heritage</span>
-        <span class="card-tag">Mt. Hiei</span>
-        <span class="card-tag">Open 08:30–16:30</span>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="section-title">Meals</div>
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🍱 Lunch — Hieizan Minemichi Restaurant &nbsp;<span style="font-weight:400;font-size:9px;color:#888">比叡山嶺道餐廳</span></h4>
-      <ul>
-        <li>A mountain restaurant on Mt. Hiei along the scenic ridge path near Enryaku-ji, offering a welcome rest stop after exploring the temple complex. A great opportunity to enjoy local cuisine with views of the surrounding mountains and forest.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">🥩 Dinner — Tonkatsu Taku &nbsp;<span style="font-weight:400;font-size:9px;color:#888">豬排Taku</span></h4>
-      <ul>
-        <li><strong>Tonkatsu Taku</strong> serves Japanese-style breaded pork cutlets — crispy panko-coated tonkatsu paired with shredded cabbage, miso soup, and rice. A hearty, satisfying dinner after a full day of sightseeing around Lake Biwa and Mt. Hiei.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 4 &nbsp;·&nbsp; 23 May 2026 &nbsp;·&nbsp; Lake Biwa &amp; Mt. Hiei, Shiga</div>
-
-</div>
-
-<!-- PAGE 7: Day 5 Summary -->
-<div class="page">
-
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 5 – Kayabuki-no-Sato &amp; Tango</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Sunday, 24 May 2026</div>
-      <div>Miyama &amp; Miyazu &nbsp;·&nbsp; Kyoto Prefecture</div>
-    </div>
-  </div>
-
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D5</div>
-      <div class="day-hero-label">
-        <div class="day-title">Kayabuki-no-Sato &amp; Tango &nbsp;·&nbsp; 茅葺之里及丹後</div>
-        <div class="day-sub">Miyama &amp; Miyazu, Kyoto Prefecture &nbsp;·&nbsp; Rural Villages &amp; Scenic Railway</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Hotel</strong> &nbsp;Fairfield by Marriott Kyoto Amanohashidate</div>
-      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
-    </div>
-  </div>
-
-  <div class="section-title">Places to Visit</div>
-
-  <div class="attraction-grid">
-
-    <div class="attraction-card">
-      <img src="https://miyamanavi.com/files/topics/95_ext_24_en_0.jpg" alt="Kayabuki-no-Sato">
-      <div class="img-credit">© miyamanavi.com</div>
-      <div class="card-body">
-        <div class="card-title">Kayabuki-no-Sato <span class="card-zh">茅葺之里</span></div>
-        <div class="card-desc">A nationally designated preservation district in Miyama, Kyoto Prefecture, Kayabuki-no-Sato is a serene village of some 38 beautifully preserved thatched-roof farmhouses. Set against forested mountains with a river running through, it is one of Japan's most photogenic rural landscapes — utterly timeless and a world away from city life.</div>
-        <div class="card-desc card-desc-zh">茅葺之里位於京都府南丹市美山町，是國家重要傳統建造物群保存地區，保存著約38棟美麗的茅草屋頂農家。村莊依山傍水，景色如畫，是日本最具代表性的農村風光之一，寧靜悠然，令人彷彿穿越時空。</div>
-        <span class="card-tag">Historic Village</span>
-        <span class="card-tag">Thatched Roofs</span>
-        <span class="card-tag">Free Entry</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://visitjapan-vegetarian.com/wp-content/uploads/2021/09/Yuragawa-Bridge-Miyazu-Kyoto-Japan-.jpg" alt="Yurakawa Railway Bridge" style="object-fit: contain; background: #f0ece4;">
-      <div class="img-credit">© visitjapan-vegetarian.com</div>
-      <div class="card-body">
-        <div class="card-title">Yurakawa Railway Bridge <span class="card-zh">由良川鐵橋</span></div>
-        <div class="card-desc">The Kitakinki Tango Railway sweeps across the Yura River on a long iron bridge near Miyazu. At high tide the bridge appears to skim just above the water, creating the magical illusion of a train gliding over the sea — earning it the nickname "sea train." One of the most iconic railway photography spots in the Kyoto-Tango region.</div>
-        <div class="card-desc card-desc-zh">北近畿丹後鐵道橫跨由良川的長形鐵橋，位於宮津附近。漲潮時橋面幾乎與水面齊平，列車仿佛直接在海面上行駛，因而得名「海上列車」，是京都丹後地區最具代表性的鐵道攝影聖地之一。</div>
-        <span class="card-tag">Scenic Railway</span>
-        <span class="card-tag">Sea Train</span>
-        <span class="card-tag">Photography Spot</span>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="section-title">Meals</div>
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🍕 Lunch — Sakaya Pizza Cafe</h4>
-      <ul>
-        <li><strong>Sakaya Pizza Cafe</strong> is a charming local café in the Miyama area, offering wood-fired pizzas in a relaxed countryside setting — a delightful contrast to the traditional thatched village surroundings. A popular stop among visitors exploring the Kayabuki-no-Sato area.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">🍽 Dinner — お食事処 割烹たんご &nbsp;<span style="font-weight:400;font-size:9px;color:#888">料理處 割烹丹後</span></h4>
-      <ul>
-        <li>A traditional Japanese dining restaurant in the Tango region serving kaiseki-style home cooking — fresh local seafood and seasonal ingredients from the Sea of Japan, prepared in the refined yet warming style of Kyoto-Tango cuisine.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 5 &nbsp;·&nbsp; 24 May 2026 &nbsp;·&nbsp; Miyama &amp; Miyazu, Kyoto Prefecture</div>
-
-</div>
-
-<!-- PAGE 8: Day 6 Summary -->
-<div class="page">
-
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 6 – Ine Bay &amp; Amanohashidate</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Monday, 25 May 2026</div>
-      <div>Ine &amp; Miyazu &nbsp;·&nbsp; Kyoto Prefecture</div>
-    </div>
-  </div>
-
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D6</div>
-      <div class="day-hero-label">
-        <div class="day-title">Ine Bay &amp; Amanohashidate &nbsp;·&nbsp; 伊根灣及天橋立</div>
-        <div class="day-sub">Ine &amp; Miyazu, Kyoto Prefecture &nbsp;·&nbsp; Boat Houses, Cruise &amp; Japan's Three Views</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Hotel</strong> &nbsp;Fairfield by Marriott Kyoto Amanohashidate</div>
-      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
-    </div>
-  </div>
-
-  <div class="section-title">Places to Visit</div>
-
-  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
-
-    <div class="attraction-card">
-      <img src="https://res.klook.com/image/upload/w_500,h_313,c_fill,q_85/activities/j6jqrfbv2d7vqrmmsw4s.jpg" alt="Ine Bay">
-      <div class="img-credit">© Klook</div>
-      <div class="card-body">
-        <div class="card-title">Ine Bay &amp; Bay Cruise <span class="card-zh">伊根灣及遊覽船</span></div>
-        <div class="card-desc">A UNESCO-nominated fishing village famous for 230+ funaya — traditional fishermen's dwellings built directly over the water, with boat garages on the ground floor. The 30-min bay cruise weaves among the funaya with seagulls in tow, framed by forested mountains.</div>
-        <div class="card-desc card-desc-zh">伊根灣面臨申遺，以逾230棟「舟屋」（funaya）聞名——漁民傳統住居的地面層即為停泊漁船的船庫。約30分鐘的遊覽船穿梭舟屋之間，海鷗伴飛，四周青山環抱，景色怡人。</div>
-        <span class="card-tag">Boat Cruise</span>
-        <span class="card-tag">Funaya</span>
-        <span class="card-tag">30 min</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://svcstrg.cld.navitime.jp/travelguide/p26270002/p26270002_01.jpg" alt="Amanohashidate Viewland">
-      <div class="img-credit">© Navitime</div>
-      <div class="card-body">
-        <div class="card-title">Amanohashidate Viewland <span class="card-zh">天橋立觀景樂園</span></div>
-        <div class="card-desc">Ride the chairlift up for the famous matanozoki — bending over to view the sandbar upside-down, making it appear to float in the sky like a bridge to heaven. The park also features panoramic views of Miyazu Bay, a zip line, and rides for all ages.</div>
-        <div class="card-desc card-desc-zh">乘坐纜椅上山，體驗著名的「股窺」（matanozoki）——彎腰倒看沙洲，宛如沙洲懸浮天際。園內另設宮津灣全景觀景台、飛索及各類遊樂設施。</div>
-        <span class="card-tag">Chairlift</span>
-        <span class="card-tag">Panoramic View</span>
-        <span class="card-tag">Matanozoki</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://i0.wp.com/donnykimball.com/wp-content/uploads/2023/08/The-Sandbar-of-Kyotos-Amanohashidate-e1691812653392.jpg?fit=801%2C534&ssl=1" alt="Amanohashidate Sandbar">
-      <div class="img-credit">© donnykimball.com</div>
-      <div class="card-body">
-        <div class="card-title">Amanohashidate Sandbar <span class="card-zh">天橋立砂洲</span></div>
-        <div class="card-desc">One of Japan's Three Views (日本三景), this 3.6-km pine-covered sandbar stretches across Miyazu Bay. Stroll or hire a bicycle along the path flanked by ancient pines with the sea shimmering on both sides. Said to resemble a bridge reaching up to heaven.</div>
-        <div class="card-desc card-desc-zh">天橋立是「日本三景」之一，橫跨宮津灣、長達3.6公里的翠松沙洲。沿沙洲步行或騎單車，兩側海水波光粼粼，古松林立，景色令人難忘，相傳其形如通往天界之橋。</div>
-        <span class="card-tag">Japan's Three Views</span>
-        <span class="card-tag">Walk / Cycle</span>
-        <span class="card-tag">Free</span>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="section-title">Meals</div>
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🦞 Lunch — 海鮮工房 or 310 Amanohashidate</h4>
-      <ul>
-        <li><strong>海鮮工房 (Kaisen Kobo)</strong> serves fresh local seafood from the Sea of Japan — grilled, raw, or set meals featuring the region's prized crab, oysters, and seasonal catch. Alternatively, <strong>310 Amanohashidate</strong> offers a more casual dining experience with sea views near the sandbar.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">🍽 Dinner — Nitanda</h4>
-      <ul>
-        <li><strong>Nitanda</strong> is a local restaurant in the Amanohashidate area, offering Japanese home-style cooking with fresh produce and seafood from the surrounding Tango Peninsula — a warm and satisfying dinner to close out a full day of sightseeing.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 6 &nbsp;·&nbsp; 25 May 2026 &nbsp;·&nbsp; Ine &amp; Miyazu, Kyoto Prefecture</div>
-
-</div>
-
-<!-- PAGE 9: Day 7 Summary -->
-<div class="page">
-
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 7 – Kinosaki &amp; Yumura Onsen</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Tuesday, 26 May 2026</div>
-      <div>Kinosaki &amp; Yumura Onsen &nbsp;·&nbsp; Hyogo Prefecture</div>
-    </div>
-  </div>
-
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D7</div>
-      <div class="day-hero-label">
-        <div class="day-title">Kinosaki &amp; Yumura Onsen &nbsp;·&nbsp; 城崎及湯村溫泉</div>
-        <div class="day-sub">Hyogo Prefecture &nbsp;·&nbsp; Marine World &amp; Traditional Hot Spring Ryokan</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Hotel</strong> &nbsp;Asanoya, Yumura Onsen</div>
-      <div><strong>Booking</strong> &nbsp;Trip.com</div>
-      <div><strong>Includes</strong> &nbsp;Dinner &amp; Breakfast</div>
-    </div>
-  </div>
-
-  <div class="section-title">Places to Visit</div>
-
-  <div class="attraction-grid">
-
-    <div class="attraction-card">
-      <img src="https://visitkinosaki.com/vkcore/wp-content/uploads/2018/04/fishdance-1.jpg" alt="Kinosaki Marine World">
-      <div class="img-credit">© visitkinosaki.com</div>
-      <div class="card-body">
-        <div class="card-title">Kinosaki Marine World <span class="card-zh">城崎海洋世界</span></div>
-        <div class="card-desc">A marine theme park on the Sea of Japan coast near Kinosaki Onsen, featuring live dolphin and sea lion shows, penguin parades, and a wide variety of ocean creatures. The open-air performance stage overlooking the Sea of Japan provides a spectacular natural backdrop for the shows.</div>
-        <div class="card-desc card-desc-zh">位於日本海沿岸、城崎溫泉附近的海洋主題公園，設有海豚及海獅表演、企鵝遊行及各類海洋生物展示。面向日本海的露天表演舞台以大海為背景，景色壯觀，令人難忘。</div>
-        <span class="card-tag">Marine Park</span>
-        <span class="card-tag">Dolphin Show</span>
-        <span class="card-tag">Sea of Japan</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkCHrehYDPa8iMmoQ7MUIxO96FdXoNFeTjRA&s" alt="Asanoya Yumura Onsen">
-      <div class="img-credit">© Asanoya</div>
-      <div class="card-body">
-        <div class="card-title">Asanoya &amp; Yumura Onsen <span class="card-zh">朝野家及湯村溫泉</span></div>
-        <div class="card-desc">A beloved traditional ryokan set beside the river in Yumura Onsen, one of Hyogo's most celebrated hot spring villages. Yumura's Arasawa spring reaches 98°C — among Japan's hottest natural springs. Unwind in indoor and outdoor baths and enjoy a multi-course kaiseki dinner served in the room.</div>
-        <div class="card-desc card-desc-zh">朝野家是湯村溫泉依河而建的傳統日式旅館，湯村溫泉的荒湯泉水溫高達攝氏98度，是日本溫度最高的天然溫泉之一。旅館設有室內外溫泉浴池，並提供精緻懷石晚餐，在客房內享用，悠然自得。</div>
-        <span class="card-tag">Ryokan</span>
-        <span class="card-tag">Hot Spring</span>
-        <span class="card-tag">Dinner &amp; Breakfast</span>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="section-title">Meals</div>
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🐬 Lunch — Kinosaki Marine World Terrace</h4>
-      <ul>
-        <li><strong>Cafe &amp; Restaurant Terrace</strong> inside Kinosaki Marine World offers casual dining with views over the Sea of Japan. Enjoy fresh seafood, light meals, and drinks between the park's shows and attractions — a convenient and scenic spot for a mid-day break.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">🍱 Dinner — Asanoya Ryokan &nbsp;<span style="font-weight:400;font-size:9px;color:#888">朝野家旅館</span></h4>
-      <ul>
-        <li>Dinner is included with the stay at Asanoya — a traditional kaiseki multi-course meal served in-room, featuring fresh seasonal ingredients and local Hyogo specialities. A perfect way to end the day after the hot spring baths.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 7 &nbsp;·&nbsp; 26 May 2026 &nbsp;·&nbsp; Kinosaki &amp; Yumura Onsen, Hyogo</div>
-
-</div>
-
-<!-- PAGE 10: Day 8 Summary -->
-<div class="page">
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 8 – Himeji</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Wednesday, 27 May 2026</div>
-      <div>Himeji &nbsp;·&nbsp; Hyogo Prefecture</div>
-    </div>
-  </div>
-
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D8</div>
-      <div class="day-hero-label">
-        <div class="day-title">Himeji &nbsp;·&nbsp; 姬路</div>
-        <div class="day-sub">Hyogo Prefecture &nbsp;·&nbsp; White Heron Castle City</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Hotel</strong> &nbsp;Smile Hotel Okayama</div>
-      <div><strong>Booking</strong> &nbsp;Trip.com</div>
-      <div><strong>Includes</strong> &nbsp;Breakfast</div>
-    </div>
-  </div>
-
-  <div class="attraction-grid">
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCxS8abUC7xycYCyGp7fCbHlYltk9-bK1eSA&s" alt="Himeji Castle">
-      <div class="card-body">
-        <div class="card-title">Himeji Castle <span class="card-zh">姬路城</span></div>
-        <div class="card-desc">Japan's finest surviving feudal castle, designated a UNESCO World Heritage Site and National Treasure. Known as "Shirasagi-jō" (White Heron Castle) for its elegant white plastered walls, the complex comprises 83 buildings across multiple baileys connected by winding paths designed to confuse invaders. The main keep stands six stories tall and offers sweeping views over Himeji city.</div>
-        <div class="card-desc card-desc-zh">日本保存最完整的封建城堡，亦是聯合國教科文組織世界文化遺產及國寶。因其優雅的白色灰泥外牆，被譽為「白鷺城」。城郭由83棟建築組成，通過曲折迴廊相連，設計巧妙以迷惑入侵者。天守閣高達六層，可俯瞰整個姬路市全景。</div>
-        <span class="card-tag">UNESCO Heritage</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/4e/ad/79/caption.jpg?w=500&h=-1&s=1" alt="Kokoromi VIERRA Himeji">
-      <div class="card-body">
-        <div class="card-title">Nihonshu Bar Kokoromi <span class="card-zh">日本酒バー こころみ</span></div>
-        <div class="card-desc">A refined sake bar tucked inside VIERRA Himeji, the stylish shopping complex adjacent to Himeji Station. Nihonshu Bar Kokoromi curates an impressive selection of nihonshu (Japanese rice wine) from breweries across Hyogo Prefecture — Japan's top sake-producing region — alongside picks from other prefectures. Guests can enjoy tasting flights paired with light snacks in a relaxed, knowledgeable setting ideal for sake enthusiasts and curious beginners alike.</div>
-        <div class="card-desc card-desc-zh">位於姬路車站旁 VIERRA Himeji 購物中心內的精緻日本酒吧。こころみ精選兵庫縣——日本最重要的清酒產地——及其他府縣酒造出品的頂級日本酒，提供品酒套餐及輕食搭配。無論是清酒愛好者還是初次探索的旅人，皆可在此享受一段悠閒而富有學問的清酒體驗。</div>
-        <span class="card-tag">Sake Bar</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🏯 Lunch — Kassui-ken 活水軒</h4>
-      <ul>
-        <li><strong>活水軒 (Kassui-ken)</strong> is a historic restaurant nestled within the grounds of Himeji Castle, offering traditional Japanese cuisine with a view of the castle's elegant architecture. Enjoy set lunches featuring seasonal dishes in a refined tatami-style setting — a rare chance to dine inside one of Japan's most celebrated castle complexes.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">🐟 Dinner — Uoya Taisho</h4>
-      <ul>
-        <li><strong>Uoya Taisho</strong> is a well-regarded seafood restaurant offering an extensive menu of fresh fish dishes, sashimi, and grilled seafood. A great choice for ending the day with the freshest catches from the Seto Inland Sea, prepared in classic Japanese style.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 8 &nbsp;·&nbsp; 27 May 2026 &nbsp;·&nbsp; Himeji, Hyogo</div>
-
-</div>
-
-<!-- PAGE 11: Day 9 Summary -->
-<div class="page">
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 9 – Okayama &amp; Kurashiki</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Thursday, 28 May 2026</div>
-      <div>Okayama &amp; Kurashiki &nbsp;·&nbsp; Okayama Prefecture</div>
-    </div>
-  </div>
-
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D9</div>
-      <div class="day-hero-label">
-        <div class="day-title">Okayama &amp; Kurashiki &nbsp;·&nbsp; 岡山及倉敷</div>
-        <div class="day-sub">Okayama Prefecture &nbsp;·&nbsp; Garden City &amp; Merchant Quarter</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Hotel</strong> &nbsp;Smile Hotel Okayama</div>
-      <div><strong>Booking</strong> &nbsp;Trip.com</div>
-      <div><strong>Includes</strong> &nbsp;Breakfast</div>
-    </div>
-  </div>
-
-  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQucWDuRT-jav5Llj4qlvglQRQgqRhFcwjilA&s" alt="Korakuen">
-      <div class="card-body">
-        <div class="card-title">Korakuen <span class="card-zh">後楽園</span></div>
-        <div class="card-desc">Ranked among Japan's three finest landscape gardens, Korakuen was completed in 1700 for the Ikeda clan lords of Okayama. Its vast grounds feature graceful lawns, pine-lined promenades, tea houses, cranes, and seasonal flower displays — all framed against a backdrop of Okayama Castle across the Asahi River.</div>
-        <div class="card-desc card-desc-zh">後楽園被譽為日本三大名園之一，建於1700年，為岡山藩池田氏所造。廣闊的園區內設有開闊草坪、松林小徑、茶室及丹頂鶴，四季花卉繽紛，更可遠眺旭川對岸的岡山城，景致優雅迷人。</div>
-        <span class="card-tag">Historic Garden</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://static.gltjp.com/glt/data/directory/13000/12544/20220111_232441_a5c11852_w1920.webp" alt="Kibitsu Jinja">
-      <div class="card-body">
-        <div class="card-title">Kibitsu Jinja <span class="card-zh">吉備津神社</span></div>
-        <div class="card-desc">A nationally significant Shinto shrine dedicated to Kibitsu-hiko-no-Mikoto, the mythological hero said to be the inspiration for the Momotaro legend. Its main hall is a rare example of the "Kibitsu-zukuri" architectural style, designated a National Treasure, and a long covered corridor stretches 360 metres through ancient cedar trees to the rear shrine.</div>
-        <div class="card-desc card-desc-zh">吉備津神社供奉吉備津彥命，傳說其事蹟正是桃太郎故事的原型。本殿以罕見的「吉備津造」建築風格著稱，被列為國寶；長達360公尺的迴廊穿越蒼翠古杉，通往後方奧宮，氣氛莊嚴神秘。</div>
-        <span class="card-tag">Shinto Shrine</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSi6ovDL4S9B6Yt9ExBmpMC0f9EvCY4DbEIw&s" alt="Kurashiki Bikan Historical Quarter">
-      <div class="card-body">
-        <div class="card-title">Kurashiki Bikan Quarter <span class="card-zh">倉敷美観地区</span></div>
-        <div class="card-desc">A beautifully preserved Edo-period merchant district centred on a willow-lined canal flanked by whitewashed kura (storehouses) converted into museums, galleries, cafés, and boutiques. The Ohara Museum of Art — Japan's first Western art museum — anchors the quarter, alongside craft shops and the charming ivy-clad Ivy Square complex.</div>
-        <div class="card-desc card-desc-zh">倉敷美観地区是保存完好的江戶時代商人街，以楊柳掩映的運河為中心，兩岸白壁倉敷群如畫卷。昔日倉庫已改建為博物館、藝廊、咖啡店及精品店；大原美術館作為日本首間西洋美術館坐鎮其中，常春藤廣場更添典雅歐式風情。</div>
-        <span class="card-tag">Historic District</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🍲 Lunch — Shabu-shabu Sukiyaki Hitorinabe Megu</h4>
-      <ul>
-        <li><strong>Hitorinabe Megu</strong> specialises in individual-portion shabu-shabu and sukiyaki hot pots, where each diner gets their own personal pot of simmering broth. Choose from premium cuts of wagyu or pork with seasonal vegetables — a relaxed, self-paced way to enjoy Japan's beloved hot pot tradition right in the heart of Okayama.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">🍶 Dinner — Hidaya Togiyacho</h4>
-      <ul>
-        <li><strong>Hidaya Togiyacho</strong> is a well-regarded izakaya-style restaurant in Kurashiki offering thoughtfully prepared Japanese cuisine using locally sourced ingredients. Enjoy a relaxed evening of small dishes, seasonal specialties, and fine local sake — a perfect way to wind down after a full day exploring Okayama and Kurashiki.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 9 &nbsp;·&nbsp; 28 May 2026 &nbsp;·&nbsp; Okayama &amp; Kurashiki, Okayama Prefecture</div>
-
-</div>
-
-<!-- PAGE 12: Day 10 Summary -->
-<div class="page">
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 10 – Naoshima Art Island</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Friday, 29 May 2026</div>
-      <div>Naoshima, Kagawa → Tokushima</div>
-    </div>
-  </div>
-
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D10</div>
-      <div class="day-hero-label">
-        <div class="day-title">Naoshima &nbsp;·&nbsp; 直島</div>
-        <div class="day-sub">Kagawa Prefecture &nbsp;·&nbsp; Japan's Art Island</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Hotel</strong> &nbsp;Hotel Sunroute Tokushima</div>
-      <div><strong>Booking</strong> &nbsp;Trip.com</div>
-    </div>
-  </div>
-
-  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
-    <div class="attraction-card">
-      <img src="https://benesse-artsite.jp/en/art/chichu_kv_thumb_01_pc.jpg" alt="Chichu Art Museum">
-      <div class="card-body">
-        <div class="card-title">Chichu Art Museum <span class="card-zh">地中美術館</span></div>
-        <div class="card-desc">Designed by Tadao Ando and built almost entirely underground to preserve Naoshima's landscape, Chichu ("underground" in Japanese) houses permanent works by Claude Monet, James Turrell, and Walter De Maria. Natural light floods the concrete galleries through carefully positioned skylights, transforming throughout the day and making each visit a unique sensory experience.</div>
-        <div class="card-desc card-desc-zh">由安藤忠雄設計，幾乎全部建於地下以保護直島自然景觀。地中美術館常設莫內、詹姆斯·特瑞爾及華特·德·瑪利亞的作品。天光透過精心設計的天窗傾瀉入混凝土展廳，隨時間流轉不斷變化，令每次參觀都成為獨一無二的感官旅程。</div>
-        <span class="card-tag">Contemporary Art</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXYUnGmBBI-TdEOLrNXQiGp456e_UQt5H0CA&s" alt="Benesse House Museum">
-      <div class="card-body">
-        <div class="card-title">Benesse House Museum <span class="card-zh">倍樂生之家美術館</span></div>
-        <div class="card-desc">Also designed by Tadao Ando, Benesse House blurs the boundary between museum and hotel, integrating contemporary artworks into the architecture and surrounding landscape. Permanent installations by Bruce Nauman, Richard Long, and Hiroshi Sugimoto sit alongside site-specific outdoor works overlooking the Seto Inland Sea — art experienced as part of everyday living.</div>
-        <div class="card-desc card-desc-zh">同由安藤忠雄設計，倍樂生之家模糊了美術館與酒店的界限，將當代藝術融入建築與周邊自然景觀。館內永久收藏布魯斯·瑙曼、理查·朗及杉本博司等藝術家的作品，戶外裝置作品俯瞰瀨戶內海，藝術與日常生活渾然一體。</div>
-        <span class="card-tag">Art Museum</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2021%2F08%2Fyayoi-kusama-yellow-pumpkin-washed-away-seto-island-japan-typhoon-lupit-001.jpg?q=75&w=800&cbr=1&fit=max" alt="Yellow Pumpkin">
-      <div class="card-body">
-        <div class="card-title">Yellow Pumpkin <span class="card-zh">黃色南瓜</span></div>
-        <div class="card-desc">Yayoi Kusama's iconic polka-dotted yellow pumpkin sculpture sits at the end of a pier on Naoshima's Benesse Art Site, having become one of Japan's most photographed artworks. The sculpture embodies Kusama's lifelong obsession with dots and infinity, and its striking silhouette against the shimmering waters of the Seto Inland Sea makes it a defining symbol of the island's artistic identity.</div>
-        <div class="card-desc card-desc-zh">草間彌生標誌性的波點黃色南瓜雕塑矗立於直島倍樂生藝術場地的突堤末端，是日本最具人氣的打卡地標之一。作品體現了草間彌生對圓點與無限的畢生執念，其鮮明輪廓映襯著瀨戶內海粼粼波光，成為直島藝術精神的象徵符號。</div>
-        <span class="card-tag">Iconic Sculpture</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🐟 Lunch — Yuunagi</h4>
-      <ul>
-        <li><strong>Yuunagi</strong> is a beloved lunch spot on Naoshima serving fresh, simple Japanese cuisine including seafood rice bowls and daily specials made from local Seto Inland Sea ingredients. A casual, no-frills setting popular with visitors and island residents alike — the kind of honest, delicious meal that makes a day of art even more memorable.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">🥩 Dinner — 焼肉割烹のべ</h4>
-      <ul>
-        <li><strong>焼肉割烹のべ</strong> is a refined yakiniku-kaiseki restaurant in Ichibancho, Tokushima city (3 Chome-21 Ichibancho, Tokushima 770-0833), combining the pleasure of tabletop grilled meat with the elegance of Japanese kaiseki presentation. Premium cuts of wagyu and seasonal accompaniments are served in a sophisticated setting — a rewarding end to a day of art before settling into Tokushima for the night.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 10 &nbsp;·&nbsp; 29 May 2026 &nbsp;·&nbsp; Naoshima, Kagawa → Tokushima</div>
-
-</div>
-
-<!-- PAGE 13: Day 11 Summary -->
-<div class="page">
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 11 – Naruto · Kobe · Osaka</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Saturday, 30 May 2026</div>
-      <div>Naruto · Kobe · Osaka</div>
-    </div>
-  </div>
-
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D11</div>
-      <div class="day-hero-label">
-        <div class="day-title">Naruto · Kobe · Osaka &nbsp;·&nbsp; 鳴門·神戶·大阪</div>
-        <div class="day-sub">Tokushima → Hyogo → Osaka &nbsp;·&nbsp; Whirlpools, Sake &amp; Neon Lights</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Hotel</strong> &nbsp;Tanimachi-Kun Hotel Ebisucho 72</div>
-      <div><strong>Booking</strong> &nbsp;Trip.com</div>
-    </div>
-  </div>
-
-  <div class="attraction-grid">
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRotxgGdhGOSUhpGPbhq_xYzOEpxLx9rXjcRg&s" alt="Wonder Naruto">
-      <div class="card-body">
-        <div class="card-title">WONDER NARUTO <span class="card-zh">渦之道</span></div>
-        <div class="card-desc">An immersive attraction built around the legendary Naruto Whirlpools — some of the world's largest tidal vortices, formed where the Pacific Ocean meets the Seto Inland Sea through the Naruto Strait. WONDER NARUTO combines observation decks, glass-floor walkways suspended above the churning whirlpools, and multimedia exhibits to deliver a dramatic encounter with one of Japan's most awe-inspiring natural phenomena.</div>
-        <div class="card-desc card-desc-zh">環繞鳴門漩渦打造的沉浸式景點——鳴門漩渦是全球最大的潮汐漩渦之一，由太平洋與瀨戶內海在鳴門海峽交匯而成。WONDER NARUTO設有觀景台、懸於翻騰漩渦上方的玻璃地板步道及多媒體展覽，讓遊客近距離感受這一壯觀的自然奇景。</div>
-        <span class="card-tag">Natural Wonder</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://onb-cdn.b-cdn.net/images-stn-kobe/42-Kobe-Shushinkan-Fukuju-Sake-Brewery3.jpg" alt="Kobe Sake Breweries">
-      <div class="card-body">
-        <div class="card-title">Kobe Sake Breweries <span class="card-zh">神戶酒造</span></div>
-        <div class="card-desc">The Nada district of Kobe is Japan's premier sake-producing region, home to three celebrated breweries: <strong>Shushinkan</strong> (菊正宗酒造), renowned for its classic dry honjozo; <strong>Hakutsuru Brewery Museum</strong> (白鶴酒造資料館), a restored Meiji-era kura with interactive exhibits; and <strong>Hamafukutsuru</strong> (浜福鶴), offering a working brewery tour with tasting. Each tells a distinct chapter of Nada's 300-year sake heritage.</div>
-        <div class="card-desc card-desc-zh">神戶灘區是日本首屈一指的清酒產地，匯聚三間知名酒造：以傳統辛口本釀造著稱的<strong>菊正宗酒造（酒の文化館）</strong>；修復明治時代酒藏、設有互動展覽的<strong>白鶴酒造資料館</strong>；以及提供作業中酒藏參觀及品酒體驗的<strong>浜福鶴</strong>。三間酒造各自述說著灘區三百年清酒傳承的獨特篇章。</div>
-        <span class="card-tag">Sake Breweries</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://static.japan-food.guide/uploads/article/cover_image/000/000/570/005457c1682a6027b97207fce1994c417ca202da43009b77092356bd5239dcbd/eye_catch_29284747_s__1_.jpg?1759897952" alt="Namba Yasaka Jinja">
-      <div class="card-body">
-        <div class="card-title">Namba Yasaka Jinja <span class="card-zh">難波八坂神社</span></div>
-        <div class="card-desc">A striking Osaka shrine famous for its enormous lion-head stage (koma-inu butai), a 12-metre-tall structure with gaping jaws designed to devour evil spirits and bring good luck. Set amid the urban energy of Namba, the shrine offers a surreal contrast of ancient ritual and modern city life. Particularly dramatic when lit up at dusk, it has become one of Osaka's most photographed landmarks.</div>
-        <div class="card-desc card-desc-zh">大阪著名神社，以巨型獅子頭舞台聞名——這座高達12公尺、張口獠牙的構造物象徵吞噬邪惡、招來好運。神社坐落於繁華的難波鬧市，古老祭祀與現代都市生活形成奇妙對比。入夜燈光亮起後尤為壯觀，已成為大阪最具人氣的打卡地標之一。</div>
-        <span class="card-tag">Shinto Shrine</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1RTuwg3SwXHXOoNFe2DwEVgdmwBfK9sXS0w&s" alt="Tsutenkaku & Shinsekai">
-      <div class="card-body">
-        <div class="card-title">Tsutenkaku &amp; Shinsekai <span class="card-zh">通天閣及新世界</span></div>
-        <div class="card-desc">Tsutenkaku is Osaka's beloved retro tower, modelled on the Eiffel Tower and rebuilt in 1956 as a symbol of postwar revival. It anchors Shinsekai — "New World" — a nostalgic entertainment district of kushikatsu joints, old-school game parlours, and colourful signage that evokes the Showa era. Strolling Shinsekai at dusk is a quintessential Osaka experience.</div>
-        <div class="card-desc card-desc-zh">通天閣是大阪深受市民喜愛的復古鐵塔，以艾菲爾鐵塔為藍本，於1956年重建，象徵戰後復興。鐵塔坐鎮「新世界」——一個充滿懷舊氣息的娛樂街區，聚集串炸小店、老式遊樂場與色彩繽紛的招牌，重現昭和年代風情。黃昏時分漫步新世界，是體驗道地大阪風情的必選行程。</div>
-        <span class="card-tag">Osaka Icon</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🍤 Lunch — 天ぷらたまき 六甲道店</h4>
-      <ul>
-        <li><strong>Tempura Tamaki Rokkodoten</strong> is a well-regarded tempura specialist in the Rokkodo area of Kobe, serving meticulously battered and fried seafood and vegetables in the classic Osaka-Kobe style. Light, crispy, and freshly made to order — a perfect mid-day stop between the Nada brewery district and the drive into Osaka.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">🍢 Dinner — Kushikatsu Ittoku Tsutenkaku Branch</h4>
-      <ul>
-        <li><strong>串かつ 一徳 通天閣店</strong> is a lively kushikatsu restaurant in the heart of Shinsekai, right by Tsutenkaku Tower. Specialising in Osaka's signature deep-fried skewers — from beef and shrimp to quail egg and lotus root — dipped in the house sauce (no double-dipping!). The definitive Shinsekai dinner experience.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 11 &nbsp;·&nbsp; 30 May 2026 &nbsp;·&nbsp; Naruto · Kobe · Osaka</div>
-
-</div>
-
-<!-- PAGE 14: Day 12 Summary -->
-<div class="page">
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 12 – Osaka</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Sunday, 31 May 2026</div>
-      <div>Osaka &nbsp;·&nbsp; Osaka Prefecture</div>
-    </div>
-  </div>
-
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D12</div>
-      <div class="day-hero-label">
-        <div class="day-title">Osaka &nbsp;·&nbsp; 大阪</div>
-        <div class="day-sub">Osaka Prefecture &nbsp;·&nbsp; Temples, Pokémon, Cruises &amp; Neon Ferris Wheels</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Hotel</strong> &nbsp;Tanimachi-Kun Hotel Ebisucho 72</div>
-      <div><strong>Booking</strong> &nbsp;Trip.com</div>
-    </div>
-  </div>
-
-  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSo3t746JngouFmEcEJ12IH9JtSM2r5E1tjDA&s" alt="Katsuoji Temple">
-      <div class="card-body">
-        <div class="card-title">Katsuoji Temple <span class="card-zh">勝尾寺</span></div>
-        <div class="card-desc">A millennium-old temple in the forested hills of Minoh, Osaka, dedicated to victories in life's struggles. Katsuoji is famous for its thousands of Daruma dolls — small, round wish-granting figures — placed by worshippers throughout the temple grounds after prayers are answered. The moss-covered stone paths, koi ponds, and autumn foliage make it one of Osaka's most atmospheric nature escapes.</div>
-        <div class="card-desc card-desc-zh">位於大阪箕面市山林間的千年古剎，供奉勝運之神。勝尾寺以遍布全境的數千個達摩不倒翁著稱——信眾在心願成真後將其擺放於寺內各處。青苔石徑、錦鯉池塘與繁茂林木交織，構成大阪最具禪意的自然景點之一。</div>
-        <span class="card-tag">Historic Temple</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/16/28/d1/bf/no15.jpg?w=900&h=500&s=1" alt="The Farm Universal Osaka">
-      <div class="card-body">
-        <div class="card-title">The Farm Universal <span class="card-zh">農場樂園</span></div>
-        <div class="card-desc">A unique urban farm experience near Universal Studios Japan, offering hands-on strawberry picking, seasonal vegetable harvesting, and farm-to-table dining. Visitors can wander through greenhouse gardens, collect their own produce, and enjoy freshly prepared meals made from ingredients picked minutes earlier — a refreshing counterpoint to the city's urban energy.</div>
-        <div class="card-desc card-desc-zh">鄰近環球影城的獨特都市農場體驗，提供親手採摘草莓、收割時令蔬菜及農場直桌餐飲服務。遊客可漫步溫室花園、自行採收農產品，並品嚐以數分鐘前剛摘下食材烹調的新鮮料理——在都市喧囂中享受一份難得的田園清靜。</div>
-        <span class="card-tag">Farm Experience</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3sWW3UXiXkOh4zSw0gO8r2yizQt2n3Vqi7g&s" alt="Osaka Ukiyoe Museum">
-      <div class="card-body">
-        <div class="card-title">Osaka Ukiyoe Museum <span class="card-zh">大阪浮世繪美術館</span></div>
-        <div class="card-desc">Japan's largest permanent ukiyo-e museum, housing an extraordinary collection of woodblock prints spanning the Edo and Meiji periods. The museum showcases iconic works by masters such as Hokusai, Hiroshige, and Utamaro, presented through both original prints and large-scale digital reproductions. A vivid window into the popular culture, fashion, and landscapes of old Japan.</div>
-        <div class="card-desc card-desc-zh">日本最大的常設浮世繪美術館，珍藏橫跨江戶至明治時代的大量木版畫精品。館內展出葛飾北齋、歌川廣重及喜多川歌麿等大師的經典作品，以原版版畫及大型數碼重現相結合的方式呈現，生動展示江戶時代的庶民文化、時尚風貌與山川景致。</div>
-        <span class="card-tag">Art Museum</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://pic.k-cdn.media/2023/07/20230721-pokemon-center-cafe-img04.jpg" alt="Pokémon Cafe Osaka">
-      <div class="card-body">
-        <div class="card-title">Pokémon Cafe Shinsaibashi <span class="card-zh">寶可夢咖啡廳</span></div>
-        <div class="card-desc">Osaka's official Pokémon Cafe located in Shinsaibashi offers an immersive themed dining experience with character-inspired food and drinks. Menu items are elaborately designed around beloved Pokémon — Pikachu pancakes, Eevee lattes, and seasonal specials — served in a fully decorated interior. Reservations are essential and merchandise is available exclusively on-site.</div>
-        <div class="card-desc card-desc-zh">位於心齋橋的大阪官方寶可夢咖啡廳，提供角色主題沉浸式餐飲體驗。菜單圍繞人氣寶可夢精心設計——比卡丘鬆餅、伊布拿鐵及季節限定特飲——在全主題裝潢的空間內享用。需提前預約，限定週邊商品僅在現場發售。</div>
-        <span class="card-tag">Themed Cafe</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQ-tmx9HBYB0X9LQ6WLzsA9m18vx2K7l1h8w&s" alt="Tombori River Cruise">
-      <div class="card-body">
-        <div class="card-title">Tombori River Cruise <span class="card-zh">道頓堀河遊船</span></div>
-        <div class="card-desc">A scenic boat cruise along the iconic Dotonbori Canal, gliding beneath neon-lit bridges and past Osaka's famous giant signboards — the Glico Running Man, Kani Doraku crab, and more. The 20-minute ride offers a unique water-level perspective of the city's most vibrant entertainment district, especially magical at dusk when the reflections of the signs shimmer across the canal.</div>
-        <div class="card-desc card-desc-zh">沿道頓堀運河穿行的觀光遊船，在霓虹燈橋樑下與大阪著名巨型招牌旁緩緩前行——固力果跑步人、螃蟹道樂大螃蟹等地標近在咫尺。約20分鐘的航程從水面視角俯覽城市最繁華的娛樂區，黃昏時分招牌倒影映於運河之上，景色尤為迷人。</div>
-        <span class="card-tag">Boat Cruise</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGgwpSu7OhzE04KLJSoWsxqsIj74CgI-g86A&s" alt="Ebisu Tower Ferris Wheel">
-      <div class="card-body">
-        <div class="card-title">Ebisu Tower Ferris Wheel <span class="card-zh">惠比壽塔摩天輪</span></div>
-        <div class="card-desc">The HEP Five Ferris Wheel — affectionately known as the Donki Ferris Wheel — sits atop the Don Quijote shopping complex in Shinsaibashi-suji, soaring 106 metres above street level. A ride in one of the red gondolas offers sweeping 360° views over Osaka's glittering cityscape, and the colourful wheel has become a beloved Osaka landmark in its own right.</div>
-        <div class="card-desc card-desc-zh">惠比壽塔摩天輪——又稱唐吉訶德摩天輪——矗立於心齋橋筋唐吉訶德購物中心頂層，高達地面106公尺。乘坐紅色車廂可360度俯瞰大阪璀璨夜景，繽紛旋轉的摩天輪本身亦已成為深受喜愛的大阪地標。</div>
-        <span class="card-tag">City Views</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🌿 Lunch — The Farm Universal Osaka</h4>
-      <ul>
-        <li>Dine at <strong>The Farm Universal</strong>'s on-site restaurant, where the menu is built around produce harvested from the farm itself. Enjoy fresh salads, farm platters, and seasonal mains in a relaxed garden setting — ingredients picked by you or sourced from the same fields just metres away.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">🥩 Dinner — Wagyu Sukiyaki Okuwo 和牛すき焼き おくを</h4>
-      <ul>
-        <li><strong>和牛すき焼き おくを</strong> is a premium wagyu sukiyaki restaurant in Osaka serving carefully selected Japanese black beef cooked tableside in a rich, sweet soy broth with tofu, enoki, and seasonal vegetables. An indulgent, celebratory way to close out one of the trip's most packed days in the city.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 12 &nbsp;·&nbsp; 31 May 2026 &nbsp;·&nbsp; Osaka</div>
-
-</div>
-
-<!-- PAGE 15: Day 13 Summary -->
-<div class="page">
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 13 – Osaka</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Monday, 1 June 2026</div>
-      <div>Osaka &nbsp;·&nbsp; Osaka Prefecture</div>
-    </div>
-  </div>
-
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D13</div>
-      <div class="day-hero-label">
-        <div class="day-title">Osaka &nbsp;·&nbsp; 大阪</div>
-        <div class="day-sub">Osaka Prefecture &nbsp;·&nbsp; Shopping, Street Karting &amp; Final Night</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Hotel</strong> &nbsp;Tanimachi-Kun Hotel Ebisucho 72</div>
-      <div><strong>Booking</strong> &nbsp;Trip.com</div>
-    </div>
-  </div>
-
-  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
-    <div class="attraction-card">
-      <img src="https://static.gltjp.com/glt/data/directory/15000/14249/20230127_172947_1c859784_w640.webp" alt="bills Osaka">
-      <div class="card-body">
-        <div class="card-title">bills Osaka <span class="card-zh">bills大阪</span></div>
-        <div class="card-desc">The Osaka outpost of the legendary Australian all-day dining brand, perched with sweeping views over the city. bills is celebrated worldwide for its signature ricotta hotcakes and scrambled eggs, served alongside fresh seasonal produce and specialty coffee. A stylish, unhurried start to the day — the kind of breakfast worth lingering over before hitting the shops.</div>
-        <div class="card-desc card-desc-zh">澳洲傳奇全日餐廳品牌的大阪分店，居高臨下俯瞰城市全景。bills以其招牌瑞可塔芝士熱香餅及滑嫩炒蛋享譽全球，搭配新鮮時令食材與精品咖啡。悠閒精緻的用餐氛圍，讓人流連忘返——是出發購物前最值得細細品味的早午餐體驗。</div>
-        <span class="card-tag">Brunch</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://img.activityjapan.com/wi/osaka_umeda_family_thumb.jpg" alt="Umeda Shopping">
-      <div class="card-body">
-        <div class="card-title">Umeda Shopping <span class="card-zh">梅田購物</span></div>
-        <div class="card-desc">Umeda is Osaka's premier upmarket shopping destination, anchored by Osaka Station City and surrounded by a vast network of interconnected department stores and underground malls. Grand Front Osaka, Hankyu and Hanshin department stores, Lucua, and the HEP Five complex offer everything from high fashion and Japanese cosmetics to gourmet food halls and local souvenirs — the ideal last full day for picking up gifts and final finds.</div>
-        <div class="card-desc card-desc-zh">梅田是大阪首屈一指的高端購物勝地，以大阪車站城為核心，周邊連接多個百貨公司與地下商場。Grand Front大阪、阪急、阪神百貨、Lucua及HEP Five一應俱全，涵蓋高端時裝、日本彩妝、美食廳及本地紀念品——是旅程最後整天採購手信與尋寶的理想之選。</div>
-        <span class="card-tag">Shopping</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAG_zhGPPid4Cne8seODLUHAk9-h8Y-z6pLg&s" alt="Street Kart Osaka">
-      <div class="card-body">
-        <div class="card-title">STREET KART Osaka <span class="card-zh">街道卡丁車</span></div>
-        <div class="card-desc">An unforgettable Osaka experience — drive a real go-kart through the city's public streets in full costume, weaving past landmarks, neon signs, and bewildered onlookers. STREET KART offers guided convoy tours through Osaka's most iconic districts, with helmets, costumes, and a support guide included. A thrilling, uniquely Japanese way to bid farewell to the city on the final full day of the trip.</div>
-        <div class="card-desc card-desc-zh">難忘的大阪體驗——穿上全套卡通服裝，駕駛真實卡丁車穿梭於城市公共街道，途經地標建築、霓虹招牌，引來路人驚喜目光。STREET KART提供穿越大阪最具代表性街區的導覽車隊之旅，含頭盔、服裝及隨行嚮導。以這種獨一無二的日本玩法，為旅程最後一個完整白天留下最精彩的收尾。</div>
-        <span class="card-tag">City Experience</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🍤 Lunch — Tempura Makino Umeda</h4>
-      <ul>
-        <li><strong>天ぷら 牧野 梅田店</strong> is a refined tempura restaurant in Umeda, serving meticulously battered and fried seasonal seafood and vegetables in the Osaka tradition. Set lunch courses offer excellent value, with each piece fried to order and served at peak crispness — a perfect mid-shopping break before the afternoon's street kart adventure.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">🍽️ Dinner — TBD</h4>
-      <ul>
-        <li>Dinner location to be confirmed.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 13 &nbsp;·&nbsp; 1 June 2026 &nbsp;·&nbsp; Osaka</div>
-
-</div>
-
-<!-- PAGE 16: Day 14 Summary -->
-<div class="page">
-  <div class="header">
-    <div class="header-left">
-      <h1>Osaka Driving 2026</h1>
-      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 14 – Departure Day</div>
-    </div>
-    <div class="header-right">
-      <div class="dates">Tuesday, 2 June 2026</div>
-      <div>Osaka → Kansai International Airport</div>
-    </div>
-  </div>
-
-  <div class="day-hero">
-    <div class="day-hero-left">
-      <div class="day-num-big">D14</div>
-      <div class="day-hero-label">
-        <div class="day-title">Osaka · Departure &nbsp;·&nbsp; 大阪·啟程</div>
-        <div class="day-sub">Osaka → KIX &nbsp;·&nbsp; MM773 KIX 18:25 → SIN 00:05+1</div>
-      </div>
-    </div>
-    <div class="day-hero-right">
-      <div><strong>Flight</strong> &nbsp;MM773 · Peach Aviation</div>
-      <div><strong>Departs</strong> &nbsp;KIX 18:25</div>
-      <div><strong>Arrives</strong> &nbsp;SIN 00:05 (+1)</div>
-    </div>
-  </div>
-
-  <div class="attraction-grid">
-    <div class="attraction-card">
-      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/14/5f/0c/34/caption.jpg?w=1200&h=-1&s=1" alt="Namba Shopping">
-      <div class="card-body">
-        <div class="card-title">Last-Minute Shopping · Namba <span class="card-zh">難波最後購物</span></div>
-        <div class="card-desc">Namba is Osaka's beating heart — a labyrinth of covered arcades, department stores, and specialist shops packed into Shinsaibashi-suji, Amerika-mura, and the Dotonbori strip. The perfect final morning hunting ground for last-minute omiyage, cosmetics, snacks, fashion, and anything that escaped the itinerary earlier. Namba CITY, Takashimaya, and Don Quijote all within easy walking distance.</div>
-        <div class="card-desc card-desc-zh">難波是大阪的心臟地帶——心齋橋筋、美國村與道頓堀一帶密佈有蓋商業街、百貨公司與各類專賣店。是旅程最後早上搜尋手信、彩妝、零食、時裝及一切「漏網之魚」的最佳獵場。難波City、高島屋及唐吉訶德均步行可達。</div>
-        <span class="card-tag">Shopping</span>
-      </div>
-    </div>
-
-    <div class="attraction-card">
-      <img src="https://article-image.travel.navitime.jp/img/NTJtrv1084-en/NTJtrv1084-en_kuromon_market_0.jpg" alt="Kuromon Market">
-      <div class="card-body">
-        <div class="card-title">Kuromon Ichiba Market <span class="card-zh">黑門市場</span></div>
-        <div class="card-desc">Known as "Osaka's Kitchen," Kuromon Ichiba is a 580-metre covered market with over 150 stalls selling fresh seafood, premium wagyu, pickles, fruit, and street food. Walk-and-eat is the tradition here — grilled scallops, uni on rice, and skewered wagyu are eaten fresh from the stall. The ideal send-off lunch before heading to Kansai airport for the flight home.</div>
-        <div class="card-desc card-desc-zh">素有「大阪廚房」之稱的黑門市場，全長580公尺的有蓋市場匯聚逾150個攤位，售賣新鮮海產、頂級和牛、漬物、水果及各式街頭小食。邊走邊吃是這裡的傳統——炭烤帆立貝、海膽飯及串燒和牛現點現吃。是前往關西機場搭機回家前最完美的道別午餐。</div>
-        <span class="card-tag">Food Market</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="practical-grid">
-    <div class="practical-box" style="border-left-color:#e67e22;">
-      <h4 style="color:#e67e22;">🦪 Lunch — Kuromon Ichiba Market</h4>
-      <ul>
-        <li>Graze through <strong>黒門市場</strong>'s 150+ stalls for a final feast of Osaka flavours — fresh uni, grilled scallops, wagyu skewers, tamagoyaki, and seasonal fruit. Each stall is its own experience; take your time, eat slowly, and savour the last taste of Japan before heading to KIX.</li>
-      </ul>
-    </div>
-    <div class="practical-box" style="border-left-color:#c0392b;">
-      <h4 style="color:#c0392b;">✈️ Dinner — Airport Bento</h4>
-      <ul>
-        <li>Pick up a final bento or ekiben from KIX's departure-level food shops before boarding MM773. Kansai Airport has an excellent selection of regional bento boxes — Osaka-style oshizushi, wagyu sandwiches, and local sweets — the perfect way to extend the taste of the trip all the way to Singapore.</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 14 &nbsp;·&nbsp; 2 June 2026 &nbsp;·&nbsp; Osaka → Kansai International Airport</div>
-
-</div>
-
-<!-- PAGE 17: Dining Directory -->
+<!-- PAGE 2: Dining Directory -->
 <div class="page">
   <div class="header">
     <div class="header-left">
@@ -2106,6 +812,1305 @@
   <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Dining Directory &nbsp;·&nbsp; 20 May – 2 June 2026</div>
 
 </div>
+
+<!-- PAGE 3: Route Map -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Route Map – Western Japan</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">20 May – 2 June 2026</div>
+      <div>14 stops · Self-drive road trip</div>
+    </div>
+  </div>
+
+  <div class="section-title">Route Overview</div>
+  <div id="map"></div>
+
+  <div class="stops-grid" id="stops-legend"></div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; 20 May – 2 June &nbsp;·&nbsp; 14 Days &nbsp;·&nbsp; Western Japan &nbsp;·&nbsp; Map © OpenStreetMap contributors</div>
+
+</div>
+
+<script>
+  const stops = [
+    { day: 'D1',    label: 'Rinku Town',       sub: 'Outlet',              lat: 34.442, lng: 135.310, date: '20 May' },
+    { day: 'D2',    label: 'Uji',               sub: '',                    lat: 34.884, lng: 135.801, date: '21 May' },
+    { day: 'D3',    label: 'Ōmi-Hachiman',      sub: '',                    lat: 35.128, lng: 136.098, date: '22 May' },
+    { day: 'D4',    label: 'Lake Biwa',          sub: 'Driveway & Shrines',  lat: 35.150, lng: 136.068, date: '23 May' },
+    { day: 'D5',    label: 'Kayabuki-no-Sato',  sub: 'Miyama',              lat: 35.358, lng: 135.714, date: '24 May' },
+    { day: 'D6',    label: 'Ine Bay',            sub: '',                    lat: 35.662, lng: 135.304, date: '25 May' },
+    { day: 'D6',    label: 'Amanohashidate',    sub: '',                    lat: 35.553, lng: 135.197, date: '25 May' },
+    { day: 'D7',    label: 'Yumura Onsen',      sub: 'Marine World & Dolphin', lat: 35.520, lng: 134.567, date: '26 May' },
+    { day: 'D8',    label: 'Himeji',             sub: 'Himeji Castle',       lat: 34.840, lng: 134.694, date: '27 May' },
+    { day: 'D9',    label: 'Okayama',            sub: 'Gardens & City',      lat: 34.662, lng: 133.934, date: '28 May' },
+    { day: 'D10',   label: 'Naoshima',           sub: 'Art Island',          lat: 34.463, lng: 133.989, date: '29 May' },
+    { day: 'D11',   label: 'Naruto',             sub: 'Whirlpools',          lat: 34.180, lng: 134.608, date: '30 May' },
+    { day: 'D11',   label: 'Kobe',               sub: '',                    lat: 34.690, lng: 135.196, date: '30 May' },
+    { day: 'D12–14',label: 'Osaka',              sub: 'City Days',           lat: 34.693, lng: 135.502, date: '31 May–2 Jun' },
+  ];
+
+  function dayColor(i, n) {
+    const hue = Math.round(120 - 120 * i / (n - 1));
+    return `hsl(${hue}, 72%, 40%)`;
+  }
+
+  const map = L.map('map', { zoomControl: true }).setView([35.05, 135.1], 7);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  stops.forEach((stop, i) => {
+    const color = dayColor(i, stops.length);
+    const icon = L.divIcon({
+      html: `<div style="background:${color};color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:7.5px;font-weight:700;border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.4);font-family:Inter,sans-serif;line-height:1;text-align:center">${stop.day}</div>`,
+      iconSize: [26, 26],
+      iconAnchor: [13, 13],
+      className: ''
+    });
+    L.marker([stop.lat, stop.lng], { icon })
+      .addTo(map)
+      .bindPopup(`<strong>${stop.day} · ${stop.date}</strong><br>${stop.label}${stop.sub ? '<br><em style="color:#666">' + stop.sub + '</em>' : ''}`);
+  });
+
+  // Dashed route polyline
+  L.polyline(stops.map(s => [s.lat, s.lng]), {
+    color: '#c0392b', weight: 2.5, opacity: 0.55, dashArray: '7,5'
+  }).addTo(map);
+
+  // Build legend
+  const legend = document.getElementById('stops-legend');
+  stops.forEach((stop, i) => {
+    const color = dayColor(i, stops.length);
+    const item = document.createElement('div');
+    item.className = 'stop-item';
+    item.innerHTML = `
+      <div class="stop-dot" style="background:${color}">${stop.day.replace('D','')}</div>
+      <div class="stop-text">
+        <div class="stop-day">${stop.day} · ${stop.date}</div>
+        <div class="stop-name">${stop.label}</div>
+      </div>`;
+    legend.appendChild(item);
+  });
+</script>
+
+<!-- PAGE 4: Day 1 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 1 – Rinku Town</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Wednesday, 20 May 2026</div>
+      <div>Rinku Town &nbsp;·&nbsp; Izumisano, Osaka</div>
+    </div>
+  </div>
+
+  <!-- Day hero banner -->
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D1</div>
+      <div class="day-hero-label">
+        <div class="day-title">Rinku Town &nbsp;·&nbsp; 臨空城</div>
+        <div class="day-sub">Izumisano, Osaka Prefecture &nbsp;·&nbsp; Arrival Day</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Arrive KIX</strong> &nbsp;09:05 (MM774 from SIN)</div>
+      <div><strong>Hotel</strong> &nbsp;Odysis Suites Osaka Airport Hotel</div>
+      <div><strong>Check-in</strong> &nbsp;from 15:00</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid">
+
+    <div class="attraction-card">
+      <img src="https://www.pelago.com/img/products/JP-Japan/private-shopping-tour-from-osaka-hotels-to-rinku-premium-outlets/ae746c12-20b9-4255-b4d8-66ec6b1a05d2_private-shopping-tour-from-osaka-hotels-to-rinku-premium-outlets.jpg" alt="Rinku Premium Outlets">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Rinku Premium Outlets <span class="card-zh">臨空城暢貨中心</span></div>
+        <div class="card-desc">One of Japan's largest outlet malls with 210+ stores spanning luxury brands like Dolce &amp; Gabbana and Kate Spade to Nike and Adidas. Tax-free shopping is available — bring your passport for savings of up to 10%. A perfect first stop right after landing.</div>
+        <div class="card-desc card-desc-zh">日本最大型的暢貨中心之一，匯聚逾210間店鋪，涵蓋Dolce &amp; Gabbana、Kate Spade等奢侈品牌，以及Nike、Adidas等運動品牌。持護照可享免稅優惠，最高節省10%。甫抵達後的第一站首選。</div>
+        <span class="card-tag">Shopping</span>
+        <span class="card-tag">Tax-Free</span>
+        <span class="card-tag">Open 10:00–20:00</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/09/c0/06/6f/caption.jpg?w=1200&h=-1&s=1" alt="Rinku Gate Tower">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Rinku Gate Tower &amp; Ferris Wheel <span class="card-zh">臨空閘塔及摩天輪</span></div>
+        <div class="card-desc">The landmark twin towers and the 85-metre Rinku No Hoshi Ferris Wheel define the Rinku skyline. A ride on the Ferris wheel rewards you with panoramic views over Osaka Bay, Kansai Airport, and on a clear day, as far as Awaji Island to the south.</div>
+        <div class="card-desc card-desc-zh">標誌性的雙子塔與高達85米的「臨空之星」摩天輪，是臨空城最具代表性的地標。乘坐摩天輪可俯瞰大阪灣及關西國際機場全景，晴天時甚至能遠眺南方的淡路島。</div>
+        <span class="card-tag">Landmark</span>
+        <span class="card-tag">Observation</span>
+        <span class="card-tag">Paid Entry</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🍱 Lunch</h4>
+      <ul>
+        <li><strong>Restaurant in Rinku Town</strong> — Grab lunch at one of the many dining options within Rinku Premium Outlets or the surrounding Rinku Town area after arriving and settling in.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🥩 Dinner</h4>
+      <ul>
+        <li><strong>One Karubi Yakiniku</strong> — Japanese yakiniku (BBQ) restaurant conveniently located next to the hotel. Grill your own premium cuts of beef and pork at the table — a great way to kick off the trip.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Practical Info</div>
+  <div class="practical-grid">
+    <div class="practical-box">
+      <h4>Getting Around</h4>
+      <ul>
+        <li>KIX → Rinku Town: 5 min by JR or Nankai train — station is directly under the terminal.</li>
+        <li>Rinku Premium Outlets is a 3-min walk from Rinku Town Station.</li>
+        <li>Hotel Odysis Suites is within Rinku Town, walkable from the station.</li>
+      </ul>
+    </div>
+    <div class="practical-box">
+      <h4>Tips for the Day</h4>
+      <ul>
+        <li>Bring your passport for tax-free purchases at the outlets.</li>
+        <li>Luggage storage is available at KIX if you want to explore before hotel check-in at 15:00.</li>
+        <li>AEON Mall Rinku Sennan nearby has 160+ stores for groceries, snacks, and everyday needs for the road trip.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 1 &nbsp;·&nbsp; 20 May 2026 &nbsp;·&nbsp; Rinku Town, Izumisano &nbsp;·&nbsp; Photos © Wikimedia Commons</div>
+
+</div>
+
+<!-- PAGE 5: Day 2 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 2 – Uji</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Thursday, 21 May 2026</div>
+      <div>Uji &nbsp;·&nbsp; Kyoto Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D2</div>
+      <div class="day-hero-label">
+        <div class="day-title">Uji &nbsp;·&nbsp; 宇治</div>
+        <div class="day-sub">Kyoto Prefecture &nbsp;·&nbsp; Tea Culture & UNESCO Heritage</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Lake Biwa Marriott Hotel</div>
+      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
+      <div><strong>Includes</strong> &nbsp;Breakfast</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
+
+    <div class="attraction-card">
+      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/10/3e/01/72/phoenix-hall.jpg?w=900&h=500&s=1" alt="Byōdō-in Temple">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Byōdō-in Temple <span class="card-zh">平等院</span></div>
+        <div class="card-desc">A UNESCO World Heritage Site founded in 1052, Byōdō-in is home to the iconic Phoenix Hall (Hōō-dō) — a masterpiece of Heian-period aristocratic architecture reflected in a serene garden pond. Its image appears on the Japanese 10-yen coin.</div>
+        <div class="card-desc card-desc-zh">平等院建於1052年（平安時代），是聯合國教科文組織世界文化遺產。以著名的鳳凰堂聞名，此建築凌駕於倒影池上，是日本貴族建築瑰寶，其圖像更印於日本十円硬幣之上。</div>
+        <span class="card-tag">UNESCO Heritage</span>
+        <span class="card-tag">Temple</span>
+        <span class="card-tag">Open 08:30–17:30</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://cdn.cheapoguides.com/wp-content/uploads/sites/3/2024/02/tsuen-teahouse-1024x600.jpg" alt="Uji Tea District">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Uji Tea Houses <span class="card-zh">宇治茶屋</span></div>
+        <div class="card-desc">Uji is Japan's most prized tea region. <strong>Nakamura Tokichi Honten</strong> (est. 1854) serves matcha sweets in a heritage tea-factory café. <strong>Tsujiri Uji Main Store</strong> and the ancient <strong>Tsuen Main Branch</strong> complete the trio — all within a short riverside walk of each other.</div>
+        <div class="card-desc card-desc-zh">宇治是日本最負盛名的茶葉產區。<strong>中村藤吉本店</strong>（創立於1854年）以古樸茶廠改建的咖啡廳供應精緻抹茶甜點；<strong>辻利宇治本店</strong>及歷史悠久的<strong>通園本店</strong>同樣提供精選茶飲與和菓子，各店沿河步行皆可輕鬆到達。</div>
+        <span class="card-tag">Matcha</span>
+        <span class="card-tag">Tea Culture</span>
+        <span class="card-tag">Historic Cafés</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://english-site.fudousin.com/wp-content/uploads/2024/10/Kisenbashi-760x570.jpg" alt="Tachibana Bridge Uji">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Tachibana Bridge <span class="card-zh">橘橋</span></div>
+        <div class="card-desc">A charming footbridge spanning the Uji River near Byōdō-in, Tachibana Bridge offers picturesque views of the river and the wooded temple grounds beyond. A leisurely riverside stroll between the bridge and the temple is the perfect way to round off the afternoon in Uji.</div>
+        <div class="card-desc card-desc-zh">橘橋是橫跨宇治川的古雅小橋，毗鄰平等院，可眺望川面及山林中的寺院景色。漫步橘橋與平等院之間的河畔步道，是在宇治度過午後時光的最悠然方式。</div>
+        <span class="card-tag">Scenic</span>
+        <span class="card-tag">Riverside Walk</span>
+        <span class="card-tag">Free</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🍱 Lunch — Irori Beniya</h4>
+      <ul>
+        <li><strong>Irori Beniya</strong> is a beloved traditional restaurant in Uji serving charcoal-grilled fish dishes cooked over an <em>irori</em> (sunken hearth). Signature dishes include grilled Atka mackerel set meals and grilled salmon with salmon roe rice. Rated 5.0 on Tripadvisor.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🥩 Dinner — Matsukiya Main Store &nbsp;<span style="font-weight:400;font-size:9px;color:#888">近江牛專門餐廳松喜屋本店</span></h4>
+      <ul>
+        <li><strong>Matsukiya</strong> is a legendary Omi beef (近江牛) specialist run by the same family since the Meiji era. The main store sits on the bank of the Seta River in Otsu — perfectly placed en route to Lake Biwa. Enjoy premium cuts prepared as sukiyaki, shabu-shabu, or steak, finished with the chef's signature bubble salt.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 2 &nbsp;·&nbsp; 21 May 2026 &nbsp;·&nbsp; Uji, Kyoto Prefecture &nbsp;·&nbsp; Photos © Wikimedia Commons</div>
+
+</div>
+
+<!-- PAGE 6: Day 3 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 3 – Ōmi-Hachiman</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Friday, 22 May 2026</div>
+      <div>Ōmi-Hachiman &nbsp;·&nbsp; Shiga Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D3</div>
+      <div class="day-hero-label">
+        <div class="day-title">Ōmi-Hachiman &nbsp;·&nbsp; 近江八幡</div>
+        <div class="day-sub">Shiga Prefecture &nbsp;·&nbsp; Historic Canals & Merchant Culture</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Lake Biwa Marriott Hotel</div>
+      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
+      <div><strong>Includes</strong> &nbsp;Breakfast</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbszhbXjXz3uz4dEbkODD4GZqZ3hApam10rQ&s" alt="La Collina Ōmi-Hachiman">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">La Collina Ōmi-Hachiman <span class="card-zh">拉科利納近江八幡</span></div>
+        <div class="card-desc">A magical complex by confectionery group Taneya, centred on a grass-thatched main building designed by architect Terunobu Fujimori. Home to Club Harie — Japan's premier Baumkuchen brand — and the Taneya wagashi shop. Shiga's top tourist facility for nine consecutive years.</div>
+        <div class="card-desc card-desc-zh">由糖果集團TANEYA打造的夢幻園區，以建築師藤森照信設計的茅草屋頂主建築為核心，四周環抱翠綠山丘，宛如童話世界。設有日本頂級年輪蛋糕品牌Club Harie及和菓子店TANEYA，連續九年榮登滋賀縣人氣旅遊設施榜首。</div>
+        <span class="card-tag">Sweets & Café</span>
+        <span class="card-tag">Architecture</span>
+        <span class="card-tag">Open 09:00–18:00</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://rimage.gnst.jp/livejapan.com/public/article/detail/a/20/00/a2000094/img/en/a2000094_main.jpg" alt="Hachiman-bori Canal">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Hachiman-bori Boat Tour <span class="card-zh">八幡堀遊船</span></div>
+        <div class="card-desc">A 35-minute boat journey through Ōmi-Hachiman's historic canal, guided by skilled boatmen with traditional oars. The waterway is flanked by 400-year-old white-walled merchant storehouses and willows — a scene straight out of a period drama. Both rowing and engine-powered boats available.</div>
+        <div class="card-desc card-desc-zh">由技術嫻熟的船夫以傳統木槳引領，全程約35分鐘，穿梭於近江八幡歷史悠久的運河之中。兩岸矗立逾400年歷史的白牆商家倉庫與垂柳，景色宛如走入時代劇場景。可選擇人力划船或機動船。</div>
+        <span class="card-tag">Boat Tour</span>
+        <span class="card-tag">35 min</span>
+        <span class="card-tag">Historic Canal</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnjwJLpsjgLdKQLSTH-4OtWhYFmT0CKXmBmA&s" alt="Himure Hachimangu Shrine">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Himure Hachimangu &amp; Omi Merchant Cityscape <span class="card-zh">日牟禮八幡宮及近江商人街道</span></div>
+        <div class="card-desc"><strong>Himure Hachimangu Shrine</strong>, guardian deity of the Ōmi merchants for over 1,000 years, sits amid ancient trees at the foot of Mt. Hachiman. Nearby, the <strong>Omi Merchant Cityscape</strong> — a nationally designated preservation district — preserves 2 km of Edo-to-Meiji merchant residences and storehouses.</div>
+        <div class="card-desc card-desc-zh"><strong>日牟禮八幡宮</strong>擁有逾千年歷史，長期作為近江商人的守護神，坐落於八幡山麓古木之間。附近的<strong>近江商人街道</strong>全長約2公里，被列為國家重要傳統建造物群保存地區，保存著江戶至明治時代的商家建築，是日本最完整的商家街景之一。</div>
+        <span class="card-tag">Shrine</span>
+        <span class="card-tag">Historic District</span>
+        <span class="card-tag">Free</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🍱 Lunch — Eel Hitsumabushi Sumiyagura</h4>
+      <ul>
+        <li><strong>Sumiyagura</strong> specialises in hitsumabushi — grilled freshwater eel over rice served in a wooden tub, enjoyed three ways: plain, with condiments, or as ochazuke with dashi broth. The eel is grilled over premium binchotan charcoal. Their signature <em>double hitsumabushi</em> adds Omi beef for an indulgent combination.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🍽 Dinner — PIERI MORIYAMA &nbsp;<span style="font-weight:400;font-size:9px;color:#888">PIERI守山</span></h4>
+      <ul>
+        <li>Dinner at one of the restaurants in <strong>PIERI MORIYAMA</strong>, a lakeside shopping mall in Moriyama, Shiga, situated on the shores of Lake Biwa. The dining floor offers a variety of Japanese and international options, many with views over the lake — a scenic end to the day before heading to the hotel.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 3 &nbsp;·&nbsp; 22 May 2026 &nbsp;·&nbsp; Ōmi-Hachiman, Shiga &nbsp;·&nbsp; Photos © Wikimedia Commons</div>
+
+</div>
+
+<!-- PAGE 7: Day 4 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 4 – Lake Biwa & Mt. Hiei</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Saturday, 23 May 2026</div>
+      <div>Lake Biwa &nbsp;·&nbsp; Shiga Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D4</div>
+      <div class="day-hero-label">
+        <div class="day-title">Lake Biwa &amp; Mt. Hiei &nbsp;·&nbsp; 琵琶湖及比叡山</div>
+        <div class="day-sub">Shiga Prefecture &nbsp;·&nbsp; Floating Temples, Lakeside Shrines &amp; Sacred Mountain</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Lake Biwa Marriott Hotel</div>
+      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
+      <div><strong>Includes</strong> &nbsp;Breakfast</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFslUeAXVsW5R1-M8WIsG_1Zyt32adTGMO-Q&s" alt="Mangetsu-ji Uki-midō">
+      <div class="img-credit">© To be added</div>
+      <div class="card-body">
+        <div class="card-title">Mangetsu-ji Uki-midō <span class="card-zh">滿月寺浮御堂</span></div>
+        <div class="card-desc">A small Buddhist hall perched on stilts over Lake Biwa in Katata, originally built in the 11th century by the monk Genshin to protect fishermen and sailors. One of Lake Biwa's most iconic and photographed sights — serene and magical at dawn when perfectly reflected in the still water.</div>
+        <div class="card-desc card-desc-zh">位於大津市堅田的浮御堂，是建於木樁之上、漂浮於琵琶湖水面的小型佛堂，相傳由11世紀源信和尚修建，以庇護湖上漁民及舟人。為琵琶湖最具代表性的地標之一，倒映湖面的景色尤為迷人，日出時分前往更是如夢似幻。</div>
+        <span class="card-tag">Temple</span>
+        <span class="card-tag">Lake Biwa</span>
+        <span class="card-tag">Iconic View</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-edr1vnqKaya9tiKwuG5H6th-6qXhYYNG9A&s" alt="Shirahige Shrine">
+      <div class="img-credit">© To be added</div>
+      <div class="card-body">
+        <div class="card-title">Shirahige Shrine <span class="card-zh">白鬚神社</span></div>
+        <div class="card-desc">One of Japan's oldest shrines, famous for its dramatic torii gate rising from the waters of Lake Biwa — often called the "Torii of Lake Biwa" and likened to Miyajima's iconic gate. Sunrise visits are especially rewarding as the gate glows against the morning light reflected on the lake.</div>
+        <div class="card-desc card-desc-zh">日本歷史最悠久的神社之一，以矗立於琵琶湖湖面的鳥居聞名，被譽為「琵琶湖的大鳥居」，常與廣島宮島的著名鳥居相提並論。日出時分前往尤為推薦，朝陽映照下鳥居與湖面交相輝映，景色震撼人心。</div>
+        <span class="card-tag">Shrine</span>
+        <span class="card-tag">Lake Torii</span>
+        <span class="card-tag">Sunrise Spot</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSp1FvPeYlsK6XY2rJRzk979VeQGJGZNKro1g&s" alt="Enryaku-ji">
+      <div class="img-credit">© To be added</div>
+      <div class="card-body">
+        <div class="card-title">Enryaku-ji <span class="card-zh">延曆寺</span></div>
+        <div class="card-desc">A UNESCO World Heritage Site founded in 788 by the monk Saicho atop Mt. Hiei. Headquarters of Japanese Tendai Buddhism for over 1,200 years, its vast complex spans three areas across the mountaintop. The founding monks of Zen, Pure Land, and other major Buddhist schools all trained here.</div>
+        <div class="card-desc card-desc-zh">延曆寺建於788年，由最澄上人創立於比叡山頂，是聯合國教科文組織世界文化遺產，天台宗總本山。寺院建築群分布山頂三個區域，逾千二百年來影響日本佛教深遠，禪宗、淨土宗等多個主要宗派的開山祖師皆出身於此。</div>
+        <span class="card-tag">UNESCO Heritage</span>
+        <span class="card-tag">Mt. Hiei</span>
+        <span class="card-tag">Open 08:30–16:30</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🍱 Lunch — Hieizan Minemichi Restaurant &nbsp;<span style="font-weight:400;font-size:9px;color:#888">比叡山嶺道餐廳</span></h4>
+      <ul>
+        <li>A mountain restaurant on Mt. Hiei along the scenic ridge path near Enryaku-ji, offering a welcome rest stop after exploring the temple complex. A great opportunity to enjoy local cuisine with views of the surrounding mountains and forest.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🥩 Dinner — Tonkatsu Taku &nbsp;<span style="font-weight:400;font-size:9px;color:#888">豬排Taku</span></h4>
+      <ul>
+        <li><strong>Tonkatsu Taku</strong> serves Japanese-style breaded pork cutlets — crispy panko-coated tonkatsu paired with shredded cabbage, miso soup, and rice. A hearty, satisfying dinner after a full day of sightseeing around Lake Biwa and Mt. Hiei.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 4 &nbsp;·&nbsp; 23 May 2026 &nbsp;·&nbsp; Lake Biwa &amp; Mt. Hiei, Shiga</div>
+
+</div>
+
+<!-- PAGE 8: Day 5 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 5 – Kayabuki-no-Sato &amp; Tango</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Sunday, 24 May 2026</div>
+      <div>Miyama &amp; Miyazu &nbsp;·&nbsp; Kyoto Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D5</div>
+      <div class="day-hero-label">
+        <div class="day-title">Kayabuki-no-Sato &amp; Tango &nbsp;·&nbsp; 茅葺之里及丹後</div>
+        <div class="day-sub">Miyama &amp; Miyazu, Kyoto Prefecture &nbsp;·&nbsp; Rural Villages &amp; Scenic Railway</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Fairfield by Marriott Kyoto Amanohashidate</div>
+      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid">
+
+    <div class="attraction-card">
+      <img src="https://miyamanavi.com/files/topics/95_ext_24_en_0.jpg" alt="Kayabuki-no-Sato">
+      <div class="img-credit">© miyamanavi.com</div>
+      <div class="card-body">
+        <div class="card-title">Kayabuki-no-Sato <span class="card-zh">茅葺之里</span></div>
+        <div class="card-desc">A nationally designated preservation district in Miyama, Kyoto Prefecture, Kayabuki-no-Sato is a serene village of some 38 beautifully preserved thatched-roof farmhouses. Set against forested mountains with a river running through, it is one of Japan's most photogenic rural landscapes — utterly timeless and a world away from city life.</div>
+        <div class="card-desc card-desc-zh">茅葺之里位於京都府南丹市美山町，是國家重要傳統建造物群保存地區，保存著約38棟美麗的茅草屋頂農家。村莊依山傍水，景色如畫，是日本最具代表性的農村風光之一，寧靜悠然，令人彷彿穿越時空。</div>
+        <span class="card-tag">Historic Village</span>
+        <span class="card-tag">Thatched Roofs</span>
+        <span class="card-tag">Free Entry</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://visitjapan-vegetarian.com/wp-content/uploads/2021/09/Yuragawa-Bridge-Miyazu-Kyoto-Japan-.jpg" alt="Yurakawa Railway Bridge" style="object-fit: contain; background: #f0ece4;">
+      <div class="img-credit">© visitjapan-vegetarian.com</div>
+      <div class="card-body">
+        <div class="card-title">Yurakawa Railway Bridge <span class="card-zh">由良川鐵橋</span></div>
+        <div class="card-desc">The Kitakinki Tango Railway sweeps across the Yura River on a long iron bridge near Miyazu. At high tide the bridge appears to skim just above the water, creating the magical illusion of a train gliding over the sea — earning it the nickname "sea train." One of the most iconic railway photography spots in the Kyoto-Tango region.</div>
+        <div class="card-desc card-desc-zh">北近畿丹後鐵道橫跨由良川的長形鐵橋，位於宮津附近。漲潮時橋面幾乎與水面齊平，列車仿佛直接在海面上行駛，因而得名「海上列車」，是京都丹後地區最具代表性的鐵道攝影聖地之一。</div>
+        <span class="card-tag">Scenic Railway</span>
+        <span class="card-tag">Sea Train</span>
+        <span class="card-tag">Photography Spot</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🍕 Lunch — Sakaya Pizza Cafe</h4>
+      <ul>
+        <li><strong>Sakaya Pizza Cafe</strong> is a charming local café in the Miyama area, offering wood-fired pizzas in a relaxed countryside setting — a delightful contrast to the traditional thatched village surroundings. A popular stop among visitors exploring the Kayabuki-no-Sato area.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🍽 Dinner — お食事処 割烹たんご &nbsp;<span style="font-weight:400;font-size:9px;color:#888">料理處 割烹丹後</span></h4>
+      <ul>
+        <li>A traditional Japanese dining restaurant in the Tango region serving kaiseki-style home cooking — fresh local seafood and seasonal ingredients from the Sea of Japan, prepared in the refined yet warming style of Kyoto-Tango cuisine.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 5 &nbsp;·&nbsp; 24 May 2026 &nbsp;·&nbsp; Miyama &amp; Miyazu, Kyoto Prefecture</div>
+
+</div>
+
+<!-- PAGE 9: Day 6 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 6 – Ine Bay &amp; Amanohashidate</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Monday, 25 May 2026</div>
+      <div>Ine &amp; Miyazu &nbsp;·&nbsp; Kyoto Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D6</div>
+      <div class="day-hero-label">
+        <div class="day-title">Ine Bay &amp; Amanohashidate &nbsp;·&nbsp; 伊根灣及天橋立</div>
+        <div class="day-sub">Ine &amp; Miyazu, Kyoto Prefecture &nbsp;·&nbsp; Boat Houses, Cruise &amp; Japan's Three Views</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Fairfield by Marriott Kyoto Amanohashidate</div>
+      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
+
+    <div class="attraction-card">
+      <img src="https://res.klook.com/image/upload/w_500,h_313,c_fill,q_85/activities/j6jqrfbv2d7vqrmmsw4s.jpg" alt="Ine Bay">
+      <div class="img-credit">© Klook</div>
+      <div class="card-body">
+        <div class="card-title">Ine Bay &amp; Bay Cruise <span class="card-zh">伊根灣及遊覽船</span></div>
+        <div class="card-desc">A UNESCO-nominated fishing village famous for 230+ funaya — traditional fishermen's dwellings built directly over the water, with boat garages on the ground floor. The 30-min bay cruise weaves among the funaya with seagulls in tow, framed by forested mountains.</div>
+        <div class="card-desc card-desc-zh">伊根灣面臨申遺，以逾230棟「舟屋」（funaya）聞名——漁民傳統住居的地面層即為停泊漁船的船庫。約30分鐘的遊覽船穿梭舟屋之間，海鷗伴飛，四周青山環抱，景色怡人。</div>
+        <span class="card-tag">Boat Cruise</span>
+        <span class="card-tag">Funaya</span>
+        <span class="card-tag">30 min</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://svcstrg.cld.navitime.jp/travelguide/p26270002/p26270002_01.jpg" alt="Amanohashidate Viewland">
+      <div class="img-credit">© Navitime</div>
+      <div class="card-body">
+        <div class="card-title">Amanohashidate Viewland <span class="card-zh">天橋立觀景樂園</span></div>
+        <div class="card-desc">Ride the chairlift up for the famous matanozoki — bending over to view the sandbar upside-down, making it appear to float in the sky like a bridge to heaven. The park also features panoramic views of Miyazu Bay, a zip line, and rides for all ages.</div>
+        <div class="card-desc card-desc-zh">乘坐纜椅上山，體驗著名的「股窺」（matanozoki）——彎腰倒看沙洲，宛如沙洲懸浮天際。園內另設宮津灣全景觀景台、飛索及各類遊樂設施。</div>
+        <span class="card-tag">Chairlift</span>
+        <span class="card-tag">Panoramic View</span>
+        <span class="card-tag">Matanozoki</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://i0.wp.com/donnykimball.com/wp-content/uploads/2023/08/The-Sandbar-of-Kyotos-Amanohashidate-e1691812653392.jpg?fit=801%2C534&ssl=1" alt="Amanohashidate Sandbar">
+      <div class="img-credit">© donnykimball.com</div>
+      <div class="card-body">
+        <div class="card-title">Amanohashidate Sandbar <span class="card-zh">天橋立砂洲</span></div>
+        <div class="card-desc">One of Japan's Three Views (日本三景), this 3.6-km pine-covered sandbar stretches across Miyazu Bay. Stroll or hire a bicycle along the path flanked by ancient pines with the sea shimmering on both sides. Said to resemble a bridge reaching up to heaven.</div>
+        <div class="card-desc card-desc-zh">天橋立是「日本三景」之一，橫跨宮津灣、長達3.6公里的翠松沙洲。沿沙洲步行或騎單車，兩側海水波光粼粼，古松林立，景色令人難忘，相傳其形如通往天界之橋。</div>
+        <span class="card-tag">Japan's Three Views</span>
+        <span class="card-tag">Walk / Cycle</span>
+        <span class="card-tag">Free</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🦞 Lunch — 海鮮工房 or 310 Amanohashidate</h4>
+      <ul>
+        <li><strong>海鮮工房 (Kaisen Kobo)</strong> serves fresh local seafood from the Sea of Japan — grilled, raw, or set meals featuring the region's prized crab, oysters, and seasonal catch. Alternatively, <strong>310 Amanohashidate</strong> offers a more casual dining experience with sea views near the sandbar.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🍽 Dinner — Nitanda</h4>
+      <ul>
+        <li><strong>Nitanda</strong> is a local restaurant in the Amanohashidate area, offering Japanese home-style cooking with fresh produce and seafood from the surrounding Tango Peninsula — a warm and satisfying dinner to close out a full day of sightseeing.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 6 &nbsp;·&nbsp; 25 May 2026 &nbsp;·&nbsp; Ine &amp; Miyazu, Kyoto Prefecture</div>
+
+</div>
+
+<!-- PAGE 10: Day 7 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 7 – Kinosaki &amp; Yumura Onsen</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Tuesday, 26 May 2026</div>
+      <div>Kinosaki &amp; Yumura Onsen &nbsp;·&nbsp; Hyogo Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D7</div>
+      <div class="day-hero-label">
+        <div class="day-title">Kinosaki &amp; Yumura Onsen &nbsp;·&nbsp; 城崎及湯村溫泉</div>
+        <div class="day-sub">Hyogo Prefecture &nbsp;·&nbsp; Marine World &amp; Traditional Hot Spring Ryokan</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Asanoya, Yumura Onsen</div>
+      <div><strong>Booking</strong> &nbsp;Trip.com</div>
+      <div><strong>Includes</strong> &nbsp;Dinner &amp; Breakfast</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid">
+
+    <div class="attraction-card">
+      <img src="https://visitkinosaki.com/vkcore/wp-content/uploads/2018/04/fishdance-1.jpg" alt="Kinosaki Marine World">
+      <div class="img-credit">© visitkinosaki.com</div>
+      <div class="card-body">
+        <div class="card-title">Kinosaki Marine World <span class="card-zh">城崎海洋世界</span></div>
+        <div class="card-desc">A marine theme park on the Sea of Japan coast near Kinosaki Onsen, featuring live dolphin and sea lion shows, penguin parades, and a wide variety of ocean creatures. The open-air performance stage overlooking the Sea of Japan provides a spectacular natural backdrop for the shows.</div>
+        <div class="card-desc card-desc-zh">位於日本海沿岸、城崎溫泉附近的海洋主題公園，設有海豚及海獅表演、企鵝遊行及各類海洋生物展示。面向日本海的露天表演舞台以大海為背景，景色壯觀，令人難忘。</div>
+        <span class="card-tag">Marine Park</span>
+        <span class="card-tag">Dolphin Show</span>
+        <span class="card-tag">Sea of Japan</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkCHrehYDPa8iMmoQ7MUIxO96FdXoNFeTjRA&s" alt="Asanoya Yumura Onsen">
+      <div class="img-credit">© Asanoya</div>
+      <div class="card-body">
+        <div class="card-title">Asanoya &amp; Yumura Onsen <span class="card-zh">朝野家及湯村溫泉</span></div>
+        <div class="card-desc">A beloved traditional ryokan set beside the river in Yumura Onsen, one of Hyogo's most celebrated hot spring villages. Yumura's Arasawa spring reaches 98°C — among Japan's hottest natural springs. Unwind in indoor and outdoor baths and enjoy a multi-course kaiseki dinner served in the room.</div>
+        <div class="card-desc card-desc-zh">朝野家是湯村溫泉依河而建的傳統日式旅館，湯村溫泉的荒湯泉水溫高達攝氏98度，是日本溫度最高的天然溫泉之一。旅館設有室內外溫泉浴池，並提供精緻懷石晚餐，在客房內享用，悠然自得。</div>
+        <span class="card-tag">Ryokan</span>
+        <span class="card-tag">Hot Spring</span>
+        <span class="card-tag">Dinner &amp; Breakfast</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🐬 Lunch — Kinosaki Marine World Terrace</h4>
+      <ul>
+        <li><strong>Cafe &amp; Restaurant Terrace</strong> inside Kinosaki Marine World offers casual dining with views over the Sea of Japan. Enjoy fresh seafood, light meals, and drinks between the park's shows and attractions — a convenient and scenic spot for a mid-day break.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🍱 Dinner — Asanoya Ryokan &nbsp;<span style="font-weight:400;font-size:9px;color:#888">朝野家旅館</span></h4>
+      <ul>
+        <li>Dinner is included with the stay at Asanoya — a traditional kaiseki multi-course meal served in-room, featuring fresh seasonal ingredients and local Hyogo specialities. A perfect way to end the day after the hot spring baths.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 7 &nbsp;·&nbsp; 26 May 2026 &nbsp;·&nbsp; Kinosaki &amp; Yumura Onsen, Hyogo</div>
+
+</div>
+
+<!-- PAGE 11: Day 8 Summary -->
+<div class="page">
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 8 – Himeji</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Wednesday, 27 May 2026</div>
+      <div>Himeji &nbsp;·&nbsp; Hyogo Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D8</div>
+      <div class="day-hero-label">
+        <div class="day-title">Himeji &nbsp;·&nbsp; 姬路</div>
+        <div class="day-sub">Hyogo Prefecture &nbsp;·&nbsp; White Heron Castle City</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Smile Hotel Okayama</div>
+      <div><strong>Booking</strong> &nbsp;Trip.com</div>
+      <div><strong>Includes</strong> &nbsp;Breakfast</div>
+    </div>
+  </div>
+
+  <div class="attraction-grid">
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCxS8abUC7xycYCyGp7fCbHlYltk9-bK1eSA&s" alt="Himeji Castle">
+      <div class="card-body">
+        <div class="card-title">Himeji Castle <span class="card-zh">姬路城</span></div>
+        <div class="card-desc">Japan's finest surviving feudal castle, designated a UNESCO World Heritage Site and National Treasure. Known as "Shirasagi-jō" (White Heron Castle) for its elegant white plastered walls, the complex comprises 83 buildings across multiple baileys connected by winding paths designed to confuse invaders. The main keep stands six stories tall and offers sweeping views over Himeji city.</div>
+        <div class="card-desc card-desc-zh">日本保存最完整的封建城堡，亦是聯合國教科文組織世界文化遺產及國寶。因其優雅的白色灰泥外牆，被譽為「白鷺城」。城郭由83棟建築組成，通過曲折迴廊相連，設計巧妙以迷惑入侵者。天守閣高達六層，可俯瞰整個姬路市全景。</div>
+        <span class="card-tag">UNESCO Heritage</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/4e/ad/79/caption.jpg?w=500&h=-1&s=1" alt="Kokoromi VIERRA Himeji">
+      <div class="card-body">
+        <div class="card-title">Nihonshu Bar Kokoromi <span class="card-zh">日本酒バー こころみ</span></div>
+        <div class="card-desc">A refined sake bar tucked inside VIERRA Himeji, the stylish shopping complex adjacent to Himeji Station. Nihonshu Bar Kokoromi curates an impressive selection of nihonshu (Japanese rice wine) from breweries across Hyogo Prefecture — Japan's top sake-producing region — alongside picks from other prefectures. Guests can enjoy tasting flights paired with light snacks in a relaxed, knowledgeable setting ideal for sake enthusiasts and curious beginners alike.</div>
+        <div class="card-desc card-desc-zh">位於姬路車站旁 VIERRA Himeji 購物中心內的精緻日本酒吧。こころみ精選兵庫縣——日本最重要的清酒產地——及其他府縣酒造出品的頂級日本酒，提供品酒套餐及輕食搭配。無論是清酒愛好者還是初次探索的旅人，皆可在此享受一段悠閒而富有學問的清酒體驗。</div>
+        <span class="card-tag">Sake Bar</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🏯 Lunch — Kassui-ken 活水軒</h4>
+      <ul>
+        <li><strong>活水軒 (Kassui-ken)</strong> is a historic restaurant nestled within the grounds of Himeji Castle, offering traditional Japanese cuisine with a view of the castle's elegant architecture. Enjoy set lunches featuring seasonal dishes in a refined tatami-style setting — a rare chance to dine inside one of Japan's most celebrated castle complexes.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🐟 Dinner — Uoya Taisho</h4>
+      <ul>
+        <li><strong>Uoya Taisho</strong> is a well-regarded seafood restaurant offering an extensive menu of fresh fish dishes, sashimi, and grilled seafood. A great choice for ending the day with the freshest catches from the Seto Inland Sea, prepared in classic Japanese style.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 8 &nbsp;·&nbsp; 27 May 2026 &nbsp;·&nbsp; Himeji, Hyogo</div>
+
+</div>
+
+<!-- PAGE 12: Day 9 Summary -->
+<div class="page">
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 9 – Okayama &amp; Kurashiki</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Thursday, 28 May 2026</div>
+      <div>Okayama &amp; Kurashiki &nbsp;·&nbsp; Okayama Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D9</div>
+      <div class="day-hero-label">
+        <div class="day-title">Okayama &amp; Kurashiki &nbsp;·&nbsp; 岡山及倉敷</div>
+        <div class="day-sub">Okayama Prefecture &nbsp;·&nbsp; Garden City &amp; Merchant Quarter</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Smile Hotel Okayama</div>
+      <div><strong>Booking</strong> &nbsp;Trip.com</div>
+      <div><strong>Includes</strong> &nbsp;Breakfast</div>
+    </div>
+  </div>
+
+  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQucWDuRT-jav5Llj4qlvglQRQgqRhFcwjilA&s" alt="Korakuen">
+      <div class="card-body">
+        <div class="card-title">Korakuen <span class="card-zh">後楽園</span></div>
+        <div class="card-desc">Ranked among Japan's three finest landscape gardens, Korakuen was completed in 1700 for the Ikeda clan lords of Okayama. Its vast grounds feature graceful lawns, pine-lined promenades, tea houses, cranes, and seasonal flower displays — all framed against a backdrop of Okayama Castle across the Asahi River.</div>
+        <div class="card-desc card-desc-zh">後楽園被譽為日本三大名園之一，建於1700年，為岡山藩池田氏所造。廣闊的園區內設有開闊草坪、松林小徑、茶室及丹頂鶴，四季花卉繽紛，更可遠眺旭川對岸的岡山城，景致優雅迷人。</div>
+        <span class="card-tag">Historic Garden</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://static.gltjp.com/glt/data/directory/13000/12544/20220111_232441_a5c11852_w1920.webp" alt="Kibitsu Jinja">
+      <div class="card-body">
+        <div class="card-title">Kibitsu Jinja <span class="card-zh">吉備津神社</span></div>
+        <div class="card-desc">A nationally significant Shinto shrine dedicated to Kibitsu-hiko-no-Mikoto, the mythological hero said to be the inspiration for the Momotaro legend. Its main hall is a rare example of the "Kibitsu-zukuri" architectural style, designated a National Treasure, and a long covered corridor stretches 360 metres through ancient cedar trees to the rear shrine.</div>
+        <div class="card-desc card-desc-zh">吉備津神社供奉吉備津彥命，傳說其事蹟正是桃太郎故事的原型。本殿以罕見的「吉備津造」建築風格著稱，被列為國寶；長達360公尺的迴廊穿越蒼翠古杉，通往後方奧宮，氣氛莊嚴神秘。</div>
+        <span class="card-tag">Shinto Shrine</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSi6ovDL4S9B6Yt9ExBmpMC0f9EvCY4DbEIw&s" alt="Kurashiki Bikan Historical Quarter">
+      <div class="card-body">
+        <div class="card-title">Kurashiki Bikan Quarter <span class="card-zh">倉敷美観地区</span></div>
+        <div class="card-desc">A beautifully preserved Edo-period merchant district centred on a willow-lined canal flanked by whitewashed kura (storehouses) converted into museums, galleries, cafés, and boutiques. The Ohara Museum of Art — Japan's first Western art museum — anchors the quarter, alongside craft shops and the charming ivy-clad Ivy Square complex.</div>
+        <div class="card-desc card-desc-zh">倉敷美観地区是保存完好的江戶時代商人街，以楊柳掩映的運河為中心，兩岸白壁倉敷群如畫卷。昔日倉庫已改建為博物館、藝廊、咖啡店及精品店；大原美術館作為日本首間西洋美術館坐鎮其中，常春藤廣場更添典雅歐式風情。</div>
+        <span class="card-tag">Historic District</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🍲 Lunch — Shabu-shabu Sukiyaki Hitorinabe Megu</h4>
+      <ul>
+        <li><strong>Hitorinabe Megu</strong> specialises in individual-portion shabu-shabu and sukiyaki hot pots, where each diner gets their own personal pot of simmering broth. Choose from premium cuts of wagyu or pork with seasonal vegetables — a relaxed, self-paced way to enjoy Japan's beloved hot pot tradition right in the heart of Okayama.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🍶 Dinner — Hidaya Togiyacho</h4>
+      <ul>
+        <li><strong>Hidaya Togiyacho</strong> is a well-regarded izakaya-style restaurant in Kurashiki offering thoughtfully prepared Japanese cuisine using locally sourced ingredients. Enjoy a relaxed evening of small dishes, seasonal specialties, and fine local sake — a perfect way to wind down after a full day exploring Okayama and Kurashiki.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 9 &nbsp;·&nbsp; 28 May 2026 &nbsp;·&nbsp; Okayama &amp; Kurashiki, Okayama Prefecture</div>
+
+</div>
+
+<!-- PAGE 13: Day 10 Summary -->
+<div class="page">
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 10 – Naoshima Art Island</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Friday, 29 May 2026</div>
+      <div>Naoshima, Kagawa → Tokushima</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D10</div>
+      <div class="day-hero-label">
+        <div class="day-title">Naoshima &nbsp;·&nbsp; 直島</div>
+        <div class="day-sub">Kagawa Prefecture &nbsp;·&nbsp; Japan's Art Island</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Hotel Sunroute Tokushima</div>
+      <div><strong>Booking</strong> &nbsp;Trip.com</div>
+    </div>
+  </div>
+
+  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
+    <div class="attraction-card">
+      <img src="https://benesse-artsite.jp/en/art/chichu_kv_thumb_01_pc.jpg" alt="Chichu Art Museum">
+      <div class="card-body">
+        <div class="card-title">Chichu Art Museum <span class="card-zh">地中美術館</span></div>
+        <div class="card-desc">Designed by Tadao Ando and built almost entirely underground to preserve Naoshima's landscape, Chichu ("underground" in Japanese) houses permanent works by Claude Monet, James Turrell, and Walter De Maria. Natural light floods the concrete galleries through carefully positioned skylights, transforming throughout the day and making each visit a unique sensory experience.</div>
+        <div class="card-desc card-desc-zh">由安藤忠雄設計，幾乎全部建於地下以保護直島自然景觀。地中美術館常設莫內、詹姆斯·特瑞爾及華特·德·瑪利亞的作品。天光透過精心設計的天窗傾瀉入混凝土展廳，隨時間流轉不斷變化，令每次參觀都成為獨一無二的感官旅程。</div>
+        <span class="card-tag">Contemporary Art</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXYUnGmBBI-TdEOLrNXQiGp456e_UQt5H0CA&s" alt="Benesse House Museum">
+      <div class="card-body">
+        <div class="card-title">Benesse House Museum <span class="card-zh">倍樂生之家美術館</span></div>
+        <div class="card-desc">Also designed by Tadao Ando, Benesse House blurs the boundary between museum and hotel, integrating contemporary artworks into the architecture and surrounding landscape. Permanent installations by Bruce Nauman, Richard Long, and Hiroshi Sugimoto sit alongside site-specific outdoor works overlooking the Seto Inland Sea — art experienced as part of everyday living.</div>
+        <div class="card-desc card-desc-zh">同由安藤忠雄設計，倍樂生之家模糊了美術館與酒店的界限，將當代藝術融入建築與周邊自然景觀。館內永久收藏布魯斯·瑙曼、理查·朗及杉本博司等藝術家的作品，戶外裝置作品俯瞰瀨戶內海，藝術與日常生活渾然一體。</div>
+        <span class="card-tag">Art Museum</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2021%2F08%2Fyayoi-kusama-yellow-pumpkin-washed-away-seto-island-japan-typhoon-lupit-001.jpg?q=75&w=800&cbr=1&fit=max" alt="Yellow Pumpkin">
+      <div class="card-body">
+        <div class="card-title">Yellow Pumpkin <span class="card-zh">黃色南瓜</span></div>
+        <div class="card-desc">Yayoi Kusama's iconic polka-dotted yellow pumpkin sculpture sits at the end of a pier on Naoshima's Benesse Art Site, having become one of Japan's most photographed artworks. The sculpture embodies Kusama's lifelong obsession with dots and infinity, and its striking silhouette against the shimmering waters of the Seto Inland Sea makes it a defining symbol of the island's artistic identity.</div>
+        <div class="card-desc card-desc-zh">草間彌生標誌性的波點黃色南瓜雕塑矗立於直島倍樂生藝術場地的突堤末端，是日本最具人氣的打卡地標之一。作品體現了草間彌生對圓點與無限的畢生執念，其鮮明輪廓映襯著瀨戶內海粼粼波光，成為直島藝術精神的象徵符號。</div>
+        <span class="card-tag">Iconic Sculpture</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🐟 Lunch — Yuunagi</h4>
+      <ul>
+        <li><strong>Yuunagi</strong> is a beloved lunch spot on Naoshima serving fresh, simple Japanese cuisine including seafood rice bowls and daily specials made from local Seto Inland Sea ingredients. A casual, no-frills setting popular with visitors and island residents alike — the kind of honest, delicious meal that makes a day of art even more memorable.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🥩 Dinner — 焼肉割烹のべ</h4>
+      <ul>
+        <li><strong>焼肉割烹のべ</strong> is a refined yakiniku-kaiseki restaurant in Ichibancho, Tokushima city (3 Chome-21 Ichibancho, Tokushima 770-0833), combining the pleasure of tabletop grilled meat with the elegance of Japanese kaiseki presentation. Premium cuts of wagyu and seasonal accompaniments are served in a sophisticated setting — a rewarding end to a day of art before settling into Tokushima for the night.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 10 &nbsp;·&nbsp; 29 May 2026 &nbsp;·&nbsp; Naoshima, Kagawa → Tokushima</div>
+
+</div>
+
+<!-- PAGE 14: Day 11 Summary -->
+<div class="page">
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 11 – Naruto · Kobe · Osaka</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Saturday, 30 May 2026</div>
+      <div>Naruto · Kobe · Osaka</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D11</div>
+      <div class="day-hero-label">
+        <div class="day-title">Naruto · Kobe · Osaka &nbsp;·&nbsp; 鳴門·神戶·大阪</div>
+        <div class="day-sub">Tokushima → Hyogo → Osaka &nbsp;·&nbsp; Whirlpools, Sake &amp; Neon Lights</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Tanimachi-Kun Hotel Ebisucho 72</div>
+      <div><strong>Booking</strong> &nbsp;Trip.com</div>
+    </div>
+  </div>
+
+  <div class="attraction-grid">
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRotxgGdhGOSUhpGPbhq_xYzOEpxLx9rXjcRg&s" alt="Wonder Naruto">
+      <div class="card-body">
+        <div class="card-title">WONDER NARUTO <span class="card-zh">渦之道</span></div>
+        <div class="card-desc">An immersive attraction built around the legendary Naruto Whirlpools — some of the world's largest tidal vortices, formed where the Pacific Ocean meets the Seto Inland Sea through the Naruto Strait. WONDER NARUTO combines observation decks, glass-floor walkways suspended above the churning whirlpools, and multimedia exhibits to deliver a dramatic encounter with one of Japan's most awe-inspiring natural phenomena.</div>
+        <div class="card-desc card-desc-zh">環繞鳴門漩渦打造的沉浸式景點——鳴門漩渦是全球最大的潮汐漩渦之一，由太平洋與瀨戶內海在鳴門海峽交匯而成。WONDER NARUTO設有觀景台、懸於翻騰漩渦上方的玻璃地板步道及多媒體展覽，讓遊客近距離感受這一壯觀的自然奇景。</div>
+        <span class="card-tag">Natural Wonder</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://onb-cdn.b-cdn.net/images-stn-kobe/42-Kobe-Shushinkan-Fukuju-Sake-Brewery3.jpg" alt="Kobe Sake Breweries">
+      <div class="card-body">
+        <div class="card-title">Kobe Sake Breweries <span class="card-zh">神戶酒造</span></div>
+        <div class="card-desc">The Nada district of Kobe is Japan's premier sake-producing region, home to three celebrated breweries: <strong>Shushinkan</strong> (菊正宗酒造), renowned for its classic dry honjozo; <strong>Hakutsuru Brewery Museum</strong> (白鶴酒造資料館), a restored Meiji-era kura with interactive exhibits; and <strong>Hamafukutsuru</strong> (浜福鶴), offering a working brewery tour with tasting. Each tells a distinct chapter of Nada's 300-year sake heritage.</div>
+        <div class="card-desc card-desc-zh">神戶灘區是日本首屈一指的清酒產地，匯聚三間知名酒造：以傳統辛口本釀造著稱的<strong>菊正宗酒造（酒の文化館）</strong>；修復明治時代酒藏、設有互動展覽的<strong>白鶴酒造資料館</strong>；以及提供作業中酒藏參觀及品酒體驗的<strong>浜福鶴</strong>。三間酒造各自述說著灘區三百年清酒傳承的獨特篇章。</div>
+        <span class="card-tag">Sake Breweries</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://static.japan-food.guide/uploads/article/cover_image/000/000/570/005457c1682a6027b97207fce1994c417ca202da43009b77092356bd5239dcbd/eye_catch_29284747_s__1_.jpg?1759897952" alt="Namba Yasaka Jinja">
+      <div class="card-body">
+        <div class="card-title">Namba Yasaka Jinja <span class="card-zh">難波八坂神社</span></div>
+        <div class="card-desc">A striking Osaka shrine famous for its enormous lion-head stage (koma-inu butai), a 12-metre-tall structure with gaping jaws designed to devour evil spirits and bring good luck. Set amid the urban energy of Namba, the shrine offers a surreal contrast of ancient ritual and modern city life. Particularly dramatic when lit up at dusk, it has become one of Osaka's most photographed landmarks.</div>
+        <div class="card-desc card-desc-zh">大阪著名神社，以巨型獅子頭舞台聞名——這座高達12公尺、張口獠牙的構造物象徵吞噬邪惡、招來好運。神社坐落於繁華的難波鬧市，古老祭祀與現代都市生活形成奇妙對比。入夜燈光亮起後尤為壯觀，已成為大阪最具人氣的打卡地標之一。</div>
+        <span class="card-tag">Shinto Shrine</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1RTuwg3SwXHXOoNFe2DwEVgdmwBfK9sXS0w&s" alt="Tsutenkaku & Shinsekai">
+      <div class="card-body">
+        <div class="card-title">Tsutenkaku &amp; Shinsekai <span class="card-zh">通天閣及新世界</span></div>
+        <div class="card-desc">Tsutenkaku is Osaka's beloved retro tower, modelled on the Eiffel Tower and rebuilt in 1956 as a symbol of postwar revival. It anchors Shinsekai — "New World" — a nostalgic entertainment district of kushikatsu joints, old-school game parlours, and colourful signage that evokes the Showa era. Strolling Shinsekai at dusk is a quintessential Osaka experience.</div>
+        <div class="card-desc card-desc-zh">通天閣是大阪深受市民喜愛的復古鐵塔，以艾菲爾鐵塔為藍本，於1956年重建，象徵戰後復興。鐵塔坐鎮「新世界」——一個充滿懷舊氣息的娛樂街區，聚集串炸小店、老式遊樂場與色彩繽紛的招牌，重現昭和年代風情。黃昏時分漫步新世界，是體驗道地大阪風情的必選行程。</div>
+        <span class="card-tag">Osaka Icon</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🍤 Lunch — 天ぷらたまき 六甲道店</h4>
+      <ul>
+        <li><strong>Tempura Tamaki Rokkodoten</strong> is a well-regarded tempura specialist in the Rokkodo area of Kobe, serving meticulously battered and fried seafood and vegetables in the classic Osaka-Kobe style. Light, crispy, and freshly made to order — a perfect mid-day stop between the Nada brewery district and the drive into Osaka.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🍢 Dinner — Kushikatsu Ittoku Tsutenkaku Branch</h4>
+      <ul>
+        <li><strong>串かつ 一徳 通天閣店</strong> is a lively kushikatsu restaurant in the heart of Shinsekai, right by Tsutenkaku Tower. Specialising in Osaka's signature deep-fried skewers — from beef and shrimp to quail egg and lotus root — dipped in the house sauce (no double-dipping!). The definitive Shinsekai dinner experience.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 11 &nbsp;·&nbsp; 30 May 2026 &nbsp;·&nbsp; Naruto · Kobe · Osaka</div>
+
+</div>
+
+<!-- PAGE 15: Day 12 Summary -->
+<div class="page">
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 12 – Osaka</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Sunday, 31 May 2026</div>
+      <div>Osaka &nbsp;·&nbsp; Osaka Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D12</div>
+      <div class="day-hero-label">
+        <div class="day-title">Osaka &nbsp;·&nbsp; 大阪</div>
+        <div class="day-sub">Osaka Prefecture &nbsp;·&nbsp; Temples, Pokémon, Cruises &amp; Neon Ferris Wheels</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Tanimachi-Kun Hotel Ebisucho 72</div>
+      <div><strong>Booking</strong> &nbsp;Trip.com</div>
+    </div>
+  </div>
+
+  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSo3t746JngouFmEcEJ12IH9JtSM2r5E1tjDA&s" alt="Katsuoji Temple">
+      <div class="card-body">
+        <div class="card-title">Katsuoji Temple <span class="card-zh">勝尾寺</span></div>
+        <div class="card-desc">A millennium-old temple in the forested hills of Minoh, Osaka, dedicated to victories in life's struggles. Katsuoji is famous for its thousands of Daruma dolls — small, round wish-granting figures — placed by worshippers throughout the temple grounds after prayers are answered. The moss-covered stone paths, koi ponds, and autumn foliage make it one of Osaka's most atmospheric nature escapes.</div>
+        <div class="card-desc card-desc-zh">位於大阪箕面市山林間的千年古剎，供奉勝運之神。勝尾寺以遍布全境的數千個達摩不倒翁著稱——信眾在心願成真後將其擺放於寺內各處。青苔石徑、錦鯉池塘與繁茂林木交織，構成大阪最具禪意的自然景點之一。</div>
+        <span class="card-tag">Historic Temple</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/16/28/d1/bf/no15.jpg?w=900&h=500&s=1" alt="The Farm Universal Osaka">
+      <div class="card-body">
+        <div class="card-title">The Farm Universal <span class="card-zh">農場樂園</span></div>
+        <div class="card-desc">A unique urban farm experience near Universal Studios Japan, offering hands-on strawberry picking, seasonal vegetable harvesting, and farm-to-table dining. Visitors can wander through greenhouse gardens, collect their own produce, and enjoy freshly prepared meals made from ingredients picked minutes earlier — a refreshing counterpoint to the city's urban energy.</div>
+        <div class="card-desc card-desc-zh">鄰近環球影城的獨特都市農場體驗，提供親手採摘草莓、收割時令蔬菜及農場直桌餐飲服務。遊客可漫步溫室花園、自行採收農產品，並品嚐以數分鐘前剛摘下食材烹調的新鮮料理——在都市喧囂中享受一份難得的田園清靜。</div>
+        <span class="card-tag">Farm Experience</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3sWW3UXiXkOh4zSw0gO8r2yizQt2n3Vqi7g&s" alt="Osaka Ukiyoe Museum">
+      <div class="card-body">
+        <div class="card-title">Osaka Ukiyoe Museum <span class="card-zh">大阪浮世繪美術館</span></div>
+        <div class="card-desc">Japan's largest permanent ukiyo-e museum, housing an extraordinary collection of woodblock prints spanning the Edo and Meiji periods. The museum showcases iconic works by masters such as Hokusai, Hiroshige, and Utamaro, presented through both original prints and large-scale digital reproductions. A vivid window into the popular culture, fashion, and landscapes of old Japan.</div>
+        <div class="card-desc card-desc-zh">日本最大的常設浮世繪美術館，珍藏橫跨江戶至明治時代的大量木版畫精品。館內展出葛飾北齋、歌川廣重及喜多川歌麿等大師的經典作品，以原版版畫及大型數碼重現相結合的方式呈現，生動展示江戶時代的庶民文化、時尚風貌與山川景致。</div>
+        <span class="card-tag">Art Museum</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://pic.k-cdn.media/2023/07/20230721-pokemon-center-cafe-img04.jpg" alt="Pokémon Cafe Osaka">
+      <div class="card-body">
+        <div class="card-title">Pokémon Cafe Shinsaibashi <span class="card-zh">寶可夢咖啡廳</span></div>
+        <div class="card-desc">Osaka's official Pokémon Cafe located in Shinsaibashi offers an immersive themed dining experience with character-inspired food and drinks. Menu items are elaborately designed around beloved Pokémon — Pikachu pancakes, Eevee lattes, and seasonal specials — served in a fully decorated interior. Reservations are essential and merchandise is available exclusively on-site.</div>
+        <div class="card-desc card-desc-zh">位於心齋橋的大阪官方寶可夢咖啡廳，提供角色主題沉浸式餐飲體驗。菜單圍繞人氣寶可夢精心設計——比卡丘鬆餅、伊布拿鐵及季節限定特飲——在全主題裝潢的空間內享用。需提前預約，限定週邊商品僅在現場發售。</div>
+        <span class="card-tag">Themed Cafe</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQ-tmx9HBYB0X9LQ6WLzsA9m18vx2K7l1h8w&s" alt="Tombori River Cruise">
+      <div class="card-body">
+        <div class="card-title">Tombori River Cruise <span class="card-zh">道頓堀河遊船</span></div>
+        <div class="card-desc">A scenic boat cruise along the iconic Dotonbori Canal, gliding beneath neon-lit bridges and past Osaka's famous giant signboards — the Glico Running Man, Kani Doraku crab, and more. The 20-minute ride offers a unique water-level perspective of the city's most vibrant entertainment district, especially magical at dusk when the reflections of the signs shimmer across the canal.</div>
+        <div class="card-desc card-desc-zh">沿道頓堀運河穿行的觀光遊船，在霓虹燈橋樑下與大阪著名巨型招牌旁緩緩前行——固力果跑步人、螃蟹道樂大螃蟹等地標近在咫尺。約20分鐘的航程從水面視角俯覽城市最繁華的娛樂區，黃昏時分招牌倒影映於運河之上，景色尤為迷人。</div>
+        <span class="card-tag">Boat Cruise</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGgwpSu7OhzE04KLJSoWsxqsIj74CgI-g86A&s" alt="Ebisu Tower Ferris Wheel">
+      <div class="card-body">
+        <div class="card-title">Ebisu Tower Ferris Wheel <span class="card-zh">惠比壽塔摩天輪</span></div>
+        <div class="card-desc">The HEP Five Ferris Wheel — affectionately known as the Donki Ferris Wheel — sits atop the Don Quijote shopping complex in Shinsaibashi-suji, soaring 106 metres above street level. A ride in one of the red gondolas offers sweeping 360° views over Osaka's glittering cityscape, and the colourful wheel has become a beloved Osaka landmark in its own right.</div>
+        <div class="card-desc card-desc-zh">惠比壽塔摩天輪——又稱唐吉訶德摩天輪——矗立於心齋橋筋唐吉訶德購物中心頂層，高達地面106公尺。乘坐紅色車廂可360度俯瞰大阪璀璨夜景，繽紛旋轉的摩天輪本身亦已成為深受喜愛的大阪地標。</div>
+        <span class="card-tag">City Views</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🌿 Lunch — The Farm Universal Osaka</h4>
+      <ul>
+        <li>Dine at <strong>The Farm Universal</strong>'s on-site restaurant, where the menu is built around produce harvested from the farm itself. Enjoy fresh salads, farm platters, and seasonal mains in a relaxed garden setting — ingredients picked by you or sourced from the same fields just metres away.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🥩 Dinner — Wagyu Sukiyaki Okuwo 和牛すき焼き おくを</h4>
+      <ul>
+        <li><strong>和牛すき焼き おくを</strong> is a premium wagyu sukiyaki restaurant in Osaka serving carefully selected Japanese black beef cooked tableside in a rich, sweet soy broth with tofu, enoki, and seasonal vegetables. An indulgent, celebratory way to close out one of the trip's most packed days in the city.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 12 &nbsp;·&nbsp; 31 May 2026 &nbsp;·&nbsp; Osaka</div>
+
+</div>
+
+<!-- PAGE 16: Day 13 Summary -->
+<div class="page">
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 13 – Osaka</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Monday, 1 June 2026</div>
+      <div>Osaka &nbsp;·&nbsp; Osaka Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D13</div>
+      <div class="day-hero-label">
+        <div class="day-title">Osaka &nbsp;·&nbsp; 大阪</div>
+        <div class="day-sub">Osaka Prefecture &nbsp;·&nbsp; Shopping, Street Karting &amp; Final Night</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Tanimachi-Kun Hotel Ebisucho 72</div>
+      <div><strong>Booking</strong> &nbsp;Trip.com</div>
+    </div>
+  </div>
+
+  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
+    <div class="attraction-card">
+      <img src="https://static.gltjp.com/glt/data/directory/15000/14249/20230127_172947_1c859784_w640.webp" alt="bills Osaka">
+      <div class="card-body">
+        <div class="card-title">bills Osaka <span class="card-zh">bills大阪</span></div>
+        <div class="card-desc">The Osaka outpost of the legendary Australian all-day dining brand, perched with sweeping views over the city. bills is celebrated worldwide for its signature ricotta hotcakes and scrambled eggs, served alongside fresh seasonal produce and specialty coffee. A stylish, unhurried start to the day — the kind of breakfast worth lingering over before hitting the shops.</div>
+        <div class="card-desc card-desc-zh">澳洲傳奇全日餐廳品牌的大阪分店，居高臨下俯瞰城市全景。bills以其招牌瑞可塔芝士熱香餅及滑嫩炒蛋享譽全球，搭配新鮮時令食材與精品咖啡。悠閒精緻的用餐氛圍，讓人流連忘返——是出發購物前最值得細細品味的早午餐體驗。</div>
+        <span class="card-tag">Brunch</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://img.activityjapan.com/wi/osaka_umeda_family_thumb.jpg" alt="Umeda Shopping">
+      <div class="card-body">
+        <div class="card-title">Umeda Shopping <span class="card-zh">梅田購物</span></div>
+        <div class="card-desc">Umeda is Osaka's premier upmarket shopping destination, anchored by Osaka Station City and surrounded by a vast network of interconnected department stores and underground malls. Grand Front Osaka, Hankyu and Hanshin department stores, Lucua, and the HEP Five complex offer everything from high fashion and Japanese cosmetics to gourmet food halls and local souvenirs — the ideal last full day for picking up gifts and final finds.</div>
+        <div class="card-desc card-desc-zh">梅田是大阪首屈一指的高端購物勝地，以大阪車站城為核心，周邊連接多個百貨公司與地下商場。Grand Front大阪、阪急、阪神百貨、Lucua及HEP Five一應俱全，涵蓋高端時裝、日本彩妝、美食廳及本地紀念品——是旅程最後整天採購手信與尋寶的理想之選。</div>
+        <span class="card-tag">Shopping</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAG_zhGPPid4Cne8seODLUHAk9-h8Y-z6pLg&s" alt="Street Kart Osaka">
+      <div class="card-body">
+        <div class="card-title">STREET KART Osaka <span class="card-zh">街道卡丁車</span></div>
+        <div class="card-desc">An unforgettable Osaka experience — drive a real go-kart through the city's public streets in full costume, weaving past landmarks, neon signs, and bewildered onlookers. STREET KART offers guided convoy tours through Osaka's most iconic districts, with helmets, costumes, and a support guide included. A thrilling, uniquely Japanese way to bid farewell to the city on the final full day of the trip.</div>
+        <div class="card-desc card-desc-zh">難忘的大阪體驗——穿上全套卡通服裝，駕駛真實卡丁車穿梭於城市公共街道，途經地標建築、霓虹招牌，引來路人驚喜目光。STREET KART提供穿越大阪最具代表性街區的導覽車隊之旅，含頭盔、服裝及隨行嚮導。以這種獨一無二的日本玩法，為旅程最後一個完整白天留下最精彩的收尾。</div>
+        <span class="card-tag">City Experience</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🍤 Lunch — Tempura Makino Umeda</h4>
+      <ul>
+        <li><strong>天ぷら 牧野 梅田店</strong> is a refined tempura restaurant in Umeda, serving meticulously battered and fried seasonal seafood and vegetables in the Osaka tradition. Set lunch courses offer excellent value, with each piece fried to order and served at peak crispness — a perfect mid-shopping break before the afternoon's street kart adventure.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🍽️ Dinner — TBD</h4>
+      <ul>
+        <li>Dinner location to be confirmed.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 13 &nbsp;·&nbsp; 1 June 2026 &nbsp;·&nbsp; Osaka</div>
+
+</div>
+
+<!-- PAGE 17: Day 14 Summary -->
+<div class="page">
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 14 – Departure Day</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Tuesday, 2 June 2026</div>
+      <div>Osaka → Kansai International Airport</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D14</div>
+      <div class="day-hero-label">
+        <div class="day-title">Osaka · Departure &nbsp;·&nbsp; 大阪·啟程</div>
+        <div class="day-sub">Osaka → KIX &nbsp;·&nbsp; MM773 KIX 18:25 → SIN 00:05+1</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Flight</strong> &nbsp;MM773 · Peach Aviation</div>
+      <div><strong>Departs</strong> &nbsp;KIX 18:25</div>
+      <div><strong>Arrives</strong> &nbsp;SIN 00:05 (+1)</div>
+    </div>
+  </div>
+
+  <div class="attraction-grid">
+    <div class="attraction-card">
+      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/14/5f/0c/34/caption.jpg?w=1200&h=-1&s=1" alt="Namba Shopping">
+      <div class="card-body">
+        <div class="card-title">Last-Minute Shopping · Namba <span class="card-zh">難波最後購物</span></div>
+        <div class="card-desc">Namba is Osaka's beating heart — a labyrinth of covered arcades, department stores, and specialist shops packed into Shinsaibashi-suji, Amerika-mura, and the Dotonbori strip. The perfect final morning hunting ground for last-minute omiyage, cosmetics, snacks, fashion, and anything that escaped the itinerary earlier. Namba CITY, Takashimaya, and Don Quijote all within easy walking distance.</div>
+        <div class="card-desc card-desc-zh">難波是大阪的心臟地帶——心齋橋筋、美國村與道頓堀一帶密佈有蓋商業街、百貨公司與各類專賣店。是旅程最後早上搜尋手信、彩妝、零食、時裝及一切「漏網之魚」的最佳獵場。難波City、高島屋及唐吉訶德均步行可達。</div>
+        <span class="card-tag">Shopping</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://article-image.travel.navitime.jp/img/NTJtrv1084-en/NTJtrv1084-en_kuromon_market_0.jpg" alt="Kuromon Market">
+      <div class="card-body">
+        <div class="card-title">Kuromon Ichiba Market <span class="card-zh">黑門市場</span></div>
+        <div class="card-desc">Known as "Osaka's Kitchen," Kuromon Ichiba is a 580-metre covered market with over 150 stalls selling fresh seafood, premium wagyu, pickles, fruit, and street food. Walk-and-eat is the tradition here — grilled scallops, uni on rice, and skewered wagyu are eaten fresh from the stall. The ideal send-off lunch before heading to Kansai airport for the flight home.</div>
+        <div class="card-desc card-desc-zh">素有「大阪廚房」之稱的黑門市場，全長580公尺的有蓋市場匯聚逾150個攤位，售賣新鮮海產、頂級和牛、漬物、水果及各式街頭小食。邊走邊吃是這裡的傳統——炭烤帆立貝、海膽飯及串燒和牛現點現吃。是前往關西機場搭機回家前最完美的道別午餐。</div>
+        <span class="card-tag">Food Market</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🦪 Lunch — Kuromon Ichiba Market</h4>
+      <ul>
+        <li>Graze through <strong>黒門市場</strong>'s 150+ stalls for a final feast of Osaka flavours — fresh uni, grilled scallops, wagyu skewers, tamagoyaki, and seasonal fruit. Each stall is its own experience; take your time, eat slowly, and savour the last taste of Japan before heading to KIX.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">✈️ Dinner — Airport Bento</h4>
+      <ul>
+        <li>Pick up a final bento or ekiben from KIX's departure-level food shops before boarding MM773. Kansai Airport has an excellent selection of regional bento boxes — Osaka-style oshizushi, wagyu sandwiches, and local sweets — the perfect way to extend the taste of the trip all the way to Singapore.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 14 &nbsp;·&nbsp; 2 June 2026 &nbsp;·&nbsp; Osaka → Kansai International Airport</div>
+
+</div>
+
+
+
+
+
 
 
 
