@@ -2425,6 +2425,9 @@
     .drive-total td { background: #2c3e6b !important; color: white !important; font-weight: 700; font-size: 9px; }
     .drive-total .d-km { color: #f9e79f !important; font-size: 11px; }
     .drive-total .d-time { color: #aed6f1 !important; }
+    .d-toll { width: 58px; text-align: right; font-weight: 600; color: #a04000; }
+    .d-toll-none { width: 58px; text-align: right; color: #bbb; }
+    .wknd-disc { font-size: 6px; color: #888; display: block; font-weight: 400; }
     .car-card { display: flex; gap: 10px; margin-bottom: 8px; background: #f5f7fb; border: 1px solid #dde3f0; border-radius: 6px; padding: 8px 10px; align-items: flex-start; }
     .car-img { width: 148px; min-width: 148px; height: 92px; object-fit: contain; border-radius: 4px; background: #e8eaf0; }
     .car-specs { flex: 1; }
@@ -2489,6 +2492,7 @@
         <th>Key Legs</th>
         <th class="d-km">Km</th>
         <th class="d-time">Drive Time</th>
+        <th class="d-toll">Est. Toll (¥)</th>
         <th class="d-notes">Notes</th>
       </tr>
     </thead>
@@ -2500,6 +2504,7 @@
         <td>KIX → Rinku Premium Outlets → Hotel</td>
         <td class="d-km">10</td>
         <td class="d-time">~15 min</td>
+        <td class="d-toll-none">—</td>
         <td class="d-notes">Airport area only. Park at outlets.</td>
       </tr>
       <tr>
@@ -2509,6 +2514,7 @@
         <td>Rinku → Uji (60 km) → Moriyama (55 km)</td>
         <td class="d-km">115</td>
         <td class="d-time">~1h 45min</td>
+        <td class="d-toll">¥1,200</td>
         <td class="d-notes">Hanshin Expressway + Nishimeihan. <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2518,6 +2524,7 @@
         <td>Moriyama → Ōmi-Hachiman (15 km) → return (15 km) + local</td>
         <td class="d-km">40</td>
         <td class="d-time">~50 min</td>
+        <td class="d-toll-none">—</td>
         <td class="d-notes">Mostly flat lakeside roads. Easy day.</td>
       </tr>
       <tr>
@@ -2527,6 +2534,7 @@
         <td>Moriyama → Mangetsu-ji (15 km) → Shirahige (12 km) → Enryaku-ji (25 km) → return (30 km)</td>
         <td class="d-km">82</td>
         <td class="d-time">~2h 00min</td>
+        <td class="d-toll">¥1,800<span class="wknd-disc">Hiei Driveway (private)</span></td>
         <td class="d-notes">Winding mountain roads to Enryaku-ji. <span class="mtn-tag">Mountain</span> <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2536,6 +2544,7 @@
         <td>Moriyama → Miyama/Kayabuki-no-Sato (95 km) → Miyazu (55 km)</td>
         <td class="d-km">150</td>
         <td class="d-time">~2h 30min</td>
+        <td class="d-toll">¥1,100<span class="wknd-disc">After ETC wknd 30% off</span></td>
         <td class="d-notes">Kyoto → Miyama rural roads → Maizuru Wakasa Expressway. <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2545,6 +2554,7 @@
         <td>Miyazu → Ine Bay (25 km) → Viewland (20 km) → return (5 km)</td>
         <td class="d-km">50</td>
         <td class="d-time">~1h 00min</td>
+        <td class="d-toll-none">—</td>
         <td class="d-notes">Scenic coastal road along Ine Bay. Easy driving.</td>
       </tr>
       <tr>
@@ -2554,6 +2564,7 @@
         <td>Miyazu → Kinosaki Marine World (70 km) → Yumura Onsen (25 km)</td>
         <td class="d-km">95</td>
         <td class="d-time">~1h 30min</td>
+        <td class="d-toll">¥1,200</td>
         <td class="d-notes">San-in Kinki Expressway along Sea of Japan coast. <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2563,6 +2574,7 @@
         <td>Yumura → Himeji Castle (75 km) → Okayama (65 km)</td>
         <td class="d-km">140</td>
         <td class="d-time">~2h 00min</td>
+        <td class="d-toll">¥3,200</td>
         <td class="d-notes">Bantan Expressway → San-yo Expressway. <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2572,6 +2584,7 @@
         <td>Hotel → Korakuen (2 km) → Kibitsu Jinja (10 km) → Kurashiki (15 km) → return (15 km)</td>
         <td class="d-km">42</td>
         <td class="d-time">~1h 00min</td>
+        <td class="d-toll-none">—</td>
         <td class="d-notes">All city/suburban driving. Short day behind the wheel.</td>
       </tr>
       <tr>
@@ -2581,6 +2594,7 @@
         <td>Hotel → Uno Port (20 km) + ferry → Naoshima <span class="ferry-tag">⛴ Ferry</span> → ferry → Takamatsu + drive → Tokushima (80 km)</td>
         <td class="d-km">100</td>
         <td class="d-time">~1h 30min</td>
+        <td class="d-toll">¥1,200</td>
         <td class="d-notes">Car left at Uno Port. Naoshima by bike/bus. <span class="ferry-tag">⛴ Ferry</span> <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2590,6 +2604,7 @@
         <td>Tokushima → Naruto (15 km) → Kobe via Awaji Island (80 km) → Osaka (35 km) + local (5 km)</td>
         <td class="d-km">135</td>
         <td class="d-time">~2h 30min</td>
+        <td class="d-toll">¥2,400<span class="wknd-disc">Akashi+Naruto bridges, ETC wknd 30% off</span></td>
         <td class="d-notes">Akashi Kaikyo + Naruto Bridge — world-class suspension bridges. <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2599,6 +2614,7 @@
         <td>Hotel → Katsuoji (25 km) → The Farm (18 km) → Shinsaibashi/Dotonbori (25 km) → return (6 km)</td>
         <td class="d-km">74</td>
         <td class="d-time">~2h 00min</td>
+        <td class="d-toll">¥600<span class="wknd-disc">After ETC wknd 30% off</span></td>
         <td class="d-notes">City traffic around Dotonbori. Allow extra time evenings.</td>
       </tr>
       <tr>
@@ -2608,6 +2624,7 @@
         <td>Hotel → Umeda (5 km) → STREET KART area (5 km) → return (5 km)</td>
         <td class="d-km">15</td>
         <td class="d-time">~45 min</td>
+        <td class="d-toll-none">—</td>
         <td class="d-notes">Mainly city driving. Park once and walk. Lightest drive day.</td>
       </tr>
       <tr>
@@ -2617,13 +2634,15 @@
         <td>Hotel → Namba/Kuromon Market (3 km) → KIX (60 km)</td>
         <td class="d-km">63</td>
         <td class="d-time">~1h 00min</td>
+        <td class="d-toll">¥1,000</td>
         <td class="d-notes">Allow 90 min to KIX for car return + check-in. Hanshin Expressway. <span class="toll-tag">Toll</span></td>
       </tr>
       <tr class="drive-total">
         <td class="d-day" style="color:white !important;" colspan="4">Total driving distance (KIX → KIX) &nbsp;·&nbsp; Excludes ferry crossings &amp; on-island transport</td>
         <td class="d-km">1,111</td>
         <td class="d-time" style="color:#aed6f1 !important;">~20h 55min</td>
-        <td class="d-notes" style="color:#ccc !important;">Approx. 79 km/day avg.</td>
+        <td class="d-toll" style="color:#f9e79f !important; font-size:10px;">¥13,700</td>
+        <td class="d-notes" style="color:#ccc !important;">Avg. 79 km/day &nbsp;·&nbsp; ETC wknd discounts applied D5, D11, D12</td>
       </tr>
     </tbody>
   </table>
