@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Osaka Driving 2026 – Itinerary</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0ece4;
+      color: #1a1a1a;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      background: #fff;
+      padding: 18mm 16mm;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 3px solid #c0392b;
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+    }
+    .header-left h1 {
+      font-family: 'Noto Serif JP', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #c0392b;
+      letter-spacing: 0.5px;
+    }
+    .header-left .subtitle {
+      font-size: 12px;
+      color: #666;
+      margin-top: 3px;
+      font-weight: 400;
+    }
+    .header-right {
+      text-align: right;
+      font-size: 11px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .header-right .dates {
+      font-size: 13px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    /* Overview strip */
+    .overview {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .overview-box {
+      background: #fdf6f0;
+      border: 1px solid #e8d5c4;
+      border-radius: 6px;
+      padding: 8px 10px;
+      text-align: center;
+    }
+    .overview-box .label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #888;
+      margin-bottom: 3px;
+    }
+    .overview-box .value {
+      font-size: 13px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    /* Section title */
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #c0392b;
+      font-weight: 600;
+      margin-bottom: 8px;
+      margin-top: 14px;
+    }
+
+    /* Day table */
+    table.itinerary {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+    table.itinerary thead tr {
+      background: #2c3e50;
+      color: #fff;
+    }
+    table.itinerary thead th {
+      padding: 6px 8px;
+      text-align: left;
+      font-weight: 500;
+      font-size: 10px;
+      letter-spacing: 0.4px;
+    }
+    table.itinerary tbody tr {
+      border-bottom: 1px solid #f0ece4;
+    }
+    table.itinerary tbody tr:nth-child(even) {
+      background: #fafaf8;
+    }
+    table.itinerary tbody tr:hover {
+      background: #fdf6f0;
+    }
+    table.itinerary td {
+      padding: 5.5px 8px;
+      vertical-align: top;
+    }
+    .day-num {
+      font-weight: 700;
+      color: #c0392b;
+      white-space: nowrap;
+    }
+    .day-date {
+      color: #555;
+      font-size: 10px;
+    }
+    .day-location {
+      font-weight: 500;
+    }
+    .zh {
+      font-size: 9.5px;
+      color: #888;
+      margin-left: 5px;
+      font-weight: 400;
+    }
+
+    /* Flights */
+    .flights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .flight-card {
+      border: 1px solid #dce8f5;
+      border-left: 4px solid #2471a3;
+      border-radius: 5px;
+      padding: 8px 11px;
+      background: #f4f9fd;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .flight-icon {
+      font-size: 18px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .flight-info .flight-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: #2471a3;
+      letter-spacing: 0.5px;
+    }
+    .flight-info .flight-route {
+      font-size: 12px;
+      font-weight: 500;
+      color: #1a1a1a;
+      margin: 1px 0;
+    }
+    .flight-info .flight-meta {
+      font-size: 10px;
+      color: #777;
+    }
+    .hotel-name {
+      color: #2c3e50;
+      font-size: 10.5px;
+    }
+    .hotel-source {
+      display: inline-block;
+      font-size: 9px;
+      padding: 1px 5px;
+      border-radius: 10px;
+      font-weight: 500;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+    .bonvoy { background: #e8f4fd; color: #2471a3; }
+    .trip { background: #eafaf1; color: #1e8449; }
+    .meal-badge {
+      display: inline-block;
+      font-size: 8.5px;
+      padding: 1px 5px;
+      border-radius: 10px;
+      background: #fdebd0;
+      color: #a04000;
+      font-weight: 500;
+      margin-left: 3px;
+    }
+
+    /* Tips box */
+    .tips-box {
+      border: 1px solid #e8d5c4;
+      border-left: 4px solid #c0392b;
+      border-radius: 4px;
+      padding: 10px 12px;
+      margin-top: 6px;
+      background: #fdf6f0;
+      font-size: 10.5px;
+      line-height: 1.6;
+    }
+    .tips-box h3 {
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #c0392b;
+    }
+    .tips-box ul {
+      list-style: none;
+      padding: 0;
+    }
+    .tips-box ul li {
+      padding: 2px 0;
+      padding-left: 14px;
+      position: relative;
+      color: #333;
+    }
+    .tips-box ul li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: #c0392b;
+      font-weight: 700;
+    }
+    .tips-box .jp {
+      font-family: 'Noto Serif JP', serif;
+      color: #555;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 16px;
+      padding-top: 8px;
+      border-top: 1px solid #e0dbd3;
+      font-size: 9px;
+      color: #aaa;
+      text-align: center;
+    }
+
+    /* Page 3 – Day Summary */
+    .day-hero {
+      background: linear-gradient(135deg, #2c3e50 0%, #3d566e 100%);
+      color: white;
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .day-num-big {
+      font-size: 38px;
+      font-weight: 700;
+      color: #e74c3c;
+      font-family: 'Noto Serif JP', serif;
+      line-height: 1;
+      margin-right: 12px;
+    }
+    .day-hero-left { display: flex; align-items: center; }
+    .day-hero-label .day-title { font-size: 15px; font-weight: 600; color: white; }
+    .day-hero-label .day-sub { font-size: 10.5px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+    .day-hero-right { text-align: right; font-size: 10.5px; color: rgba(255,255,255,0.75); line-height: 1.8; }
+    .day-hero-right strong { color: white; }
+
+    .attraction-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .attraction-card {
+      border: 1px solid #e0dbd3;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .attraction-card img {
+      width: 100%;
+      height: 135px;
+      object-fit: cover;
+      display: block;
+    }
+    .img-credit {
+      font-size: 7px;
+      color: #bbb;
+      padding: 1px 6px;
+      text-align: right;
+      background: #f8f8f8;
+    }
+    .img-placeholder {
+      width: 100%;
+      height: 135px;
+      background: #e8e8e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: #aaa;
+      letter-spacing: 0.5px;
+    }
+    .card-body { padding: 8px 10px 10px; }
+    .card-title {
+      font-size: 10.5px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 4px;
+    }
+    .card-zh { font-size: 9px; color: #999; font-weight: 400; margin-left: 3px; }
+    .card-desc { font-size: 9.5px; color: #444; line-height: 1.5; }
+    .card-desc-zh { font-size: 9.5px; color: #777; line-height: 1.5; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #e0dbd3; }
+    .card-tag {
+      display: inline-block;
+      font-size: 8px;
+      padding: 1px 6px;
+      border-radius: 10px;
+      background: #fdf6f0;
+      color: #c0392b;
+      border: 1px solid #e8d5c4;
+      margin-top: 5px;
+      margin-right: 2px;
+      font-weight: 500;
+    }
+
+    .practical-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .practical-box {
+      border: 1px solid #e8d5c4;
+      border-left: 4px solid #2c3e50;
+      border-radius: 4px;
+      padding: 8px 10px;
+      background: #fafaf8;
+      font-size: 9.5px;
+    }
+    .practical-box h4 {
+      font-size: 10px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .practical-box ul { list-style: none; padding: 0; }
+    .practical-box ul li {
+      padding: 2px 0 2px 12px;
+      position: relative;
+      color: #333;
+      line-height: 1.45;
+    }
+    .practical-box ul li::before {
+      content: '·';
+      position: absolute;
+      left: 0;
+      color: #c0392b;
+      font-weight: 700;
+    }
+
+    /* Page 2 – Map */
+    #map {
+      width: 100%;
+      height: 560px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+    }
+    .stops-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px 10px;
+      margin-bottom: 10px;
+    }
+    .stop-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 9.5px;
+      line-height: 1.4;
+    }
+    .stop-dot {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 7.5px;
+      font-weight: 700;
+      color: white;
+    }
+    .stop-text .stop-day { font-weight: 600; color: #2c3e50; }
+    .stop-text .stop-name { color: #555; }
+
+    @page {
+      size: 210mm 297mm;
+      margin: 0;
+    }
+
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      html, body {
+        width: 210mm;
+        background: white !important;
+      }
+      body > div:first-of-type { display: none; } /* hide any injected wrappers */
+      .page {
+        position: relative;
+        margin: 0 !important;
+        padding: 14mm 14mm !important;
+        box-shadow: none !important;
+        page-break-after: always;
+        break-after: page;
+        width: 210mm !important;
+        height: 297mm !important;
+        overflow: hidden !important;
+      }
+      .page:last-of-type {
+        page-break-after: avoid;
+        break-after: avoid;
+      }
+      /* Keep cards and boxes intact */
+      .attraction-card, .practical-box, .flight-card, .flights,
+      .overview, .day-hero, .stops-grid {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      /* Shrink fonts slightly so content fits */
+      .card-desc, .card-desc-zh, .practical-box ul li { font-size: 8.5px !important; }
+      .card-title { font-size: 9.5px !important; }
+      .attraction-card img { height: 110px !important; }
+      /* Hide Leaflet UI chrome */
+      .leaflet-control-zoom, .leaflet-control-attribution { display: none !important; }
+      /* Hide img-credit lines to save space */
+      .img-credit { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; 14-Day Road Trip Through Western Japan</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">20 May – 2 June 2026</div>
+      <div>Depart SG: 19 May &nbsp;·&nbsp; Return SG: 3 June</div>
+    </div>
+  </div>
+
+  <!-- Overview -->
+  <div class="overview">
+    <div class="overview-box">
+      <div class="label">Duration</div>
+      <div class="value">14 Days</div>
+    </div>
+    <div class="overview-box">
+      <div class="label">Start</div>
+      <div class="value">Rinku Town</div>
+    </div>
+    <div class="overview-box">
+      <div class="label">End</div>
+      <div class="value">Osaka</div>
+    </div>
+    <div class="overview-box">
+      <div class="label">Mode</div>
+      <div class="value">Self-Drive</div>
+    </div>
+  </div>
+
+  <!-- Flights -->
+  <div class="section-title">Flights</div>
+  <div class="flights">
+    <div class="flight-card">
+      <div class="flight-icon">✈</div>
+      <div class="flight-info">
+        <div class="flight-num">MM774 &nbsp;·&nbsp; Peach Aviation</div>
+        <div class="flight-route">Singapore (SIN) 01:25 → Osaka Kansai (KIX) 09:05</div>
+        <div class="flight-meta">Wednesday, 20 May 2026 &nbsp;·&nbsp; Day 1 &nbsp;·&nbsp; 7h 40m</div>
+      </div>
+    </div>
+    <div class="flight-card">
+      <div class="flight-icon" style="transform:scaleX(-1);display:inline-block">✈</div>
+      <div class="flight-info">
+        <div class="flight-num">MM773 &nbsp;·&nbsp; Peach Aviation</div>
+        <div class="flight-route">Osaka Kansai (KIX) 18:25 → Singapore (SIN) 00:05+1</div>
+        <div class="flight-meta">Tuesday, 2 June 2026 &nbsp;·&nbsp; Day 14 &nbsp;·&nbsp; 6h 40m</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Itinerary -->
+  <div class="section-title">Day-by-Day Itinerary</div>
+  <table class="itinerary">
+    <thead>
+      <tr>
+        <th style="width:7%">Day</th>
+        <th style="width:28%">Date</th>
+        <th style="width:25%">Destination</th>
+        <th>Hotel / Accommodation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="day-num">D1</td>
+        <td class="day-date">Wednesday, 20 May 2026</td>
+        <td class="day-location">Rinku Town · Outlet <span class="zh">臨空城·暢貨中心</span></td>
+        <td>
+          <span class="hotel-name">Odysis Suites Osaka Airport Hotel</span>
+          <span class="hotel-source trip">Trip.com</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D2</td>
+        <td class="day-date">Thursday, 21 May 2026</td>
+        <td class="day-location">Uji <span class="zh">宇治</span></td>
+        <td>
+          <span class="hotel-name">Lake Biwa Marriott Hotel</span>
+          <span class="hotel-source bonvoy">Bonvoy</span>
+          <span class="meal-badge">B</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D3</td>
+        <td class="day-date">Friday, 22 May 2026</td>
+        <td class="day-location">Ōmi-Hachiman <span class="zh">近江八幡</span></td>
+        <td>
+          <span class="hotel-name">Lake Biwa Marriott Hotel</span>
+          <span class="hotel-source bonvoy">Bonvoy</span>
+          <span class="meal-badge">B</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D4</td>
+        <td class="day-date">Saturday, 23 May 2026</td>
+        <td class="day-location">Lake Biwa · Driveway &amp; Shrines <span class="zh">琵琶湖·兜風及神社</span></td>
+        <td>
+          <span class="hotel-name">Lake Biwa Marriott Hotel</span>
+          <span class="hotel-source bonvoy">Bonvoy</span>
+          <span class="meal-badge">B</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D5</td>
+        <td class="day-date">Sunday, 24 May 2026</td>
+        <td class="day-location">Kayabuki-no-Sato <span class="zh">茅葺之里</span></td>
+        <td>
+          <span class="hotel-name">Fairfield by Marriott Kyoto Amanohashidate</span>
+          <span class="hotel-source bonvoy">Bonvoy</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D6</td>
+        <td class="day-date">Monday, 25 May 2026</td>
+        <td class="day-location">Ine Bay · Amanohashidate <span class="zh">伊根灣·天橋立</span></td>
+        <td>
+          <span class="hotel-name">Fairfield by Marriott Kyoto Amanohashidate</span>
+          <span class="hotel-source bonvoy">Bonvoy</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D7</td>
+        <td class="day-date">Tuesday, 26 May 2026</td>
+        <td class="day-location">Marine World · Dolphin &amp; Onsen <span class="zh">海洋世界·海豚及溫泉</span></td>
+        <td>
+          <span class="hotel-name">Asanoya, Yumura Onsen</span>
+          <span class="hotel-source trip">Trip.com</span>
+          <span class="meal-badge">D</span>
+          <span class="meal-badge">B</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D8</td>
+        <td class="day-date">Wednesday, 27 May 2026</td>
+        <td class="day-location">Himeji <span class="zh">姬路</span></td>
+        <td>
+          <span class="hotel-name">Smile Hotel Okayama</span>
+          <span class="hotel-source trip">Trip.com</span>
+          <span class="meal-badge">B</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D9</td>
+        <td class="day-date">Thursday, 28 May 2026</td>
+        <td class="day-location">Okayama · Gardens &amp; City <span class="zh">岡山·花園及市區</span></td>
+        <td>
+          <span class="hotel-name">Smile Hotel Okayama</span>
+          <span class="hotel-source trip">Trip.com</span>
+          <span class="meal-badge">B</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D10</td>
+        <td class="day-date">Friday, 29 May 2026</td>
+        <td class="day-location">Naoshima Art Island <span class="zh">直島·藝術之島</span></td>
+        <td>
+          <span class="hotel-name">Hotel Sunroute Tokushima</span>
+          <span class="hotel-source trip">Trip.com</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D11</td>
+        <td class="day-date">Saturday, 30 May 2026</td>
+        <td class="day-location">Naruto · Kobe · Osaka <span class="zh">鳴門·神戶·大阪</span></td>
+        <td>
+          <span class="hotel-name">Tanimachi-Kun Hotel Ebisucho 72</span>
+          <span class="hotel-source trip">Trip.com</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D12</td>
+        <td class="day-date">Sunday, 31 May 2026</td>
+        <td class="day-location">Osaka <span class="zh">大阪</span></td>
+        <td>
+          <span class="hotel-name">Tanimachi-Kun Hotel Ebisucho 72</span>
+          <span class="hotel-source trip">Trip.com</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D13</td>
+        <td class="day-date">Monday, 1 June 2026</td>
+        <td class="day-location">Osaka <span class="zh">大阪</span></td>
+        <td>
+          <span class="hotel-name">Tanimachi-Kun Hotel Ebisucho 72</span>
+          <span class="hotel-source trip">Trip.com</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D14</td>
+        <td class="day-date">Tuesday, 2 June 2026</td>
+        <td class="day-location">Osaka → Airport <span class="zh">大阪→機場</span></td>
+        <td style="color:#888;font-style:italic;font-size:10px;">Return to Singapore (3 June)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Petrol Tips -->
+  <div class="section-title" style="margin-top:14px;">Petrol Tips in Japan</div>
+  <div class="tips-box">
+    <ul>
+      <li>Look for <strong>セルフ (Serufu)</strong> for self-service stations — cheaper and easy to use.</li>
+      <li>Nozzle colours: <strong style="color:#e74c3c;">Red = Regular (レギュラー)</strong> &nbsp;·&nbsp; <strong style="color:#27ae60;">Green = Diesel (軽油)</strong> &nbsp;·&nbsp; <strong style="color:#f39c12;">Yellow = High Octane (ハイオク)</strong></li>
+      <li>Full tank: <span class="jp">「満タンでお願いします」</span> — <em>Mantan de onegai shimasu</em></li>
+      <li>Payment via touchscreen first, then cash or credit card — pay before pumping.</li>
+      <li>Touch the grounding panel (metal pad on pump) before fuelling to discharge static.</li>
+    </ul>
+  </div>
+
+  <!-- Legend -->
+  <div style="margin-top:10px; font-size:9.5px; color:#777; display:flex; gap:14px; flex-wrap:wrap;">
+    <span><span class="hotel-source bonvoy" style="font-size:9px;">Bonvoy</span> Marriott Bonvoy</span>
+    <span><span class="hotel-source trip" style="font-size:9px;">Trip.com</span> Trip.com</span>
+    <span><span class="meal-badge" style="font-size:8.5px;">B</span> Breakfast included</span>
+    <span><span class="meal-badge" style="font-size:8.5px;">D</span> Dinner included</span>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; 20 May – 2 June &nbsp;·&nbsp; 14 Days &nbsp;·&nbsp; Western Japan</div>
+
+</div>
+<!-- PAGE 2: Route Map -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Route Map – Western Japan</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">20 May – 2 June 2026</div>
+      <div>14 stops · Self-drive road trip</div>
+    </div>
+  </div>
+
+  <div class="section-title">Route Overview</div>
+  <div id="map"></div>
+
+  <div class="stops-grid" id="stops-legend"></div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; 20 May – 2 June &nbsp;·&nbsp; 14 Days &nbsp;·&nbsp; Western Japan &nbsp;·&nbsp; Map © OpenStreetMap contributors</div>
+
+</div>
+
+<script>
+  const stops = [
+    { day: 'D1',    label: 'Rinku Town',       sub: 'Outlet',              lat: 34.442, lng: 135.310, date: '20 May' },
+    { day: 'D2',    label: 'Uji',               sub: '',                    lat: 34.884, lng: 135.801, date: '21 May' },
+    { day: 'D3',    label: 'Ōmi-Hachiman',      sub: '',                    lat: 35.128, lng: 136.098, date: '22 May' },
+    { day: 'D4',    label: 'Lake Biwa',          sub: 'Driveway & Shrines',  lat: 35.150, lng: 136.068, date: '23 May' },
+    { day: 'D5',    label: 'Kayabuki-no-Sato',  sub: 'Miyama',              lat: 35.358, lng: 135.714, date: '24 May' },
+    { day: 'D6',    label: 'Ine Bay',            sub: '',                    lat: 35.662, lng: 135.304, date: '25 May' },
+    { day: 'D6',    label: 'Amanohashidate',    sub: '',                    lat: 35.553, lng: 135.197, date: '25 May' },
+    { day: 'D7',    label: 'Yumura Onsen',      sub: 'Marine World & Dolphin', lat: 35.520, lng: 134.567, date: '26 May' },
+    { day: 'D8',    label: 'Himeji',             sub: 'Himeji Castle',       lat: 34.840, lng: 134.694, date: '27 May' },
+    { day: 'D9',    label: 'Okayama',            sub: 'Gardens & City',      lat: 34.662, lng: 133.934, date: '28 May' },
+    { day: 'D10',   label: 'Naoshima',           sub: 'Art Island',          lat: 34.463, lng: 133.989, date: '29 May' },
+    { day: 'D11',   label: 'Naruto',             sub: 'Whirlpools',          lat: 34.180, lng: 134.608, date: '30 May' },
+    { day: 'D11',   label: 'Kobe',               sub: '',                    lat: 34.690, lng: 135.196, date: '30 May' },
+    { day: 'D12–14',label: 'Osaka',              sub: 'City Days',           lat: 34.693, lng: 135.502, date: '31 May–2 Jun' },
+  ];
+
+  function dayColor(i, n) {
+    const hue = Math.round(120 - 120 * i / (n - 1));
+    return `hsl(${hue}, 72%, 40%)`;
+  }
+
+  const map = L.map('map', { zoomControl: true }).setView([35.05, 135.1], 7);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  stops.forEach((stop, i) => {
+    const color = dayColor(i, stops.length);
+    const icon = L.divIcon({
+      html: `<div style="background:${color};color:white;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:7.5px;font-weight:700;border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.4);font-family:Inter,sans-serif;line-height:1;text-align:center">${stop.day}</div>`,
+      iconSize: [26, 26],
+      iconAnchor: [13, 13],
+      className: ''
+    });
+    L.marker([stop.lat, stop.lng], { icon })
+      .addTo(map)
+      .bindPopup(`<strong>${stop.day} · ${stop.date}</strong><br>${stop.label}${stop.sub ? '<br><em style="color:#666">' + stop.sub + '</em>' : ''}`);
+  });
+
+  // Dashed route polyline
+  L.polyline(stops.map(s => [s.lat, s.lng]), {
+    color: '#c0392b', weight: 2.5, opacity: 0.55, dashArray: '7,5'
+  }).addTo(map);
+
+  // Build legend
+  const legend = document.getElementById('stops-legend');
+  stops.forEach((stop, i) => {
+    const color = dayColor(i, stops.length);
+    const item = document.createElement('div');
+    item.className = 'stop-item';
+    item.innerHTML = `
+      <div class="stop-dot" style="background:${color}">${stop.day.replace('D','')}</div>
+      <div class="stop-text">
+        <div class="stop-day">${stop.day} · ${stop.date}</div>
+        <div class="stop-name">${stop.label}</div>
+      </div>`;
+    legend.appendChild(item);
+  });
+</script>
+
+<!-- PAGE 3: Day 1 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 1 – Rinku Town</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Wednesday, 20 May 2026</div>
+      <div>Rinku Town &nbsp;·&nbsp; Izumisano, Osaka</div>
+    </div>
+  </div>
+
+  <!-- Day hero banner -->
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D1</div>
+      <div class="day-hero-label">
+        <div class="day-title">Rinku Town &nbsp;·&nbsp; 臨空城</div>
+        <div class="day-sub">Izumisano, Osaka Prefecture &nbsp;·&nbsp; Arrival Day</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Arrive KIX</strong> &nbsp;09:05 (MM774 from SIN)</div>
+      <div><strong>Hotel</strong> &nbsp;Odysis Suites Osaka Airport Hotel</div>
+      <div><strong>Check-in</strong> &nbsp;from 15:00</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid">
+
+    <div class="attraction-card">
+      <img src="https://www.pelago.com/img/products/JP-Japan/private-shopping-tour-from-osaka-hotels-to-rinku-premium-outlets/ae746c12-20b9-4255-b4d8-66ec6b1a05d2_private-shopping-tour-from-osaka-hotels-to-rinku-premium-outlets.jpg" alt="Rinku Premium Outlets">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Rinku Premium Outlets <span class="card-zh">臨空城暢貨中心</span></div>
+        <div class="card-desc">One of Japan's largest outlet malls with 210+ stores spanning luxury brands like Dolce &amp; Gabbana and Kate Spade to Nike and Adidas. Tax-free shopping is available — bring your passport for savings of up to 10%. A perfect first stop right after landing.</div>
+        <div class="card-desc card-desc-zh">日本最大型的暢貨中心之一，匯聚逾210間店鋪，涵蓋Dolce &amp; Gabbana、Kate Spade等奢侈品牌，以及Nike、Adidas等運動品牌。持護照可享免稅優惠，最高節省10%。甫抵達後的第一站首選。</div>
+        <span class="card-tag">Shopping</span>
+        <span class="card-tag">Tax-Free</span>
+        <span class="card-tag">Open 10:00–20:00</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/09/c0/06/6f/caption.jpg?w=1200&h=-1&s=1" alt="Rinku Gate Tower">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Rinku Gate Tower &amp; Ferris Wheel <span class="card-zh">臨空閘塔及摩天輪</span></div>
+        <div class="card-desc">The landmark twin towers and the 85-metre Rinku No Hoshi Ferris Wheel define the Rinku skyline. A ride on the Ferris wheel rewards you with panoramic views over Osaka Bay, Kansai Airport, and on a clear day, as far as Awaji Island to the south.</div>
+        <div class="card-desc card-desc-zh">標誌性的雙子塔與高達85米的「臨空之星」摩天輪，是臨空城最具代表性的地標。乘坐摩天輪可俯瞰大阪灣及關西國際機場全景，晴天時甚至能遠眺南方的淡路島。</div>
+        <span class="card-tag">Landmark</span>
+        <span class="card-tag">Observation</span>
+        <span class="card-tag">Paid Entry</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🍱 Lunch</h4>
+      <ul>
+        <li><strong>Restaurant in Rinku Town</strong> — Grab lunch at one of the many dining options within Rinku Premium Outlets or the surrounding Rinku Town area after arriving and settling in.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🥩 Dinner</h4>
+      <ul>
+        <li><strong>One Karubi Yakiniku</strong> — Japanese yakiniku (BBQ) restaurant conveniently located next to the hotel. Grill your own premium cuts of beef and pork at the table — a great way to kick off the trip.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-title">Practical Info</div>
+  <div class="practical-grid">
+    <div class="practical-box">
+      <h4>Getting Around</h4>
+      <ul>
+        <li>KIX → Rinku Town: 5 min by JR or Nankai train — station is directly under the terminal.</li>
+        <li>Rinku Premium Outlets is a 3-min walk from Rinku Town Station.</li>
+        <li>Hotel Odysis Suites is within Rinku Town, walkable from the station.</li>
+      </ul>
+    </div>
+    <div class="practical-box">
+      <h4>Tips for the Day</h4>
+      <ul>
+        <li>Bring your passport for tax-free purchases at the outlets.</li>
+        <li>Luggage storage is available at KIX if you want to explore before hotel check-in at 15:00.</li>
+        <li>AEON Mall Rinku Sennan nearby has 160+ stores for groceries, snacks, and everyday needs for the road trip.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 1 &nbsp;·&nbsp; 20 May 2026 &nbsp;·&nbsp; Rinku Town, Izumisano &nbsp;·&nbsp; Photos © Wikimedia Commons</div>
+
+</div>
+
+<!-- PAGE 4: Day 2 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 2 – Uji</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Thursday, 21 May 2026</div>
+      <div>Uji &nbsp;·&nbsp; Kyoto Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D2</div>
+      <div class="day-hero-label">
+        <div class="day-title">Uji &nbsp;·&nbsp; 宇治</div>
+        <div class="day-sub">Kyoto Prefecture &nbsp;·&nbsp; Tea Culture & UNESCO Heritage</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Lake Biwa Marriott Hotel</div>
+      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
+      <div><strong>Includes</strong> &nbsp;Breakfast</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
+
+    <div class="attraction-card">
+      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/10/3e/01/72/phoenix-hall.jpg?w=900&h=500&s=1" alt="Byōdō-in Temple">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Byōdō-in Temple <span class="card-zh">平等院</span></div>
+        <div class="card-desc">A UNESCO World Heritage Site founded in 1052, Byōdō-in is home to the iconic Phoenix Hall (Hōō-dō) — a masterpiece of Heian-period aristocratic architecture reflected in a serene garden pond. Its image appears on the Japanese 10-yen coin.</div>
+        <div class="card-desc card-desc-zh">平等院建於1052年（平安時代），是聯合國教科文組織世界文化遺產。以著名的鳳凰堂聞名，此建築凌駕於倒影池上，是日本貴族建築瑰寶，其圖像更印於日本十円硬幣之上。</div>
+        <span class="card-tag">UNESCO Heritage</span>
+        <span class="card-tag">Temple</span>
+        <span class="card-tag">Open 08:30–17:30</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://cdn.cheapoguides.com/wp-content/uploads/sites/3/2024/02/tsuen-teahouse-1024x600.jpg" alt="Uji Tea District">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Uji Tea Houses <span class="card-zh">宇治茶屋</span></div>
+        <div class="card-desc">Uji is Japan's most prized tea region. <strong>Nakamura Tokichi Honten</strong> (est. 1854) serves matcha sweets in a heritage tea-factory café. <strong>Tsujiri Uji Main Store</strong> and the ancient <strong>Tsuen Main Branch</strong> complete the trio — all within a short riverside walk of each other.</div>
+        <div class="card-desc card-desc-zh">宇治是日本最負盛名的茶葉產區。<strong>中村藤吉本店</strong>（創立於1854年）以古樸茶廠改建的咖啡廳供應精緻抹茶甜點；<strong>辻利宇治本店</strong>及歷史悠久的<strong>通園本店</strong>同樣提供精選茶飲與和菓子，各店沿河步行皆可輕鬆到達。</div>
+        <span class="card-tag">Matcha</span>
+        <span class="card-tag">Tea Culture</span>
+        <span class="card-tag">Historic Cafés</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://english-site.fudousin.com/wp-content/uploads/2024/10/Kisenbashi-760x570.jpg" alt="Tachibana Bridge Uji">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Tachibana Bridge <span class="card-zh">橘橋</span></div>
+        <div class="card-desc">A charming footbridge spanning the Uji River near Byōdō-in, Tachibana Bridge offers picturesque views of the river and the wooded temple grounds beyond. A leisurely riverside stroll between the bridge and the temple is the perfect way to round off the afternoon in Uji.</div>
+        <div class="card-desc card-desc-zh">橘橋是橫跨宇治川的古雅小橋，毗鄰平等院，可眺望川面及山林中的寺院景色。漫步橘橋與平等院之間的河畔步道，是在宇治度過午後時光的最悠然方式。</div>
+        <span class="card-tag">Scenic</span>
+        <span class="card-tag">Riverside Walk</span>
+        <span class="card-tag">Free</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🍱 Lunch — Irori Beniya</h4>
+      <ul>
+        <li><strong>Irori Beniya</strong> is a beloved traditional restaurant in Uji serving charcoal-grilled fish dishes cooked over an <em>irori</em> (sunken hearth). Signature dishes include grilled Atka mackerel set meals and grilled salmon with salmon roe rice. Rated 5.0 on Tripadvisor.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🥩 Dinner — Matsukiya Main Store &nbsp;<span style="font-weight:400;font-size:9px;color:#888">近江牛專門餐廳松喜屋本店</span></h4>
+      <ul>
+        <li><strong>Matsukiya</strong> is a legendary Omi beef (近江牛) specialist run by the same family since the Meiji era. The main store sits on the bank of the Seta River in Otsu — perfectly placed en route to Lake Biwa. Enjoy premium cuts prepared as sukiyaki, shabu-shabu, or steak, finished with the chef's signature bubble salt.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 2 &nbsp;·&nbsp; 21 May 2026 &nbsp;·&nbsp; Uji, Kyoto Prefecture &nbsp;·&nbsp; Photos © Wikimedia Commons</div>
+
+</div>
+
+<!-- PAGE 5: Day 3 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 3 – Ōmi-Hachiman</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Friday, 22 May 2026</div>
+      <div>Ōmi-Hachiman &nbsp;·&nbsp; Shiga Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D3</div>
+      <div class="day-hero-label">
+        <div class="day-title">Ōmi-Hachiman &nbsp;·&nbsp; 近江八幡</div>
+        <div class="day-sub">Shiga Prefecture &nbsp;·&nbsp; Historic Canals & Merchant Culture</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Lake Biwa Marriott Hotel</div>
+      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
+      <div><strong>Includes</strong> &nbsp;Breakfast</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbszhbXjXz3uz4dEbkODD4GZqZ3hApam10rQ&s" alt="La Collina Ōmi-Hachiman">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">La Collina Ōmi-Hachiman <span class="card-zh">拉科利納近江八幡</span></div>
+        <div class="card-desc">A magical complex by confectionery group Taneya, centred on a grass-thatched main building designed by architect Terunobu Fujimori. Home to Club Harie — Japan's premier Baumkuchen brand — and the Taneya wagashi shop. Shiga's top tourist facility for nine consecutive years.</div>
+        <div class="card-desc card-desc-zh">由糖果集團TANEYA打造的夢幻園區，以建築師藤森照信設計的茅草屋頂主建築為核心，四周環抱翠綠山丘，宛如童話世界。設有日本頂級年輪蛋糕品牌Club Harie及和菓子店TANEYA，連續九年榮登滋賀縣人氣旅遊設施榜首。</div>
+        <span class="card-tag">Sweets & Café</span>
+        <span class="card-tag">Architecture</span>
+        <span class="card-tag">Open 09:00–18:00</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://rimage.gnst.jp/livejapan.com/public/article/detail/a/20/00/a2000094/img/en/a2000094_main.jpg" alt="Hachiman-bori Canal">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Hachiman-bori Boat Tour <span class="card-zh">八幡堀遊船</span></div>
+        <div class="card-desc">A 35-minute boat journey through Ōmi-Hachiman's historic canal, guided by skilled boatmen with traditional oars. The waterway is flanked by 400-year-old white-walled merchant storehouses and willows — a scene straight out of a period drama. Both rowing and engine-powered boats available.</div>
+        <div class="card-desc card-desc-zh">由技術嫻熟的船夫以傳統木槳引領，全程約35分鐘，穿梭於近江八幡歷史悠久的運河之中。兩岸矗立逾400年歷史的白牆商家倉庫與垂柳，景色宛如走入時代劇場景。可選擇人力划船或機動船。</div>
+        <span class="card-tag">Boat Tour</span>
+        <span class="card-tag">35 min</span>
+        <span class="card-tag">Historic Canal</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnjwJLpsjgLdKQLSTH-4OtWhYFmT0CKXmBmA&s" alt="Himure Hachimangu Shrine">
+      <div class="img-credit">© Wikimedia Commons</div>
+      <div class="card-body">
+        <div class="card-title">Himure Hachimangu &amp; Omi Merchant Cityscape <span class="card-zh">日牟禮八幡宮及近江商人街道</span></div>
+        <div class="card-desc"><strong>Himure Hachimangu Shrine</strong>, guardian deity of the Ōmi merchants for over 1,000 years, sits amid ancient trees at the foot of Mt. Hachiman. Nearby, the <strong>Omi Merchant Cityscape</strong> — a nationally designated preservation district — preserves 2 km of Edo-to-Meiji merchant residences and storehouses.</div>
+        <div class="card-desc card-desc-zh"><strong>日牟禮八幡宮</strong>擁有逾千年歷史，長期作為近江商人的守護神，坐落於八幡山麓古木之間。附近的<strong>近江商人街道</strong>全長約2公里，被列為國家重要傳統建造物群保存地區，保存著江戶至明治時代的商家建築，是日本最完整的商家街景之一。</div>
+        <span class="card-tag">Shrine</span>
+        <span class="card-tag">Historic District</span>
+        <span class="card-tag">Free</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🍱 Lunch — Eel Hitsumabushi Sumiyagura</h4>
+      <ul>
+        <li><strong>Sumiyagura</strong> specialises in hitsumabushi — grilled freshwater eel over rice served in a wooden tub, enjoyed three ways: plain, with condiments, or as ochazuke with dashi broth. The eel is grilled over premium binchotan charcoal. Their signature <em>double hitsumabushi</em> adds Omi beef for an indulgent combination.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🍽 Dinner — PIERI MORIYAMA &nbsp;<span style="font-weight:400;font-size:9px;color:#888">PIERI守山</span></h4>
+      <ul>
+        <li>Dinner at one of the restaurants in <strong>PIERI MORIYAMA</strong>, a lakeside shopping mall in Moriyama, Shiga, situated on the shores of Lake Biwa. The dining floor offers a variety of Japanese and international options, many with views over the lake — a scenic end to the day before heading to the hotel.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 3 &nbsp;·&nbsp; 22 May 2026 &nbsp;·&nbsp; Ōmi-Hachiman, Shiga &nbsp;·&nbsp; Photos © Wikimedia Commons</div>
+
+</div>
+
+<!-- PAGE 6: Day 4 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 4 – Lake Biwa & Mt. Hiei</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Saturday, 23 May 2026</div>
+      <div>Lake Biwa &nbsp;·&nbsp; Shiga Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D4</div>
+      <div class="day-hero-label">
+        <div class="day-title">Lake Biwa &amp; Mt. Hiei &nbsp;·&nbsp; 琵琶湖及比叡山</div>
+        <div class="day-sub">Shiga Prefecture &nbsp;·&nbsp; Floating Temples, Lakeside Shrines &amp; Sacred Mountain</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Lake Biwa Marriott Hotel</div>
+      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
+      <div><strong>Includes</strong> &nbsp;Breakfast</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFslUeAXVsW5R1-M8WIsG_1Zyt32adTGMO-Q&s" alt="Mangetsu-ji Uki-midō">
+      <div class="img-credit">© To be added</div>
+      <div class="card-body">
+        <div class="card-title">Mangetsu-ji Uki-midō <span class="card-zh">滿月寺浮御堂</span></div>
+        <div class="card-desc">A small Buddhist hall perched on stilts over Lake Biwa in Katata, originally built in the 11th century by the monk Genshin to protect fishermen and sailors. One of Lake Biwa's most iconic and photographed sights — serene and magical at dawn when perfectly reflected in the still water.</div>
+        <div class="card-desc card-desc-zh">位於大津市堅田的浮御堂，是建於木樁之上、漂浮於琵琶湖水面的小型佛堂，相傳由11世紀源信和尚修建，以庇護湖上漁民及舟人。為琵琶湖最具代表性的地標之一，倒映湖面的景色尤為迷人，日出時分前往更是如夢似幻。</div>
+        <span class="card-tag">Temple</span>
+        <span class="card-tag">Lake Biwa</span>
+        <span class="card-tag">Iconic View</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-edr1vnqKaya9tiKwuG5H6th-6qXhYYNG9A&s" alt="Shirahige Shrine">
+      <div class="img-credit">© To be added</div>
+      <div class="card-body">
+        <div class="card-title">Shirahige Shrine <span class="card-zh">白鬚神社</span></div>
+        <div class="card-desc">One of Japan's oldest shrines, famous for its dramatic torii gate rising from the waters of Lake Biwa — often called the "Torii of Lake Biwa" and likened to Miyajima's iconic gate. Sunrise visits are especially rewarding as the gate glows against the morning light reflected on the lake.</div>
+        <div class="card-desc card-desc-zh">日本歷史最悠久的神社之一，以矗立於琵琶湖湖面的鳥居聞名，被譽為「琵琶湖的大鳥居」，常與廣島宮島的著名鳥居相提並論。日出時分前往尤為推薦，朝陽映照下鳥居與湖面交相輝映，景色震撼人心。</div>
+        <span class="card-tag">Shrine</span>
+        <span class="card-tag">Lake Torii</span>
+        <span class="card-tag">Sunrise Spot</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSp1FvPeYlsK6XY2rJRzk979VeQGJGZNKro1g&s" alt="Enryaku-ji">
+      <div class="img-credit">© To be added</div>
+      <div class="card-body">
+        <div class="card-title">Enryaku-ji <span class="card-zh">延曆寺</span></div>
+        <div class="card-desc">A UNESCO World Heritage Site founded in 788 by the monk Saicho atop Mt. Hiei. Headquarters of Japanese Tendai Buddhism for over 1,200 years, its vast complex spans three areas across the mountaintop. The founding monks of Zen, Pure Land, and other major Buddhist schools all trained here.</div>
+        <div class="card-desc card-desc-zh">延曆寺建於788年，由最澄上人創立於比叡山頂，是聯合國教科文組織世界文化遺產，天台宗總本山。寺院建築群分布山頂三個區域，逾千二百年來影響日本佛教深遠，禪宗、淨土宗等多個主要宗派的開山祖師皆出身於此。</div>
+        <span class="card-tag">UNESCO Heritage</span>
+        <span class="card-tag">Mt. Hiei</span>
+        <span class="card-tag">Open 08:30–16:30</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🍱 Lunch — Hieizan Minemichi Restaurant &nbsp;<span style="font-weight:400;font-size:9px;color:#888">比叡山嶺道餐廳</span></h4>
+      <ul>
+        <li>A mountain restaurant on Mt. Hiei along the scenic ridge path near Enryaku-ji, offering a welcome rest stop after exploring the temple complex. A great opportunity to enjoy local cuisine with views of the surrounding mountains and forest.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🥩 Dinner — Tonkatsu Taku &nbsp;<span style="font-weight:400;font-size:9px;color:#888">豬排Taku</span></h4>
+      <ul>
+        <li><strong>Tonkatsu Taku</strong> serves Japanese-style breaded pork cutlets — crispy panko-coated tonkatsu paired with shredded cabbage, miso soup, and rice. A hearty, satisfying dinner after a full day of sightseeing around Lake Biwa and Mt. Hiei.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 4 &nbsp;·&nbsp; 23 May 2026 &nbsp;·&nbsp; Lake Biwa &amp; Mt. Hiei, Shiga</div>
+
+</div>
+
+<!-- PAGE 7: Day 5 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 5 – Kayabuki-no-Sato &amp; Tango</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Sunday, 24 May 2026</div>
+      <div>Miyama &amp; Miyazu &nbsp;·&nbsp; Kyoto Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D5</div>
+      <div class="day-hero-label">
+        <div class="day-title">Kayabuki-no-Sato &amp; Tango &nbsp;·&nbsp; 茅葺之里及丹後</div>
+        <div class="day-sub">Miyama &amp; Miyazu, Kyoto Prefecture &nbsp;·&nbsp; Rural Villages &amp; Scenic Railway</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Fairfield by Marriott Kyoto Amanohashidate</div>
+      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid">
+
+    <div class="attraction-card">
+      <img src="https://miyamanavi.com/files/topics/95_ext_24_en_0.jpg" alt="Kayabuki-no-Sato">
+      <div class="img-credit">© miyamanavi.com</div>
+      <div class="card-body">
+        <div class="card-title">Kayabuki-no-Sato <span class="card-zh">茅葺之里</span></div>
+        <div class="card-desc">A nationally designated preservation district in Miyama, Kyoto Prefecture, Kayabuki-no-Sato is a serene village of some 38 beautifully preserved thatched-roof farmhouses. Set against forested mountains with a river running through, it is one of Japan's most photogenic rural landscapes — utterly timeless and a world away from city life.</div>
+        <div class="card-desc card-desc-zh">茅葺之里位於京都府南丹市美山町，是國家重要傳統建造物群保存地區，保存著約38棟美麗的茅草屋頂農家。村莊依山傍水，景色如畫，是日本最具代表性的農村風光之一，寧靜悠然，令人彷彿穿越時空。</div>
+        <span class="card-tag">Historic Village</span>
+        <span class="card-tag">Thatched Roofs</span>
+        <span class="card-tag">Free Entry</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://visitjapan-vegetarian.com/wp-content/uploads/2021/09/Yuragawa-Bridge-Miyazu-Kyoto-Japan-.jpg" alt="Yurakawa Railway Bridge" style="object-fit: contain; background: #f0ece4;">
+      <div class="img-credit">© visitjapan-vegetarian.com</div>
+      <div class="card-body">
+        <div class="card-title">Yurakawa Railway Bridge <span class="card-zh">由良川鐵橋</span></div>
+        <div class="card-desc">The Kitakinki Tango Railway sweeps across the Yura River on a long iron bridge near Miyazu. At high tide the bridge appears to skim just above the water, creating the magical illusion of a train gliding over the sea — earning it the nickname "sea train." One of the most iconic railway photography spots in the Kyoto-Tango region.</div>
+        <div class="card-desc card-desc-zh">北近畿丹後鐵道橫跨由良川的長形鐵橋，位於宮津附近。漲潮時橋面幾乎與水面齊平，列車仿佛直接在海面上行駛，因而得名「海上列車」，是京都丹後地區最具代表性的鐵道攝影聖地之一。</div>
+        <span class="card-tag">Scenic Railway</span>
+        <span class="card-tag">Sea Train</span>
+        <span class="card-tag">Photography Spot</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🍕 Lunch — Sakaya Pizza Cafe</h4>
+      <ul>
+        <li><strong>Sakaya Pizza Cafe</strong> is a charming local café in the Miyama area, offering wood-fired pizzas in a relaxed countryside setting — a delightful contrast to the traditional thatched village surroundings. A popular stop among visitors exploring the Kayabuki-no-Sato area.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🍽 Dinner — お食事処 割烹たんご &nbsp;<span style="font-weight:400;font-size:9px;color:#888">料理處 割烹丹後</span></h4>
+      <ul>
+        <li>A traditional Japanese dining restaurant in the Tango region serving kaiseki-style home cooking — fresh local seafood and seasonal ingredients from the Sea of Japan, prepared in the refined yet warming style of Kyoto-Tango cuisine.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 5 &nbsp;·&nbsp; 24 May 2026 &nbsp;·&nbsp; Miyama &amp; Miyazu, Kyoto Prefecture</div>
+
+</div>
+
+<!-- PAGE 8: Day 6 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 6 – Ine Bay &amp; Amanohashidate</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Monday, 25 May 2026</div>
+      <div>Ine &amp; Miyazu &nbsp;·&nbsp; Kyoto Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D6</div>
+      <div class="day-hero-label">
+        <div class="day-title">Ine Bay &amp; Amanohashidate &nbsp;·&nbsp; 伊根灣及天橋立</div>
+        <div class="day-sub">Ine &amp; Miyazu, Kyoto Prefecture &nbsp;·&nbsp; Boat Houses, Cruise &amp; Japan's Three Views</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Fairfield by Marriott Kyoto Amanohashidate</div>
+      <div><strong>Booking</strong> &nbsp;Marriott Bonvoy</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid" style="grid-template-columns: repeat(3, 1fr)">
+
+    <div class="attraction-card">
+      <img src="https://res.klook.com/image/upload/w_500,h_313,c_fill,q_85/activities/j6jqrfbv2d7vqrmmsw4s.jpg" alt="Ine Bay">
+      <div class="img-credit">© Klook</div>
+      <div class="card-body">
+        <div class="card-title">Ine Bay &amp; Bay Cruise <span class="card-zh">伊根灣及遊覽船</span></div>
+        <div class="card-desc">A UNESCO-nominated fishing village famous for 230+ funaya — traditional fishermen's dwellings built directly over the water, with boat garages on the ground floor. The 30-min bay cruise weaves among the funaya with seagulls in tow, framed by forested mountains.</div>
+        <div class="card-desc card-desc-zh">伊根灣面臨申遺，以逾230棟「舟屋」（funaya）聞名——漁民傳統住居的地面層即為停泊漁船的船庫。約30分鐘的遊覽船穿梭舟屋之間，海鷗伴飛，四周青山環抱，景色怡人。</div>
+        <span class="card-tag">Boat Cruise</span>
+        <span class="card-tag">Funaya</span>
+        <span class="card-tag">30 min</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://svcstrg.cld.navitime.jp/travelguide/p26270002/p26270002_01.jpg" alt="Amanohashidate Viewland">
+      <div class="img-credit">© Navitime</div>
+      <div class="card-body">
+        <div class="card-title">Amanohashidate Viewland <span class="card-zh">天橋立觀景樂園</span></div>
+        <div class="card-desc">Ride the chairlift up for the famous matanozoki — bending over to view the sandbar upside-down, making it appear to float in the sky like a bridge to heaven. The park also features panoramic views of Miyazu Bay, a zip line, and rides for all ages.</div>
+        <div class="card-desc card-desc-zh">乘坐纜椅上山，體驗著名的「股窺」（matanozoki）——彎腰倒看沙洲，宛如沙洲懸浮天際。園內另設宮津灣全景觀景台、飛索及各類遊樂設施。</div>
+        <span class="card-tag">Chairlift</span>
+        <span class="card-tag">Panoramic View</span>
+        <span class="card-tag">Matanozoki</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://i0.wp.com/donnykimball.com/wp-content/uploads/2023/08/The-Sandbar-of-Kyotos-Amanohashidate-e1691812653392.jpg?fit=801%2C534&ssl=1" alt="Amanohashidate Sandbar">
+      <div class="img-credit">© donnykimball.com</div>
+      <div class="card-body">
+        <div class="card-title">Amanohashidate Sandbar <span class="card-zh">天橋立砂洲</span></div>
+        <div class="card-desc">One of Japan's Three Views (日本三景), this 3.6-km pine-covered sandbar stretches across Miyazu Bay. Stroll or hire a bicycle along the path flanked by ancient pines with the sea shimmering on both sides. Said to resemble a bridge reaching up to heaven.</div>
+        <div class="card-desc card-desc-zh">天橋立是「日本三景」之一，橫跨宮津灣、長達3.6公里的翠松沙洲。沿沙洲步行或騎單車，兩側海水波光粼粼，古松林立，景色令人難忘，相傳其形如通往天界之橋。</div>
+        <span class="card-tag">Japan's Three Views</span>
+        <span class="card-tag">Walk / Cycle</span>
+        <span class="card-tag">Free</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🦞 Lunch — 海鮮工房 or 310 Amanohashidate</h4>
+      <ul>
+        <li><strong>海鮮工房 (Kaisen Kobo)</strong> serves fresh local seafood from the Sea of Japan — grilled, raw, or set meals featuring the region's prized crab, oysters, and seasonal catch. Alternatively, <strong>310 Amanohashidate</strong> offers a more casual dining experience with sea views near the sandbar.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🍽 Dinner — Nitanda</h4>
+      <ul>
+        <li><strong>Nitanda</strong> is a local restaurant in the Amanohashidate area, offering Japanese home-style cooking with fresh produce and seafood from the surrounding Tango Peninsula — a warm and satisfying dinner to close out a full day of sightseeing.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 6 &nbsp;·&nbsp; 25 May 2026 &nbsp;·&nbsp; Ine &amp; Miyazu, Kyoto Prefecture</div>
+
+</div>
+
+<!-- PAGE 9: Day 7 Summary -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Osaka Driving 2026</h1>
+      <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 7 – Kinosaki &amp; Yumura Onsen</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Tuesday, 26 May 2026</div>
+      <div>Kinosaki &amp; Yumura Onsen &nbsp;·&nbsp; Hyogo Prefecture</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D7</div>
+      <div class="day-hero-label">
+        <div class="day-title">Kinosaki &amp; Yumura Onsen &nbsp;·&nbsp; 城崎及湯村溫泉</div>
+        <div class="day-sub">Hyogo Prefecture &nbsp;·&nbsp; Marine World &amp; Traditional Hot Spring Ryokan</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Hotel</strong> &nbsp;Asanoya, Yumura Onsen</div>
+      <div><strong>Booking</strong> &nbsp;Trip.com</div>
+      <div><strong>Includes</strong> &nbsp;Dinner &amp; Breakfast</div>
+    </div>
+  </div>
+
+  <div class="section-title">Places to Visit</div>
+
+  <div class="attraction-grid">
+
+    <div class="attraction-card">
+      <img src="https://visitkinosaki.com/vkcore/wp-content/uploads/2018/04/fishdance-1.jpg" alt="Kinosaki Marine World">
+      <div class="img-credit">© visitkinosaki.com</div>
+      <div class="card-body">
+        <div class="card-title">Kinosaki Marine World <span class="card-zh">城崎海洋世界</span></div>
+        <div class="card-desc">A marine theme park on the Sea of Japan coast near Kinosaki Onsen, featuring live dolphin and sea lion shows, penguin parades, and a wide variety of ocean creatures. The open-air performance stage overlooking the Sea of Japan provides a spectacular natural backdrop for the shows.</div>
+        <div class="card-desc card-desc-zh">位於日本海沿岸、城崎溫泉附近的海洋主題公園，設有海豚及海獅表演、企鵝遊行及各類海洋生物展示。面向日本海的露天表演舞台以大海為背景，景色壯觀，令人難忘。</div>
+        <span class="card-tag">Marine Park</span>
+        <span class="card-tag">Dolphin Show</span>
+        <span class="card-tag">Sea of Japan</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkCHrehYDPa8iMmoQ7MUIxO96FdXoNFeTjRA&s" alt="Asanoya Yumura Onsen">
+      <div class="img-credit">© Asanoya</div>
+      <div class="card-body">
+        <div class="card-title">Asanoya &amp; Yumura Onsen <span class="card-zh">朝野家及湯村溫泉</span></div>
+        <div class="card-desc">A beloved traditional ryokan set beside the river in Yumura Onsen, one of Hyogo's most celebrated hot spring villages. Yumura's Arasawa spring reaches 98°C — among Japan's hottest natural springs. Unwind in indoor and outdoor baths and enjoy a multi-course kaiseki dinner served in the room.</div>
+        <div class="card-desc card-desc-zh">朝野家是湯村溫泉依河而建的傳統日式旅館，湯村溫泉的荒湯泉水溫高達攝氏98度，是日本溫度最高的天然溫泉之一。旅館設有室內外溫泉浴池，並提供精緻懷石晚餐，在客房內享用，悠然自得。</div>
+        <span class="card-tag">Ryokan</span>
+        <span class="card-tag">Hot Spring</span>
+        <span class="card-tag">Dinner &amp; Breakfast</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-title">Meals</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🐬 Lunch — Kinosaki Marine World Terrace</h4>
+      <ul>
+        <li><strong>Cafe &amp; Restaurant Terrace</strong> inside Kinosaki Marine World offers casual dining with views over the Sea of Japan. Enjoy fresh seafood, light meals, and drinks between the park's shows and attractions — a convenient and scenic spot for a mid-day break.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🍱 Dinner — Asanoya Ryokan &nbsp;<span style="font-weight:400;font-size:9px;color:#888">朝野家旅館</span></h4>
+      <ul>
+        <li>Dinner is included with the stay at Asanoya — a traditional kaiseki multi-course meal served in-room, featuring fresh seasonal ingredients and local Hyogo specialities. A perfect way to end the day after the hot spring baths.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 7 &nbsp;·&nbsp; 26 May 2026 &nbsp;·&nbsp; Kinosaki &amp; Yumura Onsen, Hyogo</div>
+
+</div>
+
+<!-- PAGE 10: Day 8 Summary -->
+<div class="page">
+  <div class="page-header">
+    <div class="logo-mark">大阪</div>
+    <div class="header-title">Osaka Driving 2026</div>
+    <div class="subtitle">自動車旅行 &nbsp;·&nbsp; Day 8 – Himeji</div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D8</div>
+      <div class="day-hero-label">
+        <div class="day-title">Himeji &nbsp;·&nbsp; 姬路</div>
+        <div class="day-sub">Hyogo Prefecture &nbsp;·&nbsp; White Heron Castle City</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Date</strong> &nbsp;Wednesday, 27 May 2026</div>
+      <div><strong>Hotel</strong> &nbsp;Smile Hotel Okayama</div>
+      <div><strong>Booking</strong> &nbsp;Trip.com</div>
+      <div><strong>Includes</strong> &nbsp;Breakfast</div>
+    </div>
+  </div>
+
+  <div class="attraction-grid">
+    <div class="attraction-card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCxS8abUC7xycYCyGp7fCbHlYltk9-bK1eSA&s" alt="Himeji Castle">
+      <div class="card-body">
+        <div class="card-title">Himeji Castle <span class="card-zh">姬路城</span></div>
+        <div class="card-desc">Japan's finest surviving feudal castle, designated a UNESCO World Heritage Site and National Treasure. Known as "Shirasagi-jō" (White Heron Castle) for its elegant white plastered walls, the complex comprises 83 buildings across multiple baileys connected by winding paths designed to confuse invaders. The main keep stands six stories tall and offers sweeping views over Himeji city.</div>
+        <div class="card-desc card-desc-zh">日本保存最完整的封建城堡，亦是聯合國教科文組織世界文化遺產及國寶。因其優雅的白色灰泥外牆，被譽為「白鷺城」。城郭由83棟建築組成，通過曲折迴廊相連，設計巧妙以迷惑入侵者。天守閣高達六層，可俯瞰整個姬路市全景。</div>
+        <span class="card-tag">UNESCO Heritage</span>
+      </div>
+    </div>
+
+    <div class="attraction-card">
+      <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/4e/ad/79/caption.jpg?w=500&h=-1&s=1" alt="Kokoromi VIERRA Himeji">
+      <div class="card-body">
+        <div class="card-title">Kokoromi <span class="card-zh">心見</span></div>
+        <div class="card-desc">A curated dessert and sweets boutique located inside VIERRA Himeji, the stylish shopping complex adjacent to Himeji Station. Kokoromi specialises in premium Japanese confections that highlight local Hyogo ingredients, offering an elegant selection of seasonal treats, wagashi, and gift sets — perfect for picking up edible souvenirs before heading to Okayama.</div>
+        <div class="card-desc card-desc-zh">位於姬路車站旁 VIERRA Himeji 購物中心內的精選甜品與和菓子專賣店。心見精心挑選以兵庫縣當地食材製作的高品質日式點心，提供琳瑯滿目的季節限定甜品、和菓子及精美禮盒，是離開姬路前採購伴手禮的最佳去處。</div>
+        <span class="card-tag">Shopping</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#e67e22;">
+      <h4 style="color:#e67e22;">🏯 Lunch — Kassui-ken 活水軒</h4>
+      <ul>
+        <li><strong>活水軒 (Kassui-ken)</strong> is a historic restaurant nestled within the grounds of Himeji Castle, offering traditional Japanese cuisine with a view of the castle's elegant architecture. Enjoy set lunches featuring seasonal dishes in a refined tatami-style setting — a rare chance to dine inside one of Japan's most celebrated castle complexes.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">🐟 Dinner — Uoya Taisho</h4>
+      <ul>
+        <li><strong>Uoya Taisho</strong> is a well-regarded seafood restaurant offering an extensive menu of fresh fish dishes, sashimi, and grilled seafood. A great choice for ending the day with the freshest catches from the Seto Inland Sea, prepared in classic Japanese style.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">Osaka Driving 2026 &nbsp;·&nbsp; Day 8 &nbsp;·&nbsp; 27 May 2026 &nbsp;·&nbsp; Himeji, Hyogo</div>
+
+</div>
+
+
+
+
+
+</body>
+</html>
