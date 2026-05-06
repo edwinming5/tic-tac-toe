@@ -2428,6 +2428,8 @@
     .d-toll { width: 58px; text-align: right; font-weight: 600; color: #a04000; }
     .d-toll-none { width: 58px; text-align: right; color: #bbb; }
     .wknd-disc { font-size: 6px; color: #888; display: block; font-weight: 400; }
+    .d-park { width: 62px; text-align: right; font-weight: 600; color: #6c3483; }
+    .d-park-none { width: 62px; text-align: right; color: #bbb; }
     .car-card { display: flex; gap: 10px; margin-bottom: 8px; background: #f5f7fb; border: 1px solid #dde3f0; border-radius: 6px; padding: 8px 10px; align-items: flex-start; }
     .car-img { width: 148px; min-width: 148px; height: 92px; object-fit: contain; border-radius: 4px; background: #e8eaf0; }
     .car-specs { flex: 1; }
@@ -2493,6 +2495,7 @@
         <th class="d-km">Km</th>
         <th class="d-time">Drive Time</th>
         <th class="d-toll">Est. Toll (¥)</th>
+        <th class="d-park">Est. Parking (¥)</th>
         <th class="d-notes">Notes</th>
       </tr>
     </thead>
@@ -2505,6 +2508,7 @@
         <td class="d-km">145</td>
         <td class="d-time">~2h 20min</td>
         <td class="d-toll">¥1,400</td>
+        <td class="d-park">¥600<span class="wknd-disc">Uji municipal lot (Byōdō-in)</span></td>
         <td class="d-notes">Pick up rental at KIX. Hanshin Expressway + Meishin into Shiga. <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2515,6 +2519,7 @@
         <td class="d-km">40</td>
         <td class="d-time">~50 min</td>
         <td class="d-toll-none">—</td>
+        <td class="d-park">¥400<span class="wknd-disc">Ōmi-Hachiman bori lot</span></td>
         <td class="d-notes">Mostly flat lakeside roads. Easy day.</td>
       </tr>
       <tr>
@@ -2525,6 +2530,7 @@
         <td class="d-km">82</td>
         <td class="d-time">~2h 00min</td>
         <td class="d-toll">¥1,800<span class="wknd-disc">Hiei Driveway (private)</span></td>
+        <td class="d-park">¥300<span class="wknd-disc">Mangetsu-ji lot</span></td>
         <td class="d-notes">Winding mountain roads to Enryaku-ji. <span class="mtn-tag">Mountain</span> <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2535,6 +2541,7 @@
         <td class="d-km">150</td>
         <td class="d-time">~2h 30min</td>
         <td class="d-toll">¥1,100<span class="wknd-disc">After ETC wknd 30% off</span></td>
+        <td class="d-park-none">—</td>
         <td class="d-notes">Kyoto → Miyama rural roads → Maizuru Wakasa Expressway. <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2545,6 +2552,7 @@
         <td class="d-km">50</td>
         <td class="d-time">~1h 00min</td>
         <td class="d-toll-none">—</td>
+        <td class="d-park">¥400<span class="wknd-disc">Amanohashidate Viewland lot</span></td>
         <td class="d-notes">Scenic coastal road along Ine Bay. Easy driving.</td>
       </tr>
       <tr>
@@ -2555,6 +2563,7 @@
         <td class="d-km">95</td>
         <td class="d-time">~1h 30min</td>
         <td class="d-toll">¥1,200</td>
+        <td class="d-park-none">—</td>
         <td class="d-notes">San-in Kinki Expressway along Sea of Japan coast. <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2565,6 +2574,7 @@
         <td class="d-km">140</td>
         <td class="d-time">~2h 00min</td>
         <td class="d-toll">¥3,200</td>
+        <td class="d-park">¥700<span class="wknd-disc">Himeji Castle area lots</span></td>
         <td class="d-notes">Bantan Expressway → San-yo Expressway. <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2575,6 +2585,7 @@
         <td class="d-km">42</td>
         <td class="d-time">~1h 00min</td>
         <td class="d-toll-none">—</td>
+        <td class="d-park">¥1,000<span class="wknd-disc">Korakuen + Kurashiki lots</span></td>
         <td class="d-notes">All city/suburban driving. Short day behind the wheel.</td>
       </tr>
       <tr>
@@ -2585,6 +2596,7 @@
         <td class="d-km">100</td>
         <td class="d-time">~1h 30min</td>
         <td class="d-toll">¥1,200</td>
+        <td class="d-park">¥700<span class="wknd-disc">Uno Port all-day lot</span></td>
         <td class="d-notes">Car left at Uno Port. Naoshima by bike/bus. <span class="ferry-tag">⛴ Ferry</span> <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2595,6 +2607,7 @@
         <td class="d-km">135</td>
         <td class="d-time">~2h 30min</td>
         <td class="d-toll">¥2,400<span class="wknd-disc">Akashi+Naruto bridges, ETC wknd 30% off</span></td>
+        <td class="d-park">¥1,200<span class="wknd-disc">Shinsekai / Namba city lots</span></td>
         <td class="d-notes">Akashi Kaikyo + Naruto Bridge — world-class suspension bridges. <span class="toll-tag">Toll</span></td>
       </tr>
       <tr>
@@ -2605,6 +2618,7 @@
         <td class="d-km">74</td>
         <td class="d-time">~2h 00min</td>
         <td class="d-toll">¥600<span class="wknd-disc">After ETC wknd 30% off</span></td>
+        <td class="d-park">¥2,000<span class="wknd-disc">Katsuoji + Dotonbori lots</span></td>
         <td class="d-notes">City traffic around Dotonbori. Allow extra time evenings.</td>
       </tr>
       <tr>
@@ -2615,6 +2629,7 @@
         <td class="d-km">15</td>
         <td class="d-time">~45 min</td>
         <td class="d-toll-none">—</td>
+        <td class="d-park">¥1,500<span class="wknd-disc">Umeda paid lot (half-day)</span></td>
         <td class="d-notes">Mainly city driving. Park once and walk. Lightest drive day.</td>
       </tr>
       <tr>
@@ -2625,6 +2640,7 @@
         <td class="d-km">63</td>
         <td class="d-time">~1h 00min</td>
         <td class="d-toll">¥1,000</td>
+        <td class="d-park">¥600<span class="wknd-disc">Namba short-stay lot</span></td>
         <td class="d-notes">Allow 90 min to KIX for car return + check-in. Hanshin Expressway. <span class="toll-tag">Toll</span></td>
       </tr>
       <tr class="drive-total">
@@ -2632,6 +2648,7 @@
         <td class="d-km">1,131</td>
         <td class="d-time" style="color:#aed6f1 !important;">~21h 10min</td>
         <td class="d-toll" style="color:#f9e79f !important; font-size:10px;">¥13,900</td>
+        <td class="d-park" style="color:#d7bde2 !important; font-size:10px;">¥9,400</td>
         <td class="d-notes" style="color:#ccc !important;">Avg. 87 km/day (D2–D14) &nbsp;·&nbsp; ETC wknd discounts applied D5, D11, D12</td>
       </tr>
     </tbody>
