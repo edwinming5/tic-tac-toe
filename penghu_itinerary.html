@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>澎湖 Penghu 2026 – Itinerary</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Inter:wght@300;400;500;600&display=swap">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #e6f3f3;
+      color: #1a1a1a;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      margin: 20px auto;
+      background: #fff;
+      padding: 18mm 16mm;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      border-bottom: 3px solid #0b7a75;
+      padding-bottom: 10px;
+      margin-bottom: 16px;
+    }
+    .header-left h1 {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: #0b7a75;
+      letter-spacing: 0.5px;
+    }
+    .header-left .subtitle {
+      font-size: 12px;
+      color: #666;
+      margin-top: 3px;
+      font-weight: 400;
+    }
+    .header-right {
+      text-align: right;
+      font-size: 11px;
+      color: #555;
+      line-height: 1.6;
+    }
+    .header-right .dates {
+      font-size: 13px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    /* Overview strip */
+    .overview {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .overview-box {
+      background: #f0fafa;
+      border: 1px solid #a8d8d8;
+      border-radius: 6px;
+      padding: 8px 10px;
+      text-align: center;
+    }
+    .overview-box .label {
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #888;
+      margin-bottom: 3px;
+    }
+    .overview-box .value {
+      font-size: 13px;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    /* Section title */
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #0b7a75;
+      font-weight: 600;
+      margin-bottom: 8px;
+      margin-top: 14px;
+    }
+
+    /* Flight cards */
+    .flights {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .flight-card {
+      border: 1px solid #a8d8d8;
+      border-left: 4px solid #0b7a75;
+      border-radius: 5px;
+      padding: 8px 11px;
+      background: #f0fafa;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .flight-icon { font-size: 18px; line-height: 1; flex-shrink: 0; }
+    .flight-info .flight-num { font-size: 12px; font-weight: 700; color: #0b7a75; letter-spacing: 0.5px; }
+    .flight-info .flight-route { font-size: 12px; font-weight: 500; color: #1a1a1a; margin: 1px 0; }
+    .flight-info .flight-meta { font-size: 10px; color: #777; }
+
+    /* Overview itinerary table */
+    table.itinerary {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+    table.itinerary thead tr { background: #2c3e50; color: #fff; }
+    table.itinerary thead th { padding: 6px 8px; text-align: left; font-weight: 500; font-size: 10px; letter-spacing: 0.4px; }
+    table.itinerary tbody tr { border-bottom: 1px solid #e6f3f3; }
+    table.itinerary tbody tr:nth-child(even) { background: #fafafa; }
+    table.itinerary tbody tr:hover { background: #f0fafa; }
+    table.itinerary td { padding: 5.5px 8px; vertical-align: top; }
+    .day-num { font-weight: 700; color: #0b7a75; white-space: nowrap; }
+    .day-date { color: #555; font-size: 10px; }
+    .day-location { font-weight: 500; }
+    .zh { font-size: 9.5px; color: #888; margin-left: 5px; font-weight: 400; }
+
+    /* Tips box */
+    .tips-box {
+      border: 1px solid #a8d8d8;
+      border-left: 4px solid #0b7a75;
+      border-radius: 4px;
+      padding: 10px 12px;
+      margin-top: 6px;
+      background: #f0fafa;
+      font-size: 10.5px;
+      line-height: 1.6;
+    }
+    .tips-box ul { list-style: none; padding: 0; }
+    .tips-box ul li { padding: 2px 0 2px 14px; position: relative; color: #333; }
+    .tips-box ul li::before { content: '›'; position: absolute; left: 0; color: #0b7a75; font-weight: 700; }
+
+    /* Footer */
+    .footer {
+      margin-top: 16px;
+      padding-top: 8px;
+      border-top: 1px solid #d0e8e8;
+      font-size: 9px;
+      color: #aaa;
+      text-align: center;
+    }
+
+    /* Day hero */
+    .day-hero {
+      background: linear-gradient(135deg, #085c58 0%, #0b7a75 100%);
+      color: white;
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .day-num-big {
+      font-size: 38px;
+      font-weight: 700;
+      color: #6de8e2;
+      font-family: 'Noto Serif TC', serif;
+      line-height: 1;
+      margin-right: 12px;
+    }
+    .day-hero-left { display: flex; align-items: center; }
+    .day-hero-label .day-title { font-size: 15px; font-weight: 600; color: white; }
+    .day-hero-label .day-sub { font-size: 10.5px; color: rgba(255,255,255,0.65); margin-top: 2px; }
+    .day-hero-right { text-align: right; font-size: 10.5px; color: rgba(255,255,255,0.75); line-height: 1.8; }
+    .day-hero-right strong { color: white; }
+
+    /* Per-day schedule table */
+    table.schedule {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10.5px;
+      margin-bottom: 10px;
+    }
+    table.schedule thead tr { background: #0b7a75; color: #fff; }
+    table.schedule thead th { padding: 5px 8px; text-align: left; font-weight: 500; font-size: 9.5px; letter-spacing: 0.4px; }
+    table.schedule tbody tr { border-bottom: 1px solid #e6f3f3; }
+    table.schedule tbody tr:nth-child(even) { background: #f4fbfb; }
+    table.schedule td { padding: 5px 8px; vertical-align: top; line-height: 1.5; }
+    .sched-time { font-weight: 700; color: #0b7a75; white-space: nowrap; font-size: 11px; }
+    .sched-place { font-weight: 600; color: #1a1a1a; }
+    .sched-note { font-size: 9.5px; color: #555; }
+    .sched-note-zh { font-size: 9px; color: #888; margin-bottom: 3px; padding-bottom: 3px; border-bottom: 1px dashed #d0e8e8; }
+    .dur-badge {
+      display: inline-block;
+      font-size: 8px;
+      padding: 1px 5px;
+      border-radius: 10px;
+      background: #dff4f3;
+      color: #0b7a75;
+      border: 1px solid #a8d8d8;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .klook-badge {
+      display: inline-block;
+      font-size: 8px;
+      padding: 1px 5px;
+      border-radius: 10px;
+      background: #fff3e0;
+      color: #e65100;
+      border: 1px solid #ffcc80;
+      font-weight: 600;
+      margin-right: 3px;
+    }
+    .night-badge {
+      display: inline-block;
+      font-size: 8px;
+      padding: 1px 5px;
+      border-radius: 10px;
+      background: #1a1a3a;
+      color: #a0c8ff;
+      border: 1px solid #3a5080;
+      font-weight: 600;
+      margin-right: 3px;
+    }
+
+    /* Practical grid */
+    .practical-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .practical-box {
+      border: 1px solid #a8d8d8;
+      border-left: 4px solid #2c3e50;
+      border-radius: 4px;
+      padding: 8px 10px;
+      background: #fafafa;
+      font-size: 9.5px;
+    }
+    .practical-box h4 {
+      font-size: 10px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .practical-box ul { list-style: none; padding: 0; }
+    .practical-box ul li {
+      padding: 2px 0 2px 12px;
+      position: relative;
+      color: #333;
+      line-height: 1.45;
+    }
+    .practical-box ul li::before { content: '·'; position: absolute; left: 0; color: #0b7a75; font-weight: 700; }
+    .h4-zh { display: block; font-size: 9.5px; color: #0b7a75; font-weight: 600; text-transform: none; letter-spacing: 0; margin-bottom: 3px; }
+    .li-zh { display: block; font-size: 9px; color: #2c3e50; font-weight: 500; margin-bottom: 2px; }
+
+    /* Night section divider */
+    .night-divider {
+      background: #1a2540;
+      color: #a0c8ff;
+      font-size: 9.5px;
+      font-weight: 600;
+      padding: 4px 8px;
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    /* Photo gallery */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .photo-card {
+      border: 1px solid #a8d8d8;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .photo-slot {
+      width: 100%;
+      height: 170px;
+      background: #e6f3f3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .photo-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: #a8d8d8;
+      font-size: 9.5px;
+      letter-spacing: 0.3px;
+      height: 100%;
+    }
+    .photo-empty-icon {
+      font-size: 26px;
+      opacity: 0.6;
+    }
+    .photo-caption {
+      padding: 7px 10px 8px;
+      border-top: 1px solid #a8d8d8;
+      background: #fff;
+    }
+    .photo-caption-zh {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #0b7a75;
+      font-family: 'Noto Serif TC', serif;
+    }
+    .photo-caption-en {
+      font-size: 9px;
+      color: #888;
+      margin-top: 2px;
+    }
+
+    @page { size: 210mm 297mm; margin: 0; }
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      html, body { width: 210mm; background: white !important; }
+      .page {
+        position: relative;
+        margin: 0 !important;
+        padding: 14mm 14mm !important;
+        box-shadow: none !important;
+        page-break-after: always;
+        break-after: page;
+        width: 210mm !important;
+        height: 297mm !important;
+        overflow: hidden !important;
+      }
+      .page:last-of-type { page-break-after: avoid; break-after: avoid; }
+      table.schedule td, table.itinerary td { font-size: 9px !important; }
+      .sched-time { font-size: 9.5px !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- PAGE 1: Overview -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>澎湖 Penghu 2026</h1>
+      <div class="subtitle">島嶼之旅 &nbsp;·&nbsp; 4-Day Island Getaway &nbsp;·&nbsp; Magong, Taiwan</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">5 – 8 September 2026</div>
+      <div>Depart: Taichung (RMQ) &nbsp;·&nbsp; Return: Taichung (RMQ)</div>
+    </div>
+  </div>
+
+  <div class="overview">
+    <div class="overview-box">
+      <div class="label">Duration</div>
+      <div class="value">4 Days</div>
+    </div>
+    <div class="overview-box">
+      <div class="label">Base</div>
+      <div class="value">Magong 馬公</div>
+    </div>
+    <div class="overview-box">
+      <div class="label">Transport</div>
+      <div class="value">Scooter 機車</div>
+    </div>
+    <div class="overview-box">
+      <div class="label">Klook Tours</div>
+      <div class="value">3 Bookings</div>
+    </div>
+  </div>
+
+  <div class="section-title">Flights</div>
+  <div class="flights">
+    <div class="flight-card">
+      <div class="flight-icon">✈</div>
+      <div class="flight-info">
+        <div class="flight-num">AE787 &nbsp;·&nbsp; Mandarin Airlines 華信航空</div>
+        <div class="flight-route">Taichung (RMQ) 13:30 → Magong (MZG) 14:15</div>
+        <div class="flight-meta">Saturday, 5 September 2026 &nbsp;·&nbsp; Day 1 &nbsp;·&nbsp; ~45 min</div>
+      </div>
+    </div>
+    <div class="flight-card">
+      <div class="flight-icon" style="transform:scaleX(-1);display:inline-block">✈</div>
+      <div class="flight-info">
+        <div class="flight-num">AE792 &nbsp;·&nbsp; Mandarin Airlines 華信航空</div>
+        <div class="flight-route">Magong (MZG) 17:35 → Taichung (RMQ)</div>
+        <div class="flight-meta">Tuesday, 8 September 2026 &nbsp;·&nbsp; Day 4 &nbsp;·&nbsp; ~45 min</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Day-by-Day Summary</div>
+  <table class="itinerary">
+    <thead>
+      <tr>
+        <th style="width:6%">Day</th>
+        <th style="width:24%">Date</th>
+        <th style="width:70%">Highlights</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="day-num">D1</td>
+        <td class="day-date">Sat, 5 Sep 2026</td>
+        <td class="day-location">
+          中央老街 &nbsp;·&nbsp; 跨海大橋 &nbsp;·&nbsp; 通梁古榕 &nbsp;·&nbsp; 二崁聚落 &nbsp;·&nbsp; 池西岩瀑 &nbsp;·&nbsp; 漁翁島燈塔 &nbsp;·&nbsp; 外垵漁港日落<br>
+          <span class="zh">Fly in &amp; afternoon scooter loop — West Penghu highlights &amp; sunset at Waian Port</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D2</td>
+        <td class="day-date">Sun, 6 Sep 2026</td>
+        <td class="day-location">
+          吉貝跳島 &nbsp;·&nbsp; 目斗嶼燈塔登島 &nbsp;·&nbsp; 夜釣小管體驗<br>
+          <span class="zh">Jibei island hop (Klook · NT$752) + evening squid fishing (Klook · NT$299)</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D3</td>
+        <td class="day-date">Mon, 7 Sep 2026</td>
+        <td class="day-location">
+          南方四島：東吉島 &nbsp;·&nbsp; 藍洞 &nbsp;·&nbsp; 七美島<br>
+          <span class="zh">Southern Four Islands full-day tour (Klook · NT$1,378) — depart 07:40 sharp</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="day-num">D4</td>
+        <td class="day-date">Tue, 8 Sep 2026</td>
+        <td class="day-location">
+          鯨魚洞 &nbsp;·&nbsp; 小池角雙曲橋 &nbsp;·&nbsp; 大果葉柱狀玄武岩 &nbsp;·&nbsp; ✈ AE792 回台中<br>
+          <span class="zh">North Penghu morning loop, lunch in Magong, depart MZG 17:35</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title" style="margin-top:12px;">Klook Bookings Summary</div>
+  <div class="tips-box">
+    <ul>
+      <li><span class="klook-badge">Klook</span> <strong>D2 — 吉貝來回船票（含島上機車）+ 目斗嶼燈塔登島</strong> &nbsp;·&nbsp; NT$752/人 &nbsp;·&nbsp; Departs 赤崁碼頭 10:30</li>
+      <li><span class="klook-badge">Klook</span> <strong>D2 — 澎湖夜釣小管體驗</strong> &nbsp;·&nbsp; NT$299/人 &nbsp;·&nbsp; Gather 南海遊客中心 17:30, departs 18:00, returns ~21:30</li>
+      <li><span class="klook-badge">Klook</span> <strong>D3 — 南方四島：東吉 &amp; 藍洞 &amp; 七美（含七美機車）一日遊</strong> &nbsp;·&nbsp; NT$1,378/人 &nbsp;·&nbsp; Gather 南海遊客中心 07:40 — arrive 20 min early (07:20)</li>
+      <li>Rent a <strong>125cc scooter</strong> in Magong for D1 and D4 — international driving permit or Taiwan license required.</li>
+      <li>Bring <strong>cash</strong> — many stalls and local restaurants in Penghu are cash-only.</li>
+      <li>Pack <strong>sunscreen, a hat, and water</strong> — Penghu is very exposed on scooters and open boat decks.</li>
+    </ul>
+  </div>
+
+  <div class="footer">澎湖 Penghu 2026 &nbsp;·&nbsp; 5–8 September &nbsp;·&nbsp; 4 Days &nbsp;·&nbsp; Magong, Taiwan</div>
+
+</div>
+
+<!-- PAGE 2: Day 1 Photo Gallery -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>澎湖 Penghu 2026</h1>
+      <div class="subtitle">島嶼之旅 &nbsp;·&nbsp; Day 1 – West Penghu &nbsp;·&nbsp; Photo Highlights</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Saturday, 5 September 2026</div>
+      <div>西嶼環島 West Penghu Scooter Loop</div>
+    </div>
+  </div>
+
+  <div class="section-title">Day 1 Photo Gallery</div>
+
+  <div class="photo-grid">
+
+    <div class="photo-card">
+      <div class="photo-slot">
+        <img src="https://annieshing.tw/wp-content/uploads/pixnet/1667148724-1851970225-g.jpg" alt="中央老街">
+      </div>
+      <div class="photo-caption">
+        <div class="photo-caption-zh">中央老街</div>
+        <div class="photo-caption-en">Zhongyang Old Street</div>
+      </div>
+    </div>
+
+    <div class="photo-card">
+      <div class="photo-slot">
+        <img src="https://wanderland.tw/wp-content/uploads/2023/09/03澎湖跨海大橋-1024x676.jpg" alt="跨海大橋">
+      </div>
+      <div class="photo-caption">
+        <div class="photo-caption-zh">跨海大橋</div>
+        <div class="photo-caption-en">Cross-Sea Bridge</div>
+      </div>
+    </div>
+
+    <div class="photo-card">
+      <div class="photo-slot">
+        <img src="https://immay.tw/wp-content/uploads/2020/11/DSC08638-2.jpg" alt="通梁古榕">
+      </div>
+      <div class="photo-caption">
+        <div class="photo-caption-zh">通梁古榕</div>
+        <div class="photo-caption-en">Tongliiang Banyan Tree</div>
+      </div>
+    </div>
+
+    <div class="photo-card">
+      <div class="photo-slot">
+        <img src="https://i0.wp.com/wetrip0105.com/wp-content/uploads/2022/07/DSC_2356-scaled.jpg?resize=1170%2C781&ssl=1" alt="二崁聚落">
+      </div>
+      <div class="photo-caption">
+        <div class="photo-caption-zh">二崁聚落</div>
+        <div class="photo-caption-en">Erkan Village</div>
+      </div>
+    </div>
+
+    <div class="photo-card">
+      <div class="photo-slot">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLV-SGo-AmKmiNihas_9PqDxfh-Rwfwv9hYngn_RIanfOyVEBS9aOOi4np&s=10" alt="池西岩瀑">
+      </div>
+      <div class="photo-caption">
+        <div class="photo-caption-zh">池西岩瀑</div>
+        <div class="photo-caption-en">"Penghu Mini Iceland"</div>
+      </div>
+    </div>
+
+    <div class="photo-card">
+      <div class="photo-slot">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReQlPtT_YfrUNWYv-PX2MVQa5TYja1TIJO2P6DStDOYks3L5LSRoMO3y4&s=10" alt="外垵漁港觀景台">
+      </div>
+      <div class="photo-caption">
+        <div class="photo-caption-zh">外垵漁港觀景台</div>
+        <div class="photo-caption-en">Waian Fishing Port Viewpoint</div>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="section-title" style="margin-top:14px;">Practical Info</div>
+  <div class="practical-grid">
+    <div class="practical-box">
+      <h4><span class="h4-zh">交通方式</span>Getting Around</h4>
+      <ul>
+        <li><span class="li-zh">在飯店附近租借125cc機車，需持有國際駕照或台灣駕照。</span>Rent a 125cc scooter near the hotel — international driving permit or Taiwan license required.</li>
+        <li><span class="li-zh">第一天行程涵蓋馬公本島及西嶼，全程約45至55公里，下午出發完全足夠。</span>The Day 1 loop covers Magong main island and Xiyu (西嶼) via 跨海大橋. Total ~45–55 km — comfortable for an afternoon.</li>
+        <li><span class="li-zh">出發前先在馬公加滿油，西嶼加油站稀少。</span>Fill up at a petrol station in Magong before heading out; stations are sparse on Xiyu.</li>
+      </ul>
+    </div>
+    <div class="practical-box">
+      <h4><span class="h4-zh">晚餐選擇</span>Dinner Options</h4>
+      <ul>
+        <li><span class="li-zh"><strong>臨海樓</strong> — 馬公在地海鮮餐廳，食材新鮮，提供道地澎湖料理。</span><strong>臨海樓</strong> — Local seafood restaurant in Magong with fresh catch and classic Penghu dishes.</li>
+        <li><span class="li-zh"><strong>澎漁宴</strong> — 海鮮種類豐富，適合多人聚餐，建議提早前往或電話預約。</span><strong>澎漁宴</strong> — Broader seafood spread, good for groups. Often busy; arrive early or call ahead.</li>
+        <li><span class="li-zh">兩家餐廳均接受現金，週末建議19:00前抵達以免等候。</span>Both cash-friendly. Aim to arrive before 19:00 on weekends to avoid long waits.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">澎湖 Penghu 2026 &nbsp;·&nbsp; Day 1 &nbsp;·&nbsp; 5 September 2026 &nbsp;·&nbsp; West Penghu Photo Highlights</div>
+
+</div>
+
+<!-- PAGE 3: Day 1 -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>澎湖 Penghu 2026</h1>
+      <div class="subtitle">島嶼之旅 &nbsp;·&nbsp; Day 1 – West Penghu Scooter Loop</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Saturday, 5 September 2026</div>
+      <div>馬公 Magong &nbsp;·&nbsp; 西嶼 Xiyu</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D1</div>
+      <div class="day-hero-label">
+        <div class="day-title">西嶼環島 &nbsp;·&nbsp; West Penghu Loop</div>
+        <div class="day-sub">中央老街 → 跨海大橋 → 二崁聚落 → 外垵漁港日落</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Arrive MZG</strong> &nbsp;14:15 (AE787 from RMQ)</div>
+      <div><strong>Check-in</strong> &nbsp;15:00 · 馬公市區</div>
+      <div><strong>Transport</strong> &nbsp;Rental scooter 機車</div>
+    </div>
+  </div>
+
+  <div class="section-title">Day Schedule</div>
+  <table class="schedule">
+    <thead>
+      <tr>
+        <th style="width:11%">Time</th>
+        <th style="width:22%">Stop</th>
+        <th style="width:55%">Notes</th>
+        <th style="width:12%">Duration</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="sched-time">10:30</td>
+        <td>
+          <div class="sched-place">Leave Home</div>
+          <div class="sched-note">清泉岡方向</div>
+        </td>
+        <td class="sched-note">Head to Ching Chuan Kang Airport (Taichung / RMQ).<div class="sched-note-zh">從家出發，前往清泉岡機場（台中／RMQ）。</div></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="sched-time">12:00</td>
+        <td>
+          <div class="sched-place">清泉岡機場</div>
+          <div class="sched-note">Taichung Airport (RMQ)</div>
+        </td>
+        <td class="sched-note">Check in for AE787. Domestic desks close 30 min before departure — arrive with time to spare.<div class="sched-note-zh">辦理AE787登機手續。國內線報到櫃台於起飛前30分鐘關閉，請提早抵達。</div></td>
+        <td><span class="dur-badge">Check-in</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">13:30</td>
+        <td>
+          <div class="sched-place">✈ AE787 Departs</div>
+          <div class="sched-note">臺中 (RMQ) → 馬公 (MZG)</div>
+        </td>
+        <td class="sched-note">Mandarin Airlines (華信航空). ~45 min flight across the Taiwan Strait.<div class="sched-note-zh">搭乘華信航空，橫越台灣海峽，飛行約45分鐘。</div></td>
+        <td><span class="dur-badge">~45 min</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">14:15</td>
+        <td>
+          <div class="sched-place">馬公機場 Landing</div>
+          <div class="sched-note">Magong Airport (MZG)</div>
+        </td>
+        <td class="sched-note">Arrive Magong. Taxi or transfer to hotel in the city centre.<div class="sched-note-zh">抵達馬公機場，搭計程車或接駁前往市區飯店。</div></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="sched-time">15:00</td>
+        <td>
+          <div class="sched-place">Hotel Check-in</div>
+          <div class="sched-note">馬公市區</div>
+        </td>
+        <td class="sched-note">Drop bags and pick up rental scooter nearby. Head out promptly.<div class="sched-note-zh">放下行李，就近租借機車，立即出發開始行程。</div></td>
+        <td><span class="dur-badge">Check-in</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">15:30</td>
+        <td>
+          <div class="sched-place">中央老街</div>
+          <div class="sched-note">Zhongyang Old Street</div>
+        </td>
+        <td class="sched-note">Penghu's oldest street, lined with Qing-dynasty coral-stone buildings. Starting point for the west-island scooter loop.<div class="sched-note-zh">澎湖最古老的街道，兩側保留清代珊瑚礁石建築，為西嶼機車環島的起點。</div></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="sched-time">16:00</td>
+        <td>
+          <div class="sched-place">跨海大橋</div>
+          <div class="sched-note">Cross-Sea Bridge</div>
+        </td>
+        <td class="sched-note">Once the longest cross-sea bridge in Asia. Stop mid-bridge for sweeping views of the Taiwan Strait in both directions.<div class="sched-note-zh">曾為亞洲最長跨海大橋，在橋中停留，飽覽台灣海峽兩側開闊景色。</div></td>
+        <td><span class="dur-badge">~15 min</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">16:20</td>
+        <td>
+          <div class="sched-place">通梁古榕</div>
+          <div class="sched-note">Tongliiang Banyan Tree</div>
+        </td>
+        <td class="sched-note">300-year-old banyan with 96 aerial roots spreading across 660 m². Brief pass-through stop en route to Erkan.<div class="sched-note-zh">樹齡逾300年的老榕樹，96條氣根蔓延覆蓋逾660平方公尺，順路短暫停留。</div></td>
+        <td><span class="dur-badge">Pass-through</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">16:50</td>
+        <td>
+          <div class="sched-place">二崁聚落</div>
+          <div class="sched-note">Erkan Village</div>
+        </td>
+        <td class="sched-note">Preserved Qing-era stone village. Browse the ancient residences and try the famous <strong>杏仁茶</strong> (almond tea) at the old street stalls.<div class="sched-note-zh">保存完好的清代石砌聚落，穿梭古宅之間，並在老街攤位嚐嚐名物杏仁茶。</div></td>
+        <td><span class="dur-badge">~40 min</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">17:45</td>
+        <td>
+          <div class="sched-place">池西岩瀑</div>
+          <div class="sched-note">"Penghu Mini Iceland"</div>
+        </td>
+        <td class="sched-note">Dramatic basalt column formations carved by the sea. One of Penghu's best photo spots — striking rocky coastline with surging waves.<div class="sched-note-zh">海浪侵蝕玄武岩形成的壯麗景觀，素有「澎湖版小冰島」之稱，礁石嶙峋，浪濤洶湧，是絕佳拍照景點。</div></td>
+        <td><span class="dur-badge">~15 min</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">18:05</td>
+        <td>
+          <div class="sched-place">外垵漁港觀景台</div>
+          <div class="sched-note">Waian Fishing Port Viewpoint</div>
+        </td>
+        <td class="sched-note">Best sunset viewpoint on Xiyu. Overlooks the harbour and open sea. Sun sets at approximately <strong>18:20</strong> — arrive early for a good vantage point.<div class="sched-note-zh">西嶼最佳夕陽觀賞台，俯瞰漁港與大海。日落約18:20，請提早前往佔好位置。</div></td>
+        <td><span class="dur-badge">Sunset ~18:20</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">19:10</td>
+        <td>
+          <div class="sched-place">晚餐 Dinner</div>
+          <div class="sched-note">馬公市區</div>
+        </td>
+        <td class="sched-note">Return to Magong. Options: <strong>臨海樓</strong> or <strong>澎漁宴</strong> — both well-regarded seafood restaurants in the city centre.<div class="sched-note-zh">返回馬公市區用餐，可選擇臨海樓或澎漁宴，兩家皆為市區知名海鮮餐廳。</div></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="footer">澎湖 Penghu 2026 &nbsp;·&nbsp; Day 1 &nbsp;·&nbsp; 5 September 2026 &nbsp;·&nbsp; Magong & West Penghu (Xiyu)</div>
+
+</div>
+
+<!-- PAGE 3: Day 2 -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>澎湖 Penghu 2026</h1>
+      <div class="subtitle">島嶼之旅 &nbsp;·&nbsp; Day 2 – Jibei Island Hop &amp; Night Squid Fishing</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Sunday, 6 September 2026</div>
+      <div>吉貝嶼 Jibei &nbsp;·&nbsp; 目斗嶼 Mudouyu &nbsp;·&nbsp; 夜釣小管</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D2</div>
+      <div class="day-hero-label">
+        <div class="day-title">跳島 + 夜釣 &nbsp;·&nbsp; Island Hop & Squid Fishing</div>
+        <div class="day-sub">赤崁碼頭 → 吉貝 → 目斗嶼 → 夜釣小管</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Morning</strong> &nbsp;<span class="klook-badge" style="font-size:9px;">Klook</span> 吉貝島 · NT$752/人</div>
+      <div><strong>Evening</strong> &nbsp;<span class="klook-badge" style="font-size:9px;">Klook</span> 夜釣小管 · NT$299/人</div>
+      <div><strong>Return</strong> &nbsp;~21:30</div>
+    </div>
+  </div>
+
+  <div class="section-title">Day Schedule</div>
+  <table class="schedule">
+    <thead>
+      <tr>
+        <th style="width:14%">Time</th>
+        <th style="width:22%">Stop</th>
+        <th style="width:52%">Notes</th>
+        <th style="width:12%">Duration</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="sched-time">10:00</td>
+        <td>
+          <div class="sched-place">赤崁碼頭</div>
+          <div class="sched-note">Chikan Pier — Gather</div>
+        </td>
+        <td class="sched-note">Gather at the pier. Check in for Klook tour and collect tickets. Arrive 15–20 min early.<div class="sched-note-zh">在碼頭集合，辦理Klook行程報到並領取票券，請提前15至20分鐘抵達。</div></td>
+        <td><span class="dur-badge">Gather</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">10:30</td>
+        <td>
+          <div class="sched-place">⛴ 開船 Depart</div>
+          <div class="sched-note">赤崁 → 吉貝島</div>
+        </td>
+        <td class="sched-note">
+          <span class="klook-badge">Klook</span> 吉貝來回船票（含島上機車）+ 目斗嶼燈塔登島 &nbsp;·&nbsp; NT$752/人<br>
+          Ferry from Chikan Pier to Jibei Island.<div class="sched-note-zh">從赤崁碼頭搭渡輪前往吉貝嶼。</div>
+        </td>
+        <td><span class="dur-badge">~30 min</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">11:00</td>
+        <td>
+          <div class="sched-place">吉貝嶼 Jibei Island</div>
+          <div class="sched-note">Sandbar &amp; water sports</div>
+        </td>
+        <td class="sched-note">Arrive Jibei. Collect included island scooter. Explore the famous curved white-sand sandbar (沙嘴) and crystal-clear turquoise shallows. Water sports available separately at the beach.<div class="sched-note-zh">抵達吉貝嶼，領取套票含島上機車。探索著名的弧形白沙嘴及湛藍淺灘，亦可另付費體驗海上活動。</div></td>
+        <td><span class="dur-badge">~1 hr</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">12:00</td>
+        <td>
+          <div class="sched-place">鳳嬌姐小吃店</div>
+          <div class="sched-note">Lunch · 吉貝島</div>
+        </td>
+        <td class="sched-note">Popular casual eatery on Jibei — fresh seafood and home-style dishes. Very busy at midday; arrive promptly. Cash only.<div class="sched-note-zh">吉貝島上人氣小吃店，提供新鮮海鮮及家常料理，中午時段非常熱門，請準時前往，僅收現金。</div></td>
+        <td><span class="dur-badge">~1 hr</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">13:00</td>
+        <td>
+          <div class="sched-place">目斗嶼 Mudouyu</div>
+          <div class="sched-note">燈塔登島</div>
+        </td>
+        <td class="sched-note">Rare landing on the remote uninhabited islet north of Jibei. Black-and-white striped lighthouse built in 1902 — one of Taiwan's most distinctive. Landing is weather-dependent.<div class="sched-note-zh">難得一見的登島機會——吉貝北方無人小島，建於1902年的黑白相間燈塔是台灣最具特色之一，登島視天氣狀況而定。</div></td>
+        <td><span class="dur-badge">Included</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">15:00</td>
+        <td>
+          <div class="sched-place">返回馬公</div>
+          <div class="sched-note">Return to Magong</div>
+        </td>
+        <td class="sched-note">Ferry back to 赤崁碼頭. Transfer to hotel in Magong city.<div class="sched-note-zh">搭渡輪返回赤崁碼頭，再回馬公市區飯店。</div></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="sched-time">15:00–17:00</td>
+        <td>
+          <div class="sched-place">Hotel Rest</div>
+          <div class="sched-note">馬公市區</div>
+        </td>
+        <td class="sched-note">Rest and freshen up before heading out again for the evening activity.<div class="sched-note-zh">回飯店休息整理，為晚上的夜釣活動養精蓄銳。</div></td>
+        <td><span class="dur-badge">~2 hrs</span></td>
+      </tr>
+      <tr class="night-divider" style="background:#1a2540;">
+        <td colspan="4" style="padding:4px 8px; color:#a0c8ff; font-size:9.5px; font-weight:600; letter-spacing:0.6px; text-transform:uppercase;">
+          🌙 Evening — Night Squid Fishing 夜釣小管
+        </td>
+      </tr>
+      <tr>
+        <td class="sched-time">17:30</td>
+        <td>
+          <div class="sched-place">南海遊客中心</div>
+          <div class="sched-note">Gather for night fishing</div>
+        </td>
+        <td class="sched-note">
+          <span class="klook-badge">Klook</span> 澎湖夜釣小管體驗 &nbsp;·&nbsp; NT$299/人<br>
+          Gather at Nanhai Visitor Centre. Check in with tour guide before departure.<div class="sched-note-zh">在南海遊客中心集合，向導遊報到，準備出發。</div>
+        </td>
+        <td><span class="dur-badge">Gather</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">18:00</td>
+        <td>
+          <div class="sched-place">夜釣小管出發</div>
+          <div class="sched-note">Squid fishing boat departs</div>
+        </td>
+        <td class="sched-note">Head out to sea for the squid (小管) fishing experience. Equipment and bait provided — staff guide you through technique. A quintessential Penghu night activity.<div class="sched-note-zh">出海體驗夜釣小管，釣具與魚餌均已提供，工作人員全程指導技巧，是澎湖必玩的夜間特色活動。</div></td>
+        <td><span class="dur-badge">~3.5 hrs</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">21:30</td>
+        <td>
+          <div class="sched-place">回程 Return</div>
+          <div class="sched-note">Back to Magong</div>
+        </td>
+        <td class="sched-note">Return to port. Late dinner or supper in Magong city if needed.<div class="sched-note-zh">返回港口，如有需要可在馬公市區享用宵夜。</div></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Practical Info</div>
+  <div class="practical-grid">
+    <div class="practical-box">
+      <h4>Jibei Island Tips</h4>
+      <ul>
+        <li>Wear water shoes — the sandbar can have sharp coral underfoot.</li>
+        <li>Apply sunscreen before boarding; no shade on the open sandbar or ferry deck.</li>
+        <li>Bring a dry bag — spray is common on the ferry crossing.</li>
+        <li>目斗嶼 landing may be cancelled in rough seas — check with the operator on the morning.</li>
+      </ul>
+    </div>
+    <div class="practical-box">
+      <h4>Night Squid Fishing Tips</h4>
+      <ul>
+        <li>Wear a light jacket — it gets cool on the water after dark even in September.</li>
+        <li>Motion sickness tablets recommended if prone to seasickness.</li>
+        <li>The crew will gut and bag your catch — you can keep what you catch.</li>
+        <li>Confirm meeting point: <strong>南海遊客中心</strong> (Nanhai Visitor Centre), Magong.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">澎湖 Penghu 2026 &nbsp;·&nbsp; Day 2 &nbsp;·&nbsp; 6 September 2026 &nbsp;·&nbsp; Jibei · Mudouyu · Night Squid Fishing</div>
+
+</div>
+
+<!-- PAGE 4: Day 3 -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>澎湖 Penghu 2026</h1>
+      <div class="subtitle">島嶼之旅 &nbsp;·&nbsp; Day 3 – Southern Four Islands Full-Day Tour</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Monday, 7 September 2026</div>
+      <div>東吉島 &nbsp;·&nbsp; 藍洞 &nbsp;·&nbsp; 七美島</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D3</div>
+      <div class="day-hero-label">
+        <div class="day-title">南方四島 &nbsp;·&nbsp; Southern Four Islands</div>
+        <div class="day-sub">東吉島 · 藍洞 · 七美島（含七美機車）— Full Day</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><span class="klook-badge" style="font-size:9px;">Klook</span> <strong>NT$1,378/人</strong></div>
+      <div><strong>Depart</strong> &nbsp;07:40 · 南海遊客中心</div>
+      <div><strong>Must arrive</strong> &nbsp;07:20 (20 min early)</div>
+    </div>
+  </div>
+
+  <div class="section-title">Day Schedule</div>
+  <table class="schedule">
+    <thead>
+      <tr>
+        <th style="width:14%">Time</th>
+        <th style="width:22%">Stop</th>
+        <th style="width:52%">Notes</th>
+        <th style="width:12%">Duration</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="sched-time">07:20</td>
+        <td>
+          <div class="sched-place">南海遊客中心</div>
+          <div class="sched-note">Nanhai Visitor Centre — 報到</div>
+        </td>
+        <td class="sched-note">
+          <span class="klook-badge">Klook</span> 南方四島一日遊 &nbsp;·&nbsp; NT$1,378/人<br>
+          <strong>Must arrive 20 minutes early.</strong> Check in and receive briefing before boarding.<div class="sched-note-zh">請提前20分鐘抵達報到，完成手續並聽取出發說明。</div>
+        </td>
+        <td><span class="dur-badge">報到 Check-in</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">07:40</td>
+        <td>
+          <div class="sched-place">⛴ 出發 Depart</div>
+          <div class="sched-note">馬公 → 南方四島</div>
+        </td>
+        <td class="sched-note">Ferry departs from Nanhai Visitor Centre pier heading south to the outer islands. Seas can be choppy — take motion sickness tablets beforehand if needed.<div class="sched-note-zh">渡輪從南海遊客中心碼頭出發，向南前往外島群。海況可能較顛簸，有需要請事先服用暈船藥。</div></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="sched-time">Morning</td>
+        <td>
+          <div class="sched-place">東吉島</div>
+          <div class="sched-note">Dongji Island</div>
+        </td>
+        <td class="sched-note">One of the four southern islands. Known for its abandoned fishing village with crumbling stone walls, the Japanese-era lighthouse, and pristine surrounding waters. The eerie quiet of the deserted settlement is a highlight.<div class="sched-note-zh">南方四島之一，以廢棄漁村的崩頹石牆、日治時期燈塔及清澈海域著稱，荒村的幽靜氛圍令人印象深刻。</div></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="sched-time">Morning</td>
+        <td>
+          <div class="sched-place">藍洞 Blue Cave</div>
+          <div class="sched-note">西吉嶼 Xiji Island</div>
+        </td>
+        <td class="sched-note">A sea cave on Xiji Island filled with bioluminescent algae — the water glows vivid electric blue when light enters. Best experienced by small boat or snorkelling entry. One of Penghu's most photographed natural wonders.<div class="sched-note-zh">西吉嶼的海蝕洞，洞內棲息發光藻類，光線射入時水面呈現耀眼螢光藍，可搭小舟或浮潛入洞，是澎湖最夢幻的自然奇景之一。</div></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="sched-time">Midday</td>
+        <td>
+          <div class="sched-place">七美嶼 Qimei Island</div>
+          <div class="sched-note">含七美機車 Scooter included</div>
+        </td>
+        <td class="sched-note">The largest of the southern four islands. Scooter included in the tour package — explore the famous <strong>心形礁</strong> (heart-shaped reef) viewpoint, the double-heart stone weir, and the island's scenic coast. Lunch on the island.<div class="sched-note-zh">南方四島中面積最大的島嶼，套票含機車租借——探訪著名的心形礁觀景台、雙心石滬，並在島上享用午餐。</div></td>
+        <td><span class="dur-badge">Scooter incl.</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">15:10</td>
+        <td>
+          <div class="sched-place">回程 Return</div>
+          <div class="sched-note">Back to Magong</div>
+        </td>
+        <td class="sched-note">Ferry returns to 南海遊客中心, Magong. Rest of the evening free in the city.<div class="sched-note-zh">渡輪返回馬公南海遊客中心，晚上時間自由安排。</div></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Highlights of the Southern Four Islands</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#0b7a75;">
+      <h4 style="color:#0b7a75;">東吉島 · Dongji Island</h4>
+      <ul>
+        <li>A near-deserted fishing island — Qing-era stone houses slowly reclaimed by nature.</li>
+        <li>Panoramic ocean views from the Japanese-era lighthouse at the island's peak.</li>
+        <li>Crystal-clear waters ideal for snorkelling off the rocky shore.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#0b5fa0;">
+      <h4 style="color:#0b5fa0;">藍洞 · Blue Cave (西吉)</h4>
+      <ul>
+        <li>Bioluminescent blue glow caused by noctiluca algae in the cave's still water.</li>
+        <li>Entry typically by small rubber dinghy or via snorkelling — the guide leads the way.</li>
+        <li>Light conditions matter — overcast days can reduce the glow effect.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#c0392b;">
+      <h4 style="color:#c0392b;">七美島 · Qimei Island</h4>
+      <ul>
+        <li><strong>心形礁</strong> (heart-shaped reef) — iconic Penghu landmark, best viewed from the clifftop overlook.</li>
+        <li>雙心石滬 (double-heart stone weir) — ancient fish trap built from coral stones, visible from the shoreline.</li>
+        <li>Scooter included in the Klook package for island exploration.</li>
+      </ul>
+    </div>
+    <div class="practical-box">
+      <h4>Day 3 Tips</h4>
+      <ul>
+        <li><strong>Arrive at 南海遊客中心 by 07:20</strong> — the boat will not wait. Set an early alarm.</li>
+        <li>Bring motion sickness tablets — the open-water crossing to the southern islands can be rough.</li>
+        <li>Wear layers; wind on deck can be cold in the early morning even in September.</li>
+        <li>Camera essential — 藍洞 and 心形礁 are among Penghu's most spectacular sights.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">澎湖 Penghu 2026 &nbsp;·&nbsp; Day 3 &nbsp;·&nbsp; 7 September 2026 &nbsp;·&nbsp; Southern Four Islands · 東吉 · 藍洞 · 七美</div>
+
+</div>
+
+<!-- PAGE 5: Day 4 -->
+<div class="page">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>澎湖 Penghu 2026</h1>
+      <div class="subtitle">島嶼之旅 &nbsp;·&nbsp; Day 4 – North Penghu Loop &amp; Departure</div>
+    </div>
+    <div class="header-right">
+      <div class="dates">Tuesday, 8 September 2026</div>
+      <div>北海 North Penghu &nbsp;·&nbsp; ✈ AE792 Departs 17:35</div>
+    </div>
+  </div>
+
+  <div class="day-hero">
+    <div class="day-hero-left">
+      <div class="day-num-big">D4</div>
+      <div class="day-hero-label">
+        <div class="day-title">北海晨遊 &nbsp;·&nbsp; North Penghu Morning</div>
+        <div class="day-sub">鯨魚洞 → 小池角雙曲橋 → 大果葉玄武岩 → ✈ AE792</div>
+      </div>
+    </div>
+    <div class="day-hero-right">
+      <div><strong>Transport</strong> &nbsp;Scooter 機車</div>
+      <div><strong>Check-in MZG</strong> &nbsp;16:00</div>
+      <div><strong>Depart MZG</strong> &nbsp;17:35 (AE792 → RMQ)</div>
+    </div>
+  </div>
+
+  <div class="section-title">Day Schedule</div>
+  <table class="schedule">
+    <thead>
+      <tr>
+        <th style="width:14%">Time</th>
+        <th style="width:22%">Stop</th>
+        <th style="width:52%">Notes</th>
+        <th style="width:12%">Duration</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="sched-time">08:30</td>
+        <td>
+          <div class="sched-place">從市區出發</div>
+          <div class="sched-note">Depart Magong</div>
+        </td>
+        <td class="sched-note">Head north from Magong city on scooter toward Xiaomen Island (小門嶼) for the morning loop.<div class="sched-note-zh">騎機車從馬公市區出發，向北前往小門嶼，展開上午的環島行程。</div></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="sched-time">09:20–10:00</td>
+        <td>
+          <div class="sched-place">鯨魚洞</div>
+          <div class="sched-note">Whale Cave · 小門嶼</div>
+        </td>
+        <td class="sched-note">Natural sea arch on Xiaomen Island carved through solid basalt by centuries of wave action. The cave frames a dramatic ocean view — best photos from the clifftop viewing platform above.<div class="sched-note-zh">小門嶼上由海浪長年侵蝕玄武岩形成的天然拱門，景觀壯麗，從上方觀景台居高臨下拍照效果最佳。</div></td>
+        <td><span class="dur-badge">~40 min</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">10:00–10:20</td>
+        <td>
+          <div class="sched-place">小池角雙曲橋</div>
+          <div class="sched-note">Xiaochijiao Double Arch Bridge</div>
+        </td>
+        <td class="sched-note">A graceful white double-arch bridge connecting two small islets in calm, clear waters. Scenic spot popular for photos — short walk down to the water's edge for the best angle.<div class="sched-note-zh">白色雙拱橋橫跨兩座小礁嶼，海水清澈平靜，步行至水邊可取得最佳拍照角度。</div></td>
+        <td><span class="dur-badge">~20 min</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">10:35–10:50</td>
+        <td>
+          <div class="sched-place">大果葉柱狀玄武岩</div>
+          <div class="sched-note">Dagoye Columnar Basalt</div>
+        </td>
+        <td class="sched-note">Impressive cliff face of perfectly formed hexagonal basalt columns — a geological formation from ancient volcanic activity. One of Penghu's finest examples of columnar basalt alongside 池西岩瀑.<div class="sched-note-zh">由火山活動形成的六角形玄武岩柱峭壁，排列整齊壯觀，與池西岩瀑並列澎湖最精彩的玄武岩景觀。</div></td>
+        <td><span class="dur-badge">10–15 min</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">12:00</td>
+        <td>
+          <div class="sched-place">午餐 Lunch</div>
+          <div class="sched-note">回馬公市區</div>
+        </td>
+        <td class="sched-note">Return to Magong city for a final lunch. Last chance for Penghu seafood — the morning market area near the harbour has good casual options.<div class="sched-note-zh">返回馬公市區享用最後一頓午餐，把握機會再嚐澎湖海鮮，港邊市場附近有多家平價選擇。</div></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="sched-time">15:30</td>
+        <td>
+          <div class="sched-place">拿行李，出發機場</div>
+          <div class="sched-note">Hotel checkout &amp; airport transfer</div>
+        </td>
+        <td class="sched-note">Collect luggage from hotel. Head to Magong Airport (MZG) — allow time for traffic and bag drop.<div class="sched-note-zh">從飯店取出行李，前往馬公機場，請預留時間應對交通及托運行李。</div></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="sched-time">16:00</td>
+        <td>
+          <div class="sched-place">馬公機場 Check-in</div>
+          <div class="sched-note">Magong Airport (MZG)</div>
+        </td>
+        <td class="sched-note">Check in for AE792. Domestic desks close ~30 min before departure. Return rental scooter before heading to the airport.<div class="sched-note-zh">辦理AE792登機手續，報到櫃台約於起飛前30分鐘關閉，請先還車再前往機場。</div></td>
+        <td><span class="dur-badge">Check-in</span></td>
+      </tr>
+      <tr>
+        <td class="sched-time">17:35</td>
+        <td>
+          <div class="sched-place">✈ AE792 Departs</div>
+          <div class="sched-note">馬公 (MZG) → 台中 (RMQ)</div>
+        </td>
+        <td class="sched-note">Mandarin Airlines (華信航空). ~45 min return flight across the Taiwan Strait. Back to Taichung.<div class="sched-note-zh">搭乘華信航空，橫越台灣海峽約45分鐘，返回台中，結束旅程。</div></td>
+        <td><span class="dur-badge">~45 min</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">North Penghu Highlights</div>
+  <div class="practical-grid">
+    <div class="practical-box" style="border-left-color:#0b7a75;">
+      <h4 style="color:#0b7a75;">鯨魚洞 · Whale Cave</h4>
+      <ul>
+        <li>A natural sea arch punched through a basalt headland on Xiaomen Island (小門嶼).</li>
+        <li>The cave is accessible at low tide — check tide conditions before descending to the base.</li>
+        <li>Best framed from the elevated viewing platform; the arch perfectly frames the open sea beyond.</li>
+      </ul>
+    </div>
+    <div class="practical-box" style="border-left-color:#2c3e50;">
+      <h4>Departure Checklist</h4>
+      <ul>
+        <li>Return scooter before 15:00 to give time to settle any deposits and get to the airport.</li>
+        <li>Check out of hotel by the hotel's stated checkout time — store bags at reception if needed.</li>
+        <li>MZG airport is small — no long security queues, but check-in closes 30 min before departure.</li>
+        <li>Pick up any last souvenirs (dried seafood, 黑糖糕) at the Magong market before heading out.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer">澎湖 Penghu 2026 &nbsp;·&nbsp; Day 4 &nbsp;·&nbsp; 8 September 2026 &nbsp;·&nbsp; North Penghu & Departure · AE792 17:35</div>
+
+</div>
+
+<script>
+  // Swap Chinese above English in notes cells
+  document.querySelectorAll('table.schedule td').forEach(td => {
+    const zh = td.querySelector('.sched-note-zh');
+    if (zh) td.insertBefore(zh, td.firstChild);
+  });
+
+  // Remove Duration column and give its width to Notes
+  document.querySelectorAll('table.schedule').forEach(table => {
+    const ths = table.querySelectorAll('thead th');
+    if (ths.length >= 4) {
+      ths[2].style.width = (parseInt(ths[2].style.width) + parseInt(ths[3].style.width)) + '%';
+      ths[3].remove();
+    }
+    table.querySelectorAll('tbody tr').forEach(tr => {
+      const last = tr.lastElementChild;
+      if (!last) return;
+      if (last.hasAttribute('colspan')) {
+        last.setAttribute('colspan', parseInt(last.getAttribute('colspan')) - 1);
+      } else {
+        last.remove();
+      }
+    });
+  });
+</script>
+</body>
+</html>
